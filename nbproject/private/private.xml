@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>app/Catalog.php</url>
+            <bookmark id="1">
+                <name/>
+                <line>130</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/OpenServer/domains/pamira/resources/views/dealer/order_history.blade.php</file>
+            <file>file:/C:/OpenServer/domains/pamira/app/Product.php</file>
+            <file>file:/C:/OpenServer/domains/pamira/public/js/order_compare.js</file>
+            <file>file:/C:/OpenServer/domains/pamira/public/less/style.less</file>
+            <file>file:/C:/OpenServer/domains/pamira/app/Orders.php</file>
+            <file>file:/C:/OpenServer/domains/pamira/app/Order_product.php</file>
+            <file>file:/C:/OpenServer/domains/pamira/resources/views/catalog/product_template.blade.php</file>
+            <file>file:/C:/OpenServer/domains/pamira/app/Http/Controllers/Buy.php</file>
+            <file>file:/C:/OpenServer/domains/pamira/app/Compare.php</file>
+            <file>file:/C:/OpenServer/domains/pamira/app/PH.php</file>
+            <file>file:/C:/OpenServer/domains/pamira/resources/views/dealer/order_compare_list.blade.php</file>
+        </group>
+    </open-files>
+</project-private>

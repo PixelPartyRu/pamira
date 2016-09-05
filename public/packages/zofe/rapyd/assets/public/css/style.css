@@ -1,0 +1,19 @@
+.points_link{
+    border:1px solid #5bc0de;
+
+   text-align:center;
+    width:60px;
+    display:inline-block;
+   
+}
+
+
+.points_info{
+    text-align:center;
+    width:60px;
+
+    border:1px solid #5bc0de;
+            border:1px solid #eea236;
+        color:#eea236;
+}
+

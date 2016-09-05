@@ -1,0 +1,133 @@
+    .cart_list{
+        width:100%;
+       // display:inline-block;
+        &.dragging{
+
+            .product_info_row_data{
+                //background-color:red;
+                cursor:pointer;
+                &:hover{
+                    .table-cell{
+                        font-weight:bold;
+                        //border-top:1px dotted #404040;
+                        //border-bottom:1px dotted #404040;
+                         color:#285050;
+                         background-color: #DFDFDF;
+
+                    }
+
+                }
+                // background-color:red;
+
+
+            }
+        }
+        
+            
+        
+        .customer{
+
+            .product_info_row_data{
+                .count{
+                    .value{
+                        display:none;
+                    }
+                    [type=number]{
+                        display: inline-block;
+                        width: 100%;
+                    }
+
+                }
+                .table-cell{
+                    &.name{
+                        width: 40%;
+                    }
+                }
+
+
+            } 
+        }
+        .product_info_row{
+
+            &:nth-child(odd) {
+                .table-cell{
+                    background-color: #EEEEEE;
+                }  
+            }
+            &:nth-child(even) {
+                .table-cell{
+                    background-color: #CCCCCC;
+                }
+            }
+            &.caption,&.total{
+                //margin-top:10px;
+                .table-cell{
+                    text-align: center;
+                    font-family: verdana;
+                    font-size: 12px;
+                    color: #000;
+                    font-weight: bold;
+                    background-color: #AAAAAA;
+                    &.cost_sell{
+                        width:9.06%;
+                    }
+                }
+
+            }
+            &.total{
+                .table-cell{
+                    padding:20px 0 20px 0;
+                    &.name{
+                        text-align: left;
+                    }
+
+                    background-color: #BBBBBB;
+                } 
+            }
+            .table-cell{
+                vertical-align: middle;
+                text-align: center;
+                font-family: verdana;
+                font-size: 13px;
+                color: #000;
+
+                &.price{
+                    width:15%;
+                }
+                &.name{
+                    width:30%;
+                }
+                &.count{
+                    width:9.3%;
+                }
+                &.id{
+                    width:2%;
+                }
+                &.photo{
+                 width:9.4%;   
+                }
+                &.edit_cost{
+                    width:8.9%;
+                }
+                &.discount{
+                   width:8.4%;  
+                }
+                &.delete{
+                    width:2.5%;
+                }
+                
+
+                &.photo{
+                    >div {
+                        height:74px;
+                        img{
+                            width:74px;
+                            height:74px;
+                        }
+                    }
+
+                }
+            }
+        }
+
+    }

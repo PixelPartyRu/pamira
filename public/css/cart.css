@@ -1,0 +1,85 @@
+.cart_list {
+  width: 100%;
+}
+.cart_list.dragging .product_info_row_data {
+  cursor: pointer;
+}
+.cart_list.dragging .product_info_row_data:hover .table-cell {
+  font-weight: bold;
+  color: #285050;
+  background-color: #DFDFDF;
+}
+.cart_list .customer .product_info_row_data .count .value {
+  display: none;
+}
+.cart_list .customer .product_info_row_data .count [type=number] {
+  display: inline-block;
+  width: 100%;
+}
+.cart_list .customer .product_info_row_data .table-cell.name {
+  width: 40%;
+}
+.cart_list .product_info_row:nth-child(odd) .table-cell {
+  background-color: #EEEEEE;
+}
+.cart_list .product_info_row:nth-child(even) .table-cell {
+  background-color: #CCCCCC;
+}
+.cart_list .product_info_row.caption .table-cell,
+.cart_list .product_info_row.total .table-cell {
+  text-align: center;
+  font-family: verdana;
+  font-size: 12px;
+  color: #000;
+  font-weight: bold;
+  background-color: #AAAAAA;
+}
+.cart_list .product_info_row.caption .table-cell.cost_sell,
+.cart_list .product_info_row.total .table-cell.cost_sell {
+  width: 9.06%;
+}
+.cart_list .product_info_row.total .table-cell {
+  padding: 20px 0 20px 0;
+  background-color: #BBBBBB;
+}
+.cart_list .product_info_row.total .table-cell.name {
+  text-align: left;
+}
+.cart_list .product_info_row .table-cell {
+  vertical-align: middle;
+  text-align: center;
+  font-family: verdana;
+  font-size: 13px;
+  color: #000;
+}
+.cart_list .product_info_row .table-cell.price {
+  width: 15%;
+}
+.cart_list .product_info_row .table-cell.name {
+  width: 30%;
+}
+.cart_list .product_info_row .table-cell.count {
+  width: 9.3%;
+}
+.cart_list .product_info_row .table-cell.id {
+  width: 2%;
+}
+.cart_list .product_info_row .table-cell.photo {
+  width: 9.4%;
+}
+.cart_list .product_info_row .table-cell.edit_cost {
+  width: 8.9%;
+}
+.cart_list .product_info_row .table-cell.discount {
+  width: 8.4%;
+}
+.cart_list .product_info_row .table-cell.delete {
+  width: 2.5%;
+}
+.cart_list .product_info_row .table-cell.photo > div {
+  height: 74px;
+}
+.cart_list .product_info_row .table-cell.photo > div img {
+  width: 74px;
+  height: 74px;
+}

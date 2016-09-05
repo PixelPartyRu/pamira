@@ -1,0 +1,325 @@
+//Корзина
+.cart_block{
+    display:inline-block;
+    width:100%;
+    .order_info,.client_name_field{
+        width:60%;
+        padding:15px;
+        margin:0 auto;
+        box-shadow: 0 0 5px #F69E9E;
+        border: 1px dotted #F69E9E;
+        display:block;
+        margin-bottom:10px;
+    }
+    .client_name_field{
+
+
+        label,.input{
+            float:left;
+            display:inline-block;
+            font-size:15px;
+            float:left;
+        }
+        label{
+
+
+            font-family:verdana;
+            width:40%;
+            &:after{
+                content:"*";
+                color:#DC281E;
+
+
+            }
+        }
+        &.no_valid{
+            .input{
+                &:after{
+                    content:"  !  ";
+                    margin-left:5px;
+                    float:left;
+                    color:#DC281E;
+                    font-weight:bold;
+                    font-size:16px;
+                }
+                
+                input{
+                    border:1px solid #DC281E;
+                }
+
+            }
+        }
+        
+        .input{
+            
+            width:50%;
+            margin-left:5%;
+            display:inline-block;
+
+            input{
+                width:90%;
+                float:left;
+            }
+
+        }
+    }
+
+    .complited_order_links {
+        text-align: center;
+    }
+
+    .edit_button{
+        width:100%;
+        &.top{
+            margin-bottom:10px;
+        }
+        &.bottom{
+            margin-top:10px;
+        }
+        &.centered {
+            text-align: center;
+        }
+        button,.button {
+            display: inline-block;
+            background: linear-gradient(to top, #e7e7e7, #ffffff);
+            font-family: Verdana;
+            font-size: 16px;
+            color: #c50f0f;
+            font-weight: bold;
+            border: 2px solid #9F9F9F;
+            border-radius: 5px;
+            padding: 10px 10px;
+            cursor: pointer;
+            text-decoration: none;
+            &.float_right{
+                float:right;
+            }
+            &.float_left{
+                float:left;
+            }
+        }
+        &.completion_button{
+            .button{
+                width: 260px;
+                font-size: 12px;
+                text-align: center;
+                box-sizing: border-box;
+                margin-bottom: 15px;
+            }
+
+        }
+    }
+}
+
+//Стили для редактирования заказа    
+
+.cart_block{
+
+    .cart_list{
+        .in_edit_mode{
+            display:none;
+        }
+        .in_no_edit_mode{
+            display:inline-block;
+        }
+        .edit{
+            input{
+                display:none;
+            } 
+        }
+        //без редактирование цены
+        &.edit_mode{
+            .in_edit_mode{
+                &.discount_edit{
+                    width:100%;
+                    [type="button"]{
+                        width:30%;
+                        float:left;
+                        font-size:11px;
+                    }
+                    #all_discount{
+                        display:inline-block;
+                        float:left;
+                        margin-top:10px;
+                        margin-left:10px;
+                        width:70px;
+                    }
+                }
+
+                display:inline-block;
+                width:25%;
+                button,.button{
+                    font-size: 12px;
+                    width:100%;
+                    margin-bottom:10px;
+
+
+                }
+            }
+            .in_no_edit_mode{
+                display:none;
+            }
+            .edit:not(.edit_cost){
+                input{
+                    display:inline-block;
+                    width:90%;
+                }
+            }
+            .value:not(.cost_value){
+                display:none;
+            }
+
+            //С редактированием цены
+            &.edit_cost{
+                .edit{
+                    input{
+                        display:inline-block;
+                        width:90%;
+
+                    }
+
+
+                }
+                .value{
+                    display:none;
+                }
+
+            }
+
+
+
+        }
+
+    }
+
+}
+
+.pdf_test{
+    width:100px;
+    height:100px;
+    background-color:red;
+}
+
+
+
+.no_valid {
+        //background-color:red;
+        &:after{
+            content:"  !  ";
+            margin-left:5px;
+            //float:left;
+            color:#DC281E;
+            font-weight:bold;
+            font-size:16px;
+        }
+
+        input{
+            border:1px solid #DC281E;
+        } 
+    }
+
+    .order_history_list{
+        .table-cell{
+            text-align: center;
+            padding:7px 0;
+            font-family: verdana;
+            font-size: 13px;
+            &.img{
+                padding:0px;
+                width:25px;
+                vertical-align:middle;
+                img{
+                    padding-top:3px;
+                    display:inline-block;
+                    width:100%;
+                }
+            }
+        }
+        .header{
+            .table-cell{
+                background-color: #AAAAAA;
+            }
+        }
+        .table-row:not(.header) {
+            &:nth-child(even) {
+                .table-cell{
+                    background-color: #EEEEEE;
+                }
+
+            }
+            &:nth-child(odd) {
+                .table-cell{
+                background-color: #CCCCCC;
+                }
+
+            }
+        }
+    }
+
+    #cart_restore{
+     width:400px;
+     font-size:14px;
+     line-height: 43px;
+    }
+    
+    .dealer_menu{
+
+        width: 50%;
+        text-align: center;
+        display: inline-block;
+        border: 1px dotted #DC281E;
+        padding: 10px 0 10px 0;
+        margin-bottom: 15px;
+        float: left;
+        margin-left: 12%;
+
+        .hello{
+            font: 12px verdana;
+            line-height: 17px;
+
+
+
+        }
+        ul{
+            display: block;
+            text-align: center;
+
+            li{
+                line-height: 14px;
+                margin-left: 2px;
+                display:inline-block;
+                a{
+                    background: url(/img/menu_link.jpg) no-repeat top right;
+                    text-decoration: none;
+                    height: 25px;
+                    padding: 4px 10px 0 10px;
+                    line-height: 23px;
+                    box-sizing: border-box;
+                    cursor: pointer;
+                    width: 150px;
+                    font: italic 12px verdana;
+                    color: #5d5d5d;
+                    text-align: center;
+                    display: inline-block;
+                }
+            }
+        }
+
+    } 
+.compare_btns{
+    margin-bottom: 50px;
+    text-align: center;
+    button,.button {
+        display: inline-block;
+        background: linear-gradient(to top, #e7e7e7, #ffffff);
+        font-family: Verdana;
+        font-size: 16px;
+        color: #c50f0f;
+        font-weight: bold;
+        border: 2px solid #9F9F9F;
+        border-radius: 5px;
+        padding: 10px 10px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
