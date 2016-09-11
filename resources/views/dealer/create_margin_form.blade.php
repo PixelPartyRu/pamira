@@ -9,7 +9,7 @@
         {{ Form::text('name') }}
     </div>
     </div>
-    
+
     <div class="form_line two">
     <label>Установить цену*: </label>
     <div class="input">
@@ -24,8 +24,8 @@
        <label>Установить единую наценку для всех:</label>
        <div class="field">{{ Form::text('margin_for_all') }}</div>
        <div class="button_field">{{ Form::button('Установить',["class" => "set_margin_for_all"]) }}</div>
-    </div>    
-    
+    </div>
+
     <div class="brand_table table">
         @foreach($brands as $brand)
         <div class="table-row">
@@ -36,14 +36,14 @@
             </div>
         </div>
         @endforeach
-        
+
     </div>
     {{ Form::submit('Сохранить') }}
 
-    
-    
+
+
 {{ Form::close()}}
-<script type="text/javascript" src="/js/modules/inputmask.js"></script>  
-<script type="text/javascript" src="/js/min/margin_form.min.js"></script>  
-  
+<script type="text/javascript" src="/js/modules/inputmask.js"></script>
+<script type="text/javascript" src="/js/min/margin_form.min.js"></script>
+
 @stop
