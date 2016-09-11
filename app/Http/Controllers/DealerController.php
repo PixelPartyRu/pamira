@@ -38,7 +38,7 @@ class DealerController extends MyCrudController {
     private $manager_email = "website@pamira.ru";
     public function all($entity) {
         parent::all($entity);
-                
+
         $this->filter = \DataFilter::source(\App\User::query()->where("type","dealer"));
 
         $this->grid = DataGrid::source($this->filter);
@@ -49,7 +49,7 @@ class DealerController extends MyCrudController {
 $this->grid->paginate(1000);
         return $this->returnView();
     }
-    
+
     public function edit($entity) {
 
         parent::edit($entity);
@@ -76,7 +76,7 @@ $this->grid->paginate(1000);
         $typeField = $this->edit->add('type', '', 'hidden');
         $typeField->insertValue('dealer');
         $typeField->updateValue('dealer');
-        
+
 
         $pass_filed =  $this->edit->add('password', 'Пароль', 'text');
         if( !isset($params["modify"]) && !isset($params["update"])) {
@@ -87,32 +87,32 @@ $this->grid->paginate(1000);
            $this->edit->add('sourse_id', '', 'hidden')->updateValue($this->edit->model->id);
 
         }
-       
+
         $this->edit->add("generate_password", "Сгенерировать пароль", self::$ext_apth . '\ButtonField');
-        
+
         $this->edit->add('sns', 'Подразделение', 'text');
 
         $this->edit->add('send_email', 'отправить пароль на e-mail дилера', 'checkbox');
-        $this->edit->add('region_id','Регион','select')->options(\App\Region::lists("name", "id")->all()); 
+        $this->edit->add('region_id','Регион','select')->options(\App\Region::lists("name", "id")->all());
         $this->edit->add('sns', 'Подразделение', 'text')->rule('required');
         Rapyd::js("public/js/dealer.js");
         //bcrypt
         return $this->returnEditView();
-        
+
     }
 
     private function getManagerEmail() {
-        
+
         return $this->manager_email;
-        
+
     }
 
     public function auth($pass) {
-        
+
         $auth = Dealer::loginByPass($pass);
 
         return Response::json(   is_null($auth)?0:1  );
-        
+
     }
     public function logout() {
        Auth::guard("dealer")->logout();
@@ -123,17 +123,17 @@ $this->grid->paginate(1000);
     public function marginList() {
         $dealer = Dealer::getLoginDealer();
         //var_dump($dealer);
-        
+
         $data['wholesale_margin'] = $dealer->getWholesaleMargins();
         $data['retail_margin'] = $dealer->getRetailMargins();
         //dd($data['margins']);
-        
+
         return view("dealer.for_admins",$data);
-        
+
     }
 
     public function marginCreate(Request $request) {
-        
+
         //dd($request->method());
         if($request->method() == "GET" ) {
          return $this->marginCreateForm($request);
@@ -161,63 +161,71 @@ $this->grid->paginate(1000);
         return view("dealer.edit_margin_form", $data);
     }
     private function marginSaveEditForm($margin_id) {
-        
-        
+
+
         $post = \Illuminate\Support\Facades\Request::all();
         $form_data = \App\Margin::formatPostMarginFormData( $post );
         $form_data['margin']['id'] = $margin_id;
         $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default']);
         if($valid) {
-          return redirect('/dealer/margin_list');  
+          return redirect('/dealer/margin_list');
         }
         else {
             return redirect()->back()->withErrors(array("name" => false));
         }
-        
+
     }
 
     private function marginCreateForm($request) {
-        
+
         $data['brands'] = \App\Brand::all();
         $data['margin_type'] = $request->get('margin_type', false);
         return view("dealer.create_margin_form",$data);
-        
+
     }
 
     private function marginSaveForm() {
-        
+
         //Приводит данные, полученные из post, к удобному виду
         $post = \Illuminate\Support\Facades\Request::all();
         $form_data = \App\Margin::formatPostMarginFormData( $post );
         $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default']);
-        
-        if ($valid) { 
+
+        $margin_type = $form_data['margin'];
+        if($form_data['mark_up_initially'] != $margin_type['type']){
+            $form_data['margin']->type = $form_data['mark_up_initially'];
+            $form_data['margin']->name = $form_data['margin']->name . ' (+)';
+            $valid2 = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default']);
+        }
+
+
+        if ($valid) {
             return redirect('/dealer/margin_list');
-        } else { 
+        } else {
             return redirect()->back()->withErrors(array("name" => false)); //->withInput( $form_data['margin'] );
         }
     }
 
     public function orderList() {
-        
+
     }
 
     public function order() {
-        
+
     }
 
 
-    
+
     public function cart_step(Request $request) {
         $ses = Session::all();
        // var_dump($ses);
-       
+
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
         $order = $dealer->getCurentOrder();
 
         if(!is_null($order)) {
             $token = $request->get("step_token");
-        
+
             if (!is_null($token) && ( $token === csrf_token())) {
 
                 //dd(redirect()->back());
@@ -239,7 +247,7 @@ $this->grid->paginate(1000);
                 $order->setStep($request->get('step'));
             }
             switch ($order->order_step) {
-                case 1: 
+                case 1:
                     return $this->cart();
                     break;
                 case 2:
@@ -265,16 +273,16 @@ $this->grid->paginate(1000);
         $this->setCartScripts();
         return view("cart.cart",$data);
     }
-    
+
     //Страница оформления текущего заказа
     public function formalize_order_cart(Request $request) {
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
         $data['order'] = $dealer->getCurentOrder();
         $this->setCartScripts();
         return view("dealer.formalize_order_page",$data);
-        
-        
-        
+
+
+
     }
     public function formalize_order_completion(Request $request) {
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
@@ -302,9 +310,9 @@ $this->grid->paginate(1000);
         ]);
 
         return redirect("/dealer/completed_order/" . $order->id);
-        
+
     }
-    
+
     public function setCartScripts() {
         $scripts = array(
             "/js/modules/jquery.json-2.3.js",
@@ -313,21 +321,21 @@ $this->grid->paginate(1000);
         );
         $this->set_scripts($scripts);
     }
-    
+
     public function test_pdf() {
 
 
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
        $order = $dealer->getCurentOrder();
-        
+
         $html = view('pdf.order_pdf',['order' => $order, 'dealer' => $dealer])->render();
 
     PDF::load($html)
         ->filename(public_path().'/uploads/pdf/example2.pdf')
         ->output();
-        
+
     }
-    
+
     //Управление оформленным заказом - pdf файлы и отправка поставщику
     public function option_completed_order($type, Request $request) {
         switch ($type) {
@@ -341,13 +349,13 @@ $this->grid->paginate(1000);
                 return $this->caterer_mail_send_current( $request );
                 break;
         }
-   
+
         // var_dump( $_POST );
        // $data = $request->all();
        // var_dump($data);
-        
+
     }
-    
+
     public function save_order(Request $request) {
 
         $request = $request->all();
@@ -360,7 +368,7 @@ $this->grid->paginate(1000);
         $order->save();
         return 1;
     }
-    
+
     public function save_order_pdf_by_id($id, Request $request) {
         $all = $request->all();
 
@@ -368,7 +376,7 @@ $this->grid->paginate(1000);
         $ids = $all['id_order'];
         return $this->save_order_pdf($order, $ids);
     }
-    
+
     public function save_client_order_pdf_by_id($id, Request $request) {
         $all = $request->all();
         $order = \App\Orders::find($id);
@@ -396,8 +404,8 @@ $this->grid->paginate(1000);
         $ids = $all['id_order'];
         return $this->save_order_pdf($order,$ids);
     }
-   
-    
+
+
     public function caterer_mail_send_current(Request $request ) {
         $all = $request->all();
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
@@ -421,7 +429,7 @@ $this->grid->paginate(1000);
         $html = view('pdf.client_order_pdf',['order' => $order])->render();
         return PDF::load( $html )->filename($file_name)->download();
     }
-    
+
     private function caterer_mail_send($order,$ids) {
         if(!is_null($order) && $order->products()->count() > 0 ) {
         $order->setProducrOrder($ids);
@@ -435,13 +443,13 @@ $this->grid->paginate(1000);
                 ->output();
         $data['path'] = $path;
         $data['to'] = $order->getEmailForDealer();
-        
+
         Mail::send('emails.customer_letter', $data, function($message) use($data,$order) {
             $message->subject("Заказ для поставщика №" . $order->id . " от " . date("d.m.Y"));
             $message->to($data['to'])->cc('heleonprime@ya.ru');
             $message->attach( $data['path'] );
         });
-        
+
         //print view( "message", array("message" => "Заказ успешно отправлен поставщику") );
         //return redirect("/");
         }
@@ -454,9 +462,9 @@ $this->grid->paginate(1000);
         {
             $margin->setDefault();
         }
-        
+
     }
-    
+
     public function delete_margin($margin_id){
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
         $margin = Margin::where('id', $margin_id )->where('user_id', $dealer->id)->first();
@@ -465,75 +473,75 @@ $this->grid->paginate(1000);
             $margin->delete();
         }
     }
-    
 
-    
+
+
 
     public function order_history() {
-        
+
         $dealer = Dealer::getLoginDealer();
         $data['orders'] = $dealer->getOrderHistory();
 
 
         return view("dealer.order_history",$data);
-        
+
     }
     public function completed_order($order_id) {
         $data['order'] = \App\Orders::find($order_id);
- 
-        
+
+
         $this->set_scripts([
             //'/js/modules/jquery.sortable.min.js',
             '/js/modules/min/jquery.ui-drag-drop.min.js',
             '/js/min/formalize_order_completion.min.js'
-            ]); 
+            ]);
         return view("dealer.formalize_order_completion",$data);
     }
-    
+
     public function remove_order($order_id) {
-        
+
         $dealer = Dealer::getLoginDealer();
         $order = \App\Orders::where('id', $order_id)->where('user_id', $dealer->id)->first() ;
-        
+
         if(!empty($order))
         {
             \App\Order_product::where('order_id', $order->id)->delete();
             $order->delete();
         }
     }
-    
+
     //Отменя заказа и восстановления позиция в корзине
-    
+
     public function restore_order_in_cart($order_id) {
         $dealer = Dealer::getLoginDealer();
         $order = $dealer->getCurentOrder();
         if(!is_null($order)) {
         $order->delete();
         }
-        
+
         $new_order = Orders::create(array("user_id" => $dealer->id));
-        
+
         $id = $new_order->id;
         $new_order->delete();
-        
+
         $order_h = Orders::find($order_id);
         foreach($order_h->products as $k=>&$v) {
             $v->order_id = $id;
             $v->save();
-            
+
         }
-        
+
 
         $order_h->status = 0;
         $order_h->order_step = 1;
         $order_h->id = $id;
 
         $order_h->save();
-        
+
         return Response::json($order_h);
-        
+
     }
-    
+
     public function save_compare_pdf() {
         $pi = \App\Compare::getUsersPositions("order");
         $data["orders"] = $pi->get_positions();
