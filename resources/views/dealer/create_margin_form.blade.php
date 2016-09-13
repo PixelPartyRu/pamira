@@ -7,7 +7,7 @@
     --}}
 
     {{--     type    name                 value      --}}
-    {{ Form::hidden('mark_up_initially', $margin_type) }}
+    {{-- Form::hidden('mark_up_initially', $margin_type) --}}
 
 
     <div class="form_line"><p class="mess_field">Значком * отмечены обязательные поля</p></div>
