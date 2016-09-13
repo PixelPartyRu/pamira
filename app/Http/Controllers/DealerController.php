@@ -161,8 +161,6 @@ $this->grid->paginate(1000);
         return view("dealer.edit_margin_form", $data);
     }
     private function marginSaveEditForm($margin_id) {
-
-
         $post = \Illuminate\Support\Facades\Request::all();
         $form_data = \App\Margin::formatPostMarginFormData( $post );
         $form_data['margin']['id'] = $margin_id;
