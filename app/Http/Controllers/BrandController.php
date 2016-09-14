@@ -11,28 +11,28 @@ use App\PHR;
 
 
 class BrandController extends MyCrudController {
-    
+
     public function __construct(\Lang $lang) {
         parent::__construct($lang);
 
-        
+
         view()->share('path', Request::path());
     }
     public function all($entity){
-        parent::all($entity); 
+        parent::all($entity);
         $this->filter = \DataFilter::source(new \App\Brand());
         $this->filter->add('id', 'ID', 'text');
         $this->filter->add('title', 'Title', 'text');
         $this->grid = \DataGrid::source($this->filter);
         $this->grid->add('id','ID', true)->style("width:100px");
         $this->grid->add('title','Title');
-        $this->addStylesToGrid();          
+        $this->addStylesToGrid();
         $this->grid->paginate(1000);
         return $this->returnView();
     }
-    
+
     public function  edit($entity){
-        
+
         parent::edit($entity);
         $this->edit = \DataEdit::source(new \App\Brand());
         $this->edit->label('Edit Pages');
@@ -46,9 +46,9 @@ class BrandController extends MyCrudController {
         return $this->returnEditView();
     }
 
-    
+
     public function brand_page($brand_alias) {
-        
+
         $brand = Brand::getByAlias($brand_alias);
         if(is_null($brand)) {
         return view("message",array("message" => "Страница не найдена"));
@@ -58,11 +58,11 @@ class BrandController extends MyCrudController {
         $data['brand'] = $brand;
         $data['catalogs'] = $brand->getCategories();
         return view("brand.brand_page",$data);
-        
-        
-        
+
+
+
     }
-    
+
     public function brand_catalog_page($brand_alias,$catalog_alias) {
 
         $data = array();
@@ -76,7 +76,7 @@ class BrandController extends MyCrudController {
      //  dd( $categories_p->get() );
         $data['brand'] = Brand::getByAlias($brand_alias);
         $data['cur_catalog'] = $catalog;
-        
+
         foreach ($categories as $k => $cat) {
             $count = \App\Product::where("brand_id", $data["brand"]->id)
                     ->where("catalog_id", $data['cur_catalog']->id)
@@ -94,26 +94,28 @@ class BrandController extends MyCrudController {
         foreach($categories as $i=>$cat) {
             $img = $catalog->getRandCategoryImg($cat->id,$data['brand']->id);
             $data["images"][$i] = !is_null($img)?"/uploads/product/img1/".$img:"/img/no_img.jpg";
-            
+
         }
 
-        
+
         return view("brand.brand_catalog_page",$data);
     }
     public function brand_products_by_catalog($brand_alias,$catalog_alias) {
-        
+
         $data = array();
         $data["brand"] = Brand::getByAlias($brand_alias);
         $data['cur_catalog'] = Catalog::getByAlias($catalog_alias);
         $data['products'] = \App\Product::where("brand_id", $data["brand"]->id)
-                        ->where("catalog_id", $data['cur_catalog']->id)->orderBy("name","asc")
+                        ->where("catalog_id", $data['cur_catalog']->id)
+                        // ->orderBy("name","asc")
+                        ->orderBy("cost_trade","asc")
                         ->paginate(12);//get()
         $data['brand_alias'] = true;
 
         return view("brand.brand_catalog_category", $data);
     }
     public function brand_catalog_category($brand_alias,$catalog_alias,$category) {
-        
+
         $data = array();
         $data["brand"] = Brand::getByAlias($brand_alias);
         $data['cur_catalog'] = Catalog::getByAlias($catalog_alias);
@@ -122,19 +124,21 @@ class BrandController extends MyCrudController {
         $data['products'] = \App\Product::where("brand_id",$data["brand"]->id)
                 ->where("catalog_id",$data['cur_catalog']->id)
                 ->filter(array("type"=>$data["category"]->id))
-                ->orderBy("name","asc")->paginate(12);//->get()
+                // ->orderBy("name","asc")->paginate(12);//->get()
+                ->orderBy("cost_trade","asc")
+                ->paginate(12);//->get()
         $data['brand_alias'] = true;
         return view("brand.brand_catalog_category",$data);
-        
+
     }
-    
+
     public function brand_catalog_product($brand_alias,$catalog_alias,$category,$product_alias) {
 
         $data["brand"] = Brand::getByAlias($brand_alias);
         $data['cur_catalog'] = Catalog::getByAlias($catalog_alias);
 
         if($category !== "_") {
-        
+
         $data["category"] = $data['cur_catalog']->getCategotyByAlias($category);
         $data["category_alias"] =  $category;
         }
@@ -147,6 +151,6 @@ class BrandController extends MyCrudController {
     }
 
 
-    
+
 
 }

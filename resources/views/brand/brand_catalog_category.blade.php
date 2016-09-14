@@ -5,8 +5,8 @@
 @if($products->count() == 0)
 <p class="empty_message">
     Раздел находится в процессе заполнения. Информацию по товарам, пожалуйста, уточняйте у оператора номер_телефона
-</p>    
-    
+</p>
+
 @endif
 
 <div class="product_list">
@@ -15,5 +15,5 @@
     @endforeach
     <div class="clear"></div>
     @include('pagination.default', ['paginator' => $products])
-</div>    
+</div>
 @stop

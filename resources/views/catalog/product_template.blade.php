@@ -17,11 +17,11 @@
         {{$product->name}}
     </a>
     @else
-      
+
     <a href="/product_catalog/get/{{ !is_null($product->catalog)?$product->catalog->alias:"_" }}/{{ $product->alias}}" title="" class="product_name">
         {{$product->name}}
     </a>
     @endif
-    
+
 
 </div>
