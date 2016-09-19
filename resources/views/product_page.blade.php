@@ -35,12 +35,12 @@
         @if($product->viewcost)
         <div class="cost_trade"><span> Цена: {{ $product->getFormatCost() }} руб.</span></div>
 
-        {{-- ОПТ и Наценка --}}
+            {{-- ОПТ и Наценка --}}
 
-        <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
-
-        <div class="cost_trade gb-cost-mark-up" id="gb-cost-mark-up"><span> Наценка: {{ $markup }}%</span></div>
-
+            @if( \App\Dealer::is_login() )
+            <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
+            <div class="cost_trade gb-cost-mark-up" id="gb-cost-mark-up"><span> Наценка: {{ $markup }}%</span></div>
+            @endif
 
         <div class="buy_button" data-id="{{ $product->id }}"><img src="/img/button_buy1.gif"></div>
         @else
