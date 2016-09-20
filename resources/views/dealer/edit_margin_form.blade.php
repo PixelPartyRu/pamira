@@ -9,7 +9,7 @@
     {{ Form::text('name',$margin->name) }}
     </div>
     </div>
-    
+
     <div class="form_line two">
     <label>Установить цену*: </label>
     <div class="input">
@@ -17,7 +17,7 @@
     </div>
     </div>
     <div class="form_line one">
-                 
+
         <div class="input">{{ Form::checkbox('default','',( $margin->default == 1 )?true:false ) }}</div>
         <label>-  установить эту наценку по умолчанию</label>
     </div>
@@ -25,11 +25,11 @@
        <label>Установить единую наценку для всех:</label>
        <div class="field">{{ Form::text('margin_for_all') }}</div>
        <div class="button_field">{{ Form::button('Установить',["class" => "set_margin_for_all"]) }}</div>
-    </div>    
-    
+    </div>
+
     <div class="brand_table table">
         @foreach($margin->brands as $brand)
-        <?php // var_dump($brand->margin); ?>
+        <?php //var_dump($brand->margin); ?>
         <div class="table-row">
             <div class="table-cell">{{ $brand->brand->title }}</div>
             <div class="table-cell brand_input">
@@ -38,13 +38,13 @@
             </div>
         </div>
         @endforeach
-        
+
     </div>
     {{ Form::submit('Сохранить') }}
 
-    
-    
+
+
 {{ Form::close()}}
-<script type="text/javascript" src="/js/modules/inputmask.js"></script>  
-<script type="text/javascript" src="/js/min/margin_form.min.js"></script>   
+<script type="text/javascript" src="/js/modules/inputmask.js"></script>
+<script type="text/javascript" src="/js/min/margin_form.min.js"></script>
 @stop
