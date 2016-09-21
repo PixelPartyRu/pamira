@@ -33,7 +33,6 @@
         <div class="table-row">
             <div class="table-cell">{{ $brand->brand->title }}</div>
             <div class="table-cell brand_input">
-
                 {{ Form::hidden('brand_id[]',$brand->brand->id) }}
                 {{ Form::text( 'brand_margin[]', $brand->margin, $attributes = array("class" => "margin_brand_value") )  }}
             </div>
