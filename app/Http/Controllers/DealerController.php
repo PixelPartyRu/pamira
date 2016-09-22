@@ -161,6 +161,7 @@ $this->grid->paginate(1000);
         return view("dealer.edit_margin_form", $data);
     }
     private function marginSaveEditForm($margin_id) {
+
         $post = \Illuminate\Support\Facades\Request::all();
         $form_data = \App\Margin::formatPostMarginFormData( $post );
         $form_data['margin']['id'] = $margin_id;
@@ -187,13 +188,14 @@ $this->grid->paginate(1000);
         //Приводит данные, полученные из post, к удобному виду
         $post = \Illuminate\Support\Facades\Request::all();
         $form_data = \App\Margin::formatPostMarginFormData( $post );
+        // $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default'], $form_data['mark_up_initially'], ' (+)');
         $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default']);
 
         // $margin_type = $form_data['margin'];
         // if($form_data['mark_up_initially'] != $margin_type['type']){
-        //     $form_data['margin']->type = $form_data['mark_up_initially'];
-        //     $form_data['margin']->name = $form_data['margin']->name . ' (+)';
-        //     $valid2 = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default']);
+        //     // $form_data['margin']->type = $form_data['mark_up_initially'];
+        //     // $form_data['margin']->name = $form_data['margin']->name . ' (+)';
+        //     $valid2 = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default'], $form_data['mark_up_initially'], '', true);
         // }
 
 

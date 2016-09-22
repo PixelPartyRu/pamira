@@ -20,6 +20,8 @@ class Margin extends Model
            return $this->hasMany("App\MarginBrand","margin_id","id");
   }
 
+
+  // public static function saveFormData($margin, $brand_id_values, $brand_margin_values, $default, $current_type_margin="", $add_text_for_name="", $rev=false) {
   public static function saveFormData($margin, $brand_id_values, $brand_margin_values, $default) {
 
         $validator = Validator::make($margin,array('name' => array('required', 'min:5')));
@@ -30,9 +32,17 @@ class Margin extends Model
         //var_dump($validator->fails());
 
         if( isset( $margin['id'] ) ) {
+
+            // if( $rev ){
+            //     $type_margin = $current_type_margin;
+            // }
+            // else{
+                $type_margin = $margin['type'];
+            // }
+
             $margin_ob = self::find( intval($margin['id']) );
-            $margin_ob->name = $margin['name'];
-            $margin_ob->type = $margin['type'];
+            $margin_ob->name = $margin['name'].$add_text_for_name;
+            $margin_ob->type = $type_margin;
             $margin_ob->brands()->delete();
             if($default)
             {
@@ -40,6 +50,12 @@ class Margin extends Model
             }
         }
         else {
+
+            // if( $rev ){
+            //     $margin['type'] = $current_type_margin;
+            // }
+            // $margin['name'] = $margin['name'].$add_text_for_name;
+
             $margin_ob = self::create($margin);
             $margin_ob->user_id = Dealer::getLoginDealer()->id;
         }

@@ -29,7 +29,7 @@
 
     <div class="brand_table table">
         @foreach($margin->brands as $brand)
-        <?php // var_dump($brand->margin); ?>
+        <?php //var_dump($brand->margin); ?>
         <div class="table-row">
             <div class="table-cell">{{ $brand->brand->title }}</div>
             <div class="table-cell brand_input">

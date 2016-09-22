@@ -2,6 +2,14 @@
 @section("content")
 {{ Form::open(array('url' => '/dealer/margin_create', 'method' => 'post','class' => 'margin_form')) }}
 
+    {{--
+        Передадим вместе с формой скрытое поле, чтобы знать какую наценку мы хотели изначально изменить. Это потребуется для правильного расчёта наценки, если хотели изменить розн. цену и наценку к оптовой сделать. Сейчас просто к оптовой делается наценка, а надо в таком случае и там, и там.
+    --}}
+
+    {{--     type    name                 value      --}}
+    {{-- Form::hidden('mark_up_initially', $margin_type) --}}
+
+
     <div class="form_line"><p class="mess_field">Значком * отмечены обязательные поля</p></div>
     <div class="form_line two">
     <label>Наименование наценки*:</label>
@@ -43,6 +51,8 @@
 
 
 {{ Form::close()}}
+
+
 <script type="text/javascript" src="/js/modules/inputmask.js"></script>
 <script type="text/javascript" src="/js/min/margin_form.min.js"></script>
 
