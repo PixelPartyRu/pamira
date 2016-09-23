@@ -145,9 +145,10 @@ public static function query() {
     }
 
     public function getCostWithMargin($opt = false) {
-        $cost = ($opt) ? $this->cost : $this->cost_trade;
 
-        $opt ? $type='wholesale' : $type='retail';
+        $cost = ($opt) ? $this->cost : $this->cost_trade;
+        $cost_rev = ($opt) ? $this->cost_trade : $this->cost;
+        if ($opt) {$type='retail';} else {$type='wholesale';}
 
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
         $margin = \App\Margin::where('user_id', $dealer->id)->where('default', 1)->where('type', $type)->first();
@@ -159,13 +160,15 @@ public static function query() {
             $margin_name = "";
         }
 
-        if(!empty($margin_name) && $margin_name=="rev"){
-            return ceil_dec($cost + ($cost / 100 * $this->getMargin(( $opt ? 'wholesale' : 'retail' ))));
+        if($margin_name=="rev"){
+            return ceil_dec($cost + ($cost_rev / 100 * $this->getMargin(( $opt ? 'retail' : 'wholesale' ))));
+
         }
         else{
             return ceil_dec($cost + ($cost / 100 * $this->getMargin(( $opt ? 'retail' : 'wholesale' ))));
-
         }
+
+
 
     }
 
