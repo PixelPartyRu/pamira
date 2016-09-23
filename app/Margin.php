@@ -21,8 +21,8 @@ class Margin extends Model
   }
 
 
-  // public static function saveFormData($margin, $brand_id_values, $brand_margin_values, $default, $current_type_margin="", $add_text_for_name="", $rev=false) {
-  public static function saveFormData($margin, $brand_id_values, $brand_margin_values, $default) {
+  // public static function saveFormData($margin, $brand_id_values, $brand_margin_values, $default) {
+  public static function saveFormData($margin, $brand_id_values, $brand_margin_values, $default, $current_type_margin="", $add_text_for_name="", $rev=false) {
 
         $validator = Validator::make($margin,array('name' => array('required', 'min:5')));
 
@@ -51,9 +51,9 @@ class Margin extends Model
         }
         else {
 
-            // if( $rev ){
-            //     $margin['type'] = $current_type_margin;
-            // }
+            if( $rev ){
+                $margin['type'] = $current_type_margin;
+            }
             // $margin['name'] = $margin['name'].$add_text_for_name;
 
             $margin_ob = self::create($margin);
@@ -92,7 +92,7 @@ class Margin extends Model
     public static function formatPostMarginFormData(&$post) {
         $brand_margin = isset($post['brand_margin']) ? $post['brand_margin'] : array();
         $brand_ids = isset($post['brand_id']) ? $post['brand_id'] : array();
-        // $mark_up_initially = isset($post['mark_up_initially']) ? $post['mark_up_initially'] : "";
+        $mark_up_initially = isset($post['mark_up_initially']) ? $post['mark_up_initially'] : "";
         unset($post['brand_margin']);
         unset($post['margin_for_all']);
         unset($post['_token']);
@@ -100,7 +100,7 @@ class Margin extends Model
         $format_data['margin'] = $post;
         $format_data['brand_margin'] = $brand_margin;
         $format_data['brand_ids'] = $brand_ids;
-        // $format_data['mark_up_initially'] = $mark_up_initially;
+        $format_data['mark_up_initially'] = $mark_up_initially;
         return $format_data;
     }
 

@@ -9,6 +9,7 @@ use App\PH;
 use App\PHR;
 use App\Product;
 use App\User;
+// use App\Margin;
 
 class Product extends Model
 {
@@ -145,7 +146,25 @@ public static function query() {
 
     public function getCostWithMargin($opt = false) {
         $cost = ($opt) ? $this->cost : $this->cost_trade;
-        return ceil_dec($cost + ($cost / 100 * $this->getMargin(( $opt ? 'retail' : 'wholesale' ))));
+
+        $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
+        $margin = \App\Margin::where('user_id', $dealer->id)->where('default', 1)->where('type', $type)->first();
+
+        if(!empty($margin)){
+            $margin_name = substr($margin->name, -3);
+        }
+        else{
+            $margin_name = "";
+        }
+
+        iff(!empty($margin_name) && $margin_name=="rev"){
+            return ceil_dec($cost + ($cost / 100 * $this->getMargin(( $opt ? 'wholesale' : 'retail' ))));
+        }
+        else{
+            return ceil_dec($cost + ($cost / 100 * $this->getMargin(( $opt ? 'retail' : 'wholesale' ))));
+
+        }
+
     }
 
     public static function setCostFormat(&$data) {
