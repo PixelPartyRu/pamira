@@ -157,7 +157,7 @@ public static function query() {
             $margin_name = "";
         }
 
-        iff(!empty($margin_name) && $margin_name=="rev"){
+        if(!empty($margin_name) && $margin_name=="rev"){
             return ceil_dec($cost + ($cost / 100 * $this->getMargin(( $opt ? 'wholesale' : 'retail' ))));
         }
         else{
