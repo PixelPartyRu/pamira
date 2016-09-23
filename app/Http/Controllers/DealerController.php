@@ -194,10 +194,10 @@ $this->grid->paginate(1000);
         if($form_data['mark_up_initially'] != $margin_type['type']){
             // $form_data['margin']->type = $form_data['mark_up_initially'];
             // $form_data['margin']->name = $form_data['margin']->name . ' (+)';
-            $valid2 = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default'], $form_data['mark_up_initially'], ' rev', true);
+            $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default'], $form_data['mark_up_initially'], ' rev', true);
         }
         else{
-            $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default'], $form_data['mark_up_initially'], ' rev', false);
+            $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default'], $form_data['mark_up_initially'], '', false);
         }
 
 

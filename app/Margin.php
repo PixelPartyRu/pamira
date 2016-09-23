@@ -53,8 +53,8 @@ class Margin extends Model
 
             if( $rev ){
                 $margin['type'] = $current_type_margin;
+                $margin['name'] = $margin['name'].$add_text_for_name;
             }
-            // $margin['name'] = $margin['name'].$add_text_for_name;
 
             $margin_ob = self::create($margin);
             $margin_ob->user_id = Dealer::getLoginDealer()->id;

@@ -147,6 +147,8 @@ public static function query() {
     public function getCostWithMargin($opt = false) {
         $cost = ($opt) ? $this->cost : $this->cost_trade;
 
+        $opt ? $type='wholesale' : $type='retail';
+
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
         $margin = \App\Margin::where('user_id', $dealer->id)->where('default', 1)->where('type', $type)->first();
 
