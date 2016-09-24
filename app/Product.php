@@ -150,11 +150,14 @@ public static function query() {
         $cost_rev = ($opt) ? $this->cost_trade : $this->cost;
         if ($opt) {$type='retail';} else {$type='wholesale';}
 
-        $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
-        $margin = \App\Margin::where('user_id', $dealer->id)->where('default', 1)->where('type', $type)->first();
+        if(User::getLoginUserType() == "dealer")
+        {
+            $dealer2 = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
+            $margin2 = \App\Margin::where('user_id', $dealer2->id)->where('default', 1)->where('type', $type)->first();
+        }
 
-        if(!empty($margin)){
-            $margin_name = substr($margin->name, -3);
+        if(!empty($margin2)){
+            $margin_name = substr($margin2->name, -3);
         }
         else{
             $margin_name = "";
