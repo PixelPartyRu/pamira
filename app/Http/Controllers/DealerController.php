@@ -174,9 +174,16 @@ $this->grid->paginate(1000);
     private function marginEditForm($margin_id) {
         $data['brands'] = \App\Brand::all();
         $data['margin'] = Margin::find($margin_id);
+
         if(substr($data['margin']->name, -3) == "rev"){
             $data['margin']->name = substr($data['margin']->name, 0, -4);
+            $type = $data['margin']->type;
+            ($type=="wholesale") ? $type="retail" : $type="wholesale";
+            $data['margin']->current_type = $type;
         }
+        else
+            $data['margin']->current_type = $data['margin']->type;
+
         //var_dump( $data['margin']->brands );
         return view("dealer.edit_margin_form", $data);
     }

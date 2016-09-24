@@ -42,9 +42,11 @@ class Margin extends Model
                 $current_name = $margin_ob->name;
                 if(substr($current_name, -3) == "rev"){
                     $margin_name_new = $margin['name'];
+                    $margin['current_type'] = $margin['type'];
                 }
                 else {
                     $margin_name_new = $margin['name'].$add_text_for_name;
+                    $margin['current_type'] = $current_type_margin;
                 }
                 $type_margin = $current_type_margin;
             }

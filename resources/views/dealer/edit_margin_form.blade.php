@@ -20,7 +20,7 @@
     <div class="form_line two">
     <label>Установить цену*: </label>
     <div class="input">
-    {{ Form::select('type', ['wholesale' => 'Наценка к розничной цене', 'retail' => 'Наценка к оптовой цене'],$margin->type) }}
+    {{ Form::select('type', ['wholesale' => 'Наценка к розничной цене', 'retail' => 'Наценка к оптовой цене'],$margin->current_type) }}
     </div>
     </div>
     <div class="form_line one">
