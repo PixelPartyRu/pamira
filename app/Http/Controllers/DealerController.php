@@ -124,9 +124,26 @@ $this->grid->paginate(1000);
         $dealer = Dealer::getLoginDealer();
         //var_dump($dealer);
 
-        $data['wholesale_margin'] = $dealer->getWholesaleMargins();
-        $data['retail_margin'] = $dealer->getRetailMargins();
+        // Это на самом деле РОЗНИЦА
+        $array_wholesale_margin = $dealer->getWholesaleMargins();
+        // Теперь береберём массив, чтобы удалить/заменить служебные пометки
+        for ($i=0; $i < count($array_wholesale_margin); $i++) {
+            if(substr($array_wholesale_margin[$i]['name'], -3) == "rev"){
+                $array_wholesale_margin[$i]['name'] = substr($array_wholesale_margin[$i]['name'], 0, -4);
+            }
+        }
+        // Это на самом деле ОПТ
+        $array_retail_margin = $dealer->getRetailMargins();
+        // Теперь береберём массив, чтобы удалить/заменить служебные пометки
+        for ($i=0; $i < count($array_retail_margin); $i++) {
+            if(substr($array_retail_margin[$i]['name'], -3) == "rev"){
+                $array_retail_margin[$i]['name'] = substr($array_retail_margin[$i]['name'], 0, -4);
+            }
+        }
         //dd($data['margins']);
+
+        $data['wholesale_margin'] = $array_wholesale_margin;
+        $data['retail_margin'] = $array_retail_margin;
 
         return view("dealer.for_admins",$data);
 
@@ -157,6 +174,9 @@ $this->grid->paginate(1000);
     private function marginEditForm($margin_id) {
         $data['brands'] = \App\Brand::all();
         $data['margin'] = Margin::find($margin_id);
+        if(substr($data['margin']->name, -3) == "rev"){
+            $data['margin']->name = substr($data['margin']->name, 0, -4);
+        }
         //var_dump( $data['margin']->brands );
         return view("dealer.edit_margin_form", $data);
     }
@@ -165,7 +185,18 @@ $this->grid->paginate(1000);
         $post = \Illuminate\Support\Facades\Request::all();
         $form_data = \App\Margin::formatPostMarginFormData( $post );
         $form_data['margin']['id'] = $margin_id;
-        $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default']);
+        // $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default']);
+
+        $margin_type = $form_data['margin'];
+        if($form_data['mark_up_initially'] != $margin_type['type']){
+            // $form_data['margin']->type = $form_data['mark_up_initially'];
+            // $form_data['margin']->name = $form_data['margin']->name . ' (+)';
+            $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default'], $form_data['mark_up_initially'], ' rev', true);
+        }
+        else{
+            $valid = \App\Margin::saveFormData($form_data['margin'],$form_data['brand_margin'],$form_data['brand_ids'], $form_data['default'], $form_data['mark_up_initially'], '', false);
+        }
+
         if($valid) {
           return redirect('/dealer/margin_list');
         }

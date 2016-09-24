@@ -33,16 +33,33 @@ class Margin extends Model
 
         if( isset( $margin['id'] ) ) {
 
-            // if( $rev ){
-            //     $type_margin = $current_type_margin;
-            // }
-            // else{
-                $type_margin = $margin['type'];
-            // }
-
             $margin_ob = self::find( intval($margin['id']) );
-            $margin_ob->name = $margin['name'].$add_text_for_name;
+
+
+            // $margin_ob->name = "";
+
+            if( $rev ) {
+                $current_name = $margin_ob->name;
+                if(substr($current_name, -3) == "rev"){
+                    $margin_name_new = $margin['name'];
+                }
+                else {
+                    $margin_name_new = $margin['name'].$add_text_for_name;
+                }
+                $type_margin = $current_type_margin;
+            }
+            else {
+                // $type_margin = $margin['type'];
+                $type_margin = $current_type_margin;
+                if(substr($margin_ob->name, -3) == "rev"){
+                    $margin_name_new = $margin['name'];
+                }else{
+                    $margin_name_new = $margin['name'].$add_text_for_name;
+                }
+            }
+
             $margin_ob->type = $type_margin;
+            $margin_ob->name = $margin_name_new;
             $margin_ob->brands()->delete();
             if($default)
             {
