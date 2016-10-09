@@ -12,7 +12,7 @@
 <script type="text/javascript" src="/js/modules/jquery.ui-slider.js"></script>
 <script type="text/javascript" src="/js/filter.js"></script>
 <script id="product_template" type="text/template">
-         
+
 
 
 <div data-id="<%- id %>" class="product_box ">

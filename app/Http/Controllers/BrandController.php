@@ -80,6 +80,7 @@ class BrandController extends MyCrudController {
         foreach ($categories as $k => $cat) {
             $count = \App\Product::where("brand_id", $data["brand"]->id)
                     ->where("catalog_id", $data['cur_catalog']->id)
+                    ->where("deleted",0)
                     ->filter(array("type" => $cat->id))
                     ->count();
             if ($count == 0) {
@@ -107,6 +108,7 @@ class BrandController extends MyCrudController {
         $data['cur_catalog'] = Catalog::getByAlias($catalog_alias);
         $data['products'] = \App\Product::where("brand_id", $data["brand"]->id)
                         ->where("catalog_id", $data['cur_catalog']->id)
+                        ->where("deleted",0)
                         // ->orderBy("name","asc")
                         ->orderBy("cost_trade","asc")
                         ->paginate(12);//get()
@@ -123,6 +125,7 @@ class BrandController extends MyCrudController {
         $data["category_alias"] =  $category;
         $data['products'] = \App\Product::where("brand_id",$data["brand"]->id)
                 ->where("catalog_id",$data['cur_catalog']->id)
+                ->where("deleted",0)
                 ->filter(array("type"=>$data["category"]->id))
                 // ->orderBy("name","asc")->paginate(12);//->get()
                 ->orderBy("cost_trade","asc")
@@ -142,7 +145,8 @@ class BrandController extends MyCrudController {
         $data["category"] = $data['cur_catalog']->getCategotyByAlias($category);
         $data["category_alias"] =  $category;
         }
-        $product = \App\Product::getByAlias($product_alias);
+        $product = \App\Product::getByAlias($product_alias)
+                            ->where("deleted",0);
         if (is_null($product) || $product->moderated == 0) return view("message", array("message" => "Товар не найден"));
         $data['product'] = $product;
         $data['product_img'] = $product->getImageArr();

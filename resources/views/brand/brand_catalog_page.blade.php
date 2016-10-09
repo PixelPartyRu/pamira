@@ -1,7 +1,7 @@
 @extends("layout")
 @section("content")
 @include("brand.breadcrumbs")
-@foreach($categories as $cat) 
+@foreach($categories as $cat)
 
 @endforeach
 <div class="catalog_brand">
@@ -11,7 +11,7 @@
         <a href="/brand/{{ $brand->alias }}/{{ $cur_catalog->alias }}/{{ App\Jobs\Helper::translit($cat->value) }}">
         <img src="/imgresize?file={{public_path()}}{{ $images[$i] }}" />
         </a>
-    </div>    
+    </div>
     <a href="/brand/{{ $brand->alias }}/{{ $cur_catalog->alias }}/{{ App\Jobs\Helper::translit($cat->value) }}">{{ $cat->value }}</a>
     </div>
     @endforeach

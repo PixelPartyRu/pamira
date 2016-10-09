@@ -15,7 +15,7 @@
         <a href="/brand/{{ $brand->alias }}/{{ $brand_catalog->alias }}">
         <img src="/imgresize?file={{public_path()}}/uploads/product/img1/{{ $brand_catalog->getRandomImgByBrand($brand->id) }}" />
         </a>
-    </div>    
+    </div>
     <a href="/brand/{{ $brand->alias }}/{{ $brand_catalog->alias }}">{{ $brand_catalog->name }} {{ $brand->title }}</a>
     </div>
     @endforeach
@@ -23,5 +23,5 @@
 
 <div class="seo_text">
     {!! $brand->getSEOtext() !!}
-</div>    
+</div>
 @stop
