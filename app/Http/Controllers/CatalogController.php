@@ -131,18 +131,20 @@ class CatalogController extends MyCrudController {
         $data['catalog_ob'] = Catalog::where("alias",$catalog)->get()->first();
         $id = $data['catalog_ob']->id;
         $data['product_list'] = Product::where("catalog_id",$id)
-                                    // ->where("deleted",0)
-                                    ->orderBy("sales_leader","desc")
+                                    // ->orderBy("sales_leader","desc")
                                     ->orderBy("cost_trade","asc")
+                                    ->where("deleted",0)
                                     ->paginate(12);//get()
         $data['filters'] = $data['catalog_ob']->getAccessFilters();
 
 
         $data['filter_max_price'] = Product::where("catalog_id",$id)
-                                    // ->where("deleted",0)
+                                    ->where("deleted",0)
+                                    ->orderBy("cost_trade","asc")
                                     ->max('cost_trade');
         $data['filter_min_price'] = Product::where("catalog_id",$id)
-                                    // ->where("deleted",0)
+                                    ->where("deleted",0)
+                                    ->orderBy("cost_trade","asc")
                                     ->min('cost_trade');
         $data['filter_brand'] = $data['catalog_ob']->getAccessBrands();
         return view("catalog.catalog_page",$data);
@@ -187,17 +189,19 @@ class CatalogController extends MyCrudController {
 
 
         $q = Product::whereIn("id", $catalog->getCountProductByFilterValues($data))
-                        // ->where("deleted",0)
                         ->where("cost_trade", ">=", $data['cost_trade']['min'])
                         ->where("cost_trade", "<=", $data['cost_trade']['max'])
-                        ->where("catalog_id",$catalog_id);
+                        ->where("catalog_id",$catalog_id)
+                        ->where("deleted",0)
+                        ->orderBy("cost_trade","asc");
 
         $data_for_disable_detect = $data['filter'];
 
         $q_fdd = Product::whereIn("id", $catalog->getCountProductByFilterValues($data_for_disable_detect))
-                        // ->where("deleted",0)
                         ->where("cost_trade", ">=", $data['cost_trade']['min'])
-                        ->where("cost_trade", "<=", $data['cost_trade']['max']);
+                        ->where("cost_trade", "<=", $data['cost_trade']['max'])
+                        ->where("deleted",0)
+                        ->orderBy("cost_trade","asc");
        // d($data['disabled_by']);
         //if ($data['disabled_by'] !== "brand") {
            // $data_for_disable_detect["brand"];
@@ -242,16 +246,19 @@ class CatalogController extends MyCrudController {
                 ->where("catalog_id",$catalog->id)
                 ->where("cost_trade",">=",$data['cost_trade']['min'])
                 ->where("cost_trade","<=",$data['cost_trade']['max'])
-                // ->where("deleted",0)
-                ->orderBy("sales_leader","desc")->orderBy($data['sort'],"asc")
+                ->where("deleted",0)
+                // ->orderBy("sales_leader","desc")
+                // ->orderBy("cost_trade","asc")
+                ->orderBy($data['sort'],"asc")
                 ->get();
         }
         else {
                   $products = Product::where("catalog_id",$catalog->id)
                 ->where("cost_trade",">=",$data['cost_trade']['min'])
                 ->where("cost_trade","<=",$data['cost_trade']['max'])
-                // ->where("deleted",0)
-                ->orderBy("sales_leader","desc")->orderBy($data['sort'],"asc")
+                ->where("deleted",0)
+                // ->orderBy("sales_leader","desc")
+                ->orderBy($data['sort'],"asc")
                 ->get();
         }
 
