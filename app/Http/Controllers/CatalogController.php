@@ -17,63 +17,63 @@ use Illuminate\Support\Facades\DB;
 class CatalogController extends MyCrudController {
 
 
-    
+
         public function all($entity){
-            
-        parent::all($entity); 
+
+        parent::all($entity);
 
         $params = Request::all();
         $parent_id = empty($params)||!isset($params['catalog'])?0:intval($params['catalog']);
-        
+
         $this->filter = \DataFilter::source(\App\Catalog::query()->where("parent_id",$parent_id));
 
         $this->grid = DataGrid::source($this->filter);
         $this->grid->add('id','ID', true)->style("width:100px");
        // $this->grid->add('parent_id','parent_id');
 
-        //this->grid->add('name', 'Categories', 'button'); 
+        //this->grid->add('name', 'Categories', 'button');
 
 
-        $this->addStylesToGrid();   
+        $this->addStylesToGrid();
         $this->grid->add("name","Название каталога","text");
         $this->grid->add('parent',"Товары")->actions("product", array("catalog"));
         $this->grid->paginate(1000);
         return $this->returnView();
-        
-        
-        
+
+
+
     }
     public static function test_param( $param ){
- 
+
         $products = Product::whereHas("phr.ph",function($q) use($param){
-          
-          $q->where('name', $param);
-          
-      });
-      
 
-      
+          $q->where('name', $param);
+
+      });
+
+
+
       $pr = \App\PHR::whereHas("ph",function($q) use($param){
-          
+
           $q->where('name', $param);
-          
+
       });
 
-      
+
     }
-    
+
     public function getCount() {
-        $start = microtime(true); 
+        $start = microtime(true);
         $r = Request::all();
 
         $catalog = Catalog::find( intval($r['catalog_id']) );
            //     echo 'Время выполнения скрипта: '.(microtime(true) - $start).' сек.';
         return Response::json($catalog->getCountProductByHid( intval($r['hid'])) );
-        
 
-        
+
+
     }
-    
+
       public function edit($entity) {
 
         parent::edit($entity);
@@ -93,25 +93,25 @@ class CatalogController extends MyCrudController {
         $this->edit->add('alias', 'Для формирования пути', 'text');
         $this->edit->add('img', 'Картинка', 'image')->move('uploads/product/img')->preview(100, 100);
        // $this->edit->AddText("Выбор доступных фильтров для каталога");
-       
+
         $haracteristic = Product::$PRODUCT_HARACTERISTIC;
        // $this->edit->add('filter', 'Categories', 'checkboxgroup')->options($haracteristic);
-        
+
         $params = Request::all();
         if ( isset($params['insert']) || isset($params['update']) ) {
-            
+
           //  $this->edit->model->filter = json_encode($params['filter']);
         }
-        
+
        // $parent_id = empty($params)||!isset($params['catalog'])?0:intval($params['catalog']);
-        
+
        // $this->edit->model->parent_id = $parent_id;
-        
+
         $ah = $this->edit->model->getAccessFiltersWithCount();
         //d($ah);
 
-        
- 
+
+
             return \View::make("admin.catalog_edit", array('title' => $this->entity,
                         'edit' => $this->edit,
                         'catalog' => $this->edit->model->id,
@@ -123,19 +123,27 @@ class CatalogController extends MyCrudController {
         $lang = new \Illuminate\Support\Facades\Lang();
         $product = new ProductController($lang);
        return $product->all("Product");
-        
+
     }
-    
+
     public function catalog($catalog) {
 
         $data['catalog_ob'] = Catalog::where("alias",$catalog)->get()->first();
         $id = $data['catalog_ob']->id;
-        $data['product_list'] = Product::where("catalog_id",$id)->orderBy("sales_leader","desc")->orderBy("cost_trade","asc")->paginate(12);//get()
+        $data['product_list'] = Product::where("catalog_id",$id)
+                                    ->where("deleted",0)
+                                    ->orderBy("sales_leader","desc")
+                                    ->orderBy("cost_trade","asc")
+                                    ->paginate(12);//get()
         $data['filters'] = $data['catalog_ob']->getAccessFilters();
 
 
-        $data['filter_max_price'] = Product::where("catalog_id",$id)->max('cost_trade');
-        $data['filter_min_price'] = Product::where("catalog_id",$id)->min('cost_trade');
+        $data['filter_max_price'] = Product::where("catalog_id",$id)
+                                    ->where("deleted",0)
+                                    ->max('cost_trade');
+        $data['filter_min_price'] = Product::where("catalog_id",$id)
+                                    ->where("deleted",0)
+                                    ->min('cost_trade');
         $data['filter_brand'] = $data['catalog_ob']->getAccessBrands();
         return view("catalog.catalog_page",$data);
 
@@ -144,18 +152,28 @@ class CatalogController extends MyCrudController {
 
         $data['catalog_ob'] = Catalog::where("alias", $catalog)->get()->first();
         $id = $data['catalog_ob']->id;
-        $data['product_list'] = Product::where("catalog_id", $id)->orderBy("sales_leader", "desc")->orderBy("name", "acs")->take(12)->get();
+        $data['product_list'] = Product::where("catalog_id", $id)
+                                    ->where("deleted",0)
+                                    ->orderBy("sales_leader", "desc")
+                                    ->orderBy("name", "acs")
+                                    ->take(12)
+                                    ->get();
         $data['filters'] = $data['catalog_ob']->getAccessFilters();
 
-        $data['filter_max_price'] = Product::where("catalog_id", $id)->max('cost_trade');
-        $data['filter_min_price'] = Product::where("catalog_id", $id)->min('cost_trade');
+        $data['filter_max_price'] = Product::where("catalog_id", $id)
+                                    ->where("deleted",0)
+                                    ->max('cost_trade');
+        $data['filter_min_price'] = Product::where("catalog_id", $id)
+                                    ->where("deleted",0)
+                                    ->min('cost_trade');
+
         $data['filter_brand'] = $data['catalog_ob']->getAccessBrands();
         return view("catalog.catalog_page_test", $data);
     }
 
     //При смене чекбоксов возвращаю результат
     public function filter() {
-        
+
         $data = Request::all();
         $cur = $data["cur"];
 
@@ -164,17 +182,20 @@ class CatalogController extends MyCrudController {
         $catalog_id = intval($data['catalog']);
         $catalog = Catalog::find(intval($data['catalog']));
         $data = $catalog->prepareFilterFormat($data);
-       
+
        // d($data);
-        
-        
+
+
         $q = Product::whereIn("id", $catalog->getCountProductByFilterValues($data))
+                        ->where("deleted",0)
                         ->where("cost_trade", ">=", $data['cost_trade']['min'])
-                        ->where("cost_trade", "<=", $data['cost_trade']['max'])->where("catalog_id",$catalog_id);
+                        ->where("cost_trade", "<=", $data['cost_trade']['max'])
+                        ->where("catalog_id",$catalog_id);
 
         $data_for_disable_detect = $data['filter'];
-        
+
         $q_fdd = Product::whereIn("id", $catalog->getCountProductByFilterValues($data_for_disable_detect))
+                        ->where("deleted",0)
                         ->where("cost_trade", ">=", $data['cost_trade']['min'])
                         ->where("cost_trade", "<=", $data['cost_trade']['max']);
        // d($data['disabled_by']);
@@ -190,8 +211,8 @@ class CatalogController extends MyCrudController {
         }*/
 
         $products_count = $q->count();
-        
-        
+
+
         if(empty($data["filter"])) {
             $products['disable_filters'] = array();
         }
@@ -200,13 +221,13 @@ class CatalogController extends MyCrudController {
 
         return response()->json($products);
     }
-    
+
     public function test_filter() {
         $data = Request::all();
         $catalog = Catalog::find(intval($data['catalog']));
         $data = $catalog->prepareFilterFormat($data);
 
-        
+
     }
 
     //Товары по фильтру
@@ -216,21 +237,24 @@ class CatalogController extends MyCrudController {
         $data = $catalog->prepareFilterFormat($data);
        // var_dump($data);
         if(!empty($data["filter"])) {
-        $products = Product::whereIn("id",$catalog->getCountProductByFilterValues($data))
+        $products = Product::whereIn("id",$catalog
+                ->where("deleted",0)
+                ->getCountProductByFilterValues($data))
                 ->where("catalog_id",$catalog->id)
                 ->where("cost_trade",">=",$data['cost_trade']['min'])
                 ->where("cost_trade","<=",$data['cost_trade']['max'])
                 ->orderBy("sales_leader","desc")->orderBy($data['sort'],"asc")
-                
+
                 ->get();
         }
         else {
                   $products = Product::where("catalog_id",$catalog->id)
+                ->where("deleted",0)
                 ->where("cost_trade",">=",$data['cost_trade']['min'])
                 ->where("cost_trade","<=",$data['cost_trade']['max'])
                 ->orderBy("sales_leader","desc")->orderBy($data['sort'],"asc")
-                
-                ->get();  
+
+                ->get();
         }
 
 
@@ -247,9 +271,9 @@ class CatalogController extends MyCrudController {
         }
 
         return response()->json($products_ret);
-        
+
     }
-    
+
     public function frame() {
         $filter = Request::all();
 
@@ -257,7 +281,7 @@ class CatalogController extends MyCrudController {
         return $catalog->getCountProductByFilterValues($filter);
 
     }
-    
+
     public function cache_catalog($catalog_id) {
         $catalog = Catalog::find($catalog_id);
         $ob = $catalog->getCacheObject();
@@ -283,11 +307,11 @@ class CatalogController extends MyCrudController {
         unset($filter["brand"]);
         $h_ids = array();
         foreach($filter as $f) {
-          $h_ids = array_merge($f,$h_ids);  
+          $h_ids = array_merge($f,$h_ids);
         }
         //dd($h_ids);
         $catalog = Catalog::find($catalog_id);
- 
+
         $ob = $catalog->getCacheObject();
         //$ob->set_cache_info();
         //$ob->to_database();
@@ -299,9 +323,9 @@ class CatalogController extends MyCrudController {
             unset($filter[$k]);
         }
     }
-    
-   
-    
+
+
+
     public function cache_all($catalog_id){
 
 
@@ -314,8 +338,8 @@ class CatalogController extends MyCrudController {
 
         }
     }
-    
 
-    
+
+
 
 }
