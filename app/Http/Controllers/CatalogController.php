@@ -238,22 +238,20 @@ class CatalogController extends MyCrudController {
        // var_dump($data);
         if(!empty($data["filter"])) {
         $products = Product::whereIn("id",$catalog
-                ->where("deleted",0)
                 ->getCountProductByFilterValues($data))
                 ->where("catalog_id",$catalog->id)
                 ->where("cost_trade",">=",$data['cost_trade']['min'])
                 ->where("cost_trade","<=",$data['cost_trade']['max'])
+                ->where("deleted",0)
                 ->orderBy("sales_leader","desc")->orderBy($data['sort'],"asc")
-
                 ->get();
         }
         else {
                   $products = Product::where("catalog_id",$catalog->id)
-                ->where("deleted",0)
                 ->where("cost_trade",">=",$data['cost_trade']['min'])
                 ->where("cost_trade","<=",$data['cost_trade']['max'])
+                ->where("deleted",0)
                 ->orderBy("sales_leader","desc")->orderBy($data['sort'],"asc")
-
                 ->get();
         }
 
