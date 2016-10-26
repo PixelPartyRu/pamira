@@ -72,7 +72,8 @@ class ProductController extends MyCrudController {
           $this->grid->add('catalog_for_admin_list()','Каталог размещения',"catalog_id");
           $this->grid->add('show_cost()','Отображать цену',"viewcost");
           $this->grid->add('cost','Цена товара',"cost");
-          $this->grid->add('is_sales_leader()','Лидер продаж',"sales_leader");
+          // $this->grid->add('is_sales_leader()','Лидер продаж',"sales_leader");
+          $this->grid->add('is_sales_leader()','Рекомендуем',"sales_leader");
           $this->grid->add('has_img()','Фото',"img");
 
 
@@ -252,6 +253,9 @@ class ProductController extends MyCrudController {
 
         return $this->customEditView("admin.product_edit");
     }
+
+
+
 
     public function getCatalogList($parent_id,\Illuminate\Http\Request $request) {
 
