@@ -2512,17 +2512,44 @@ vertical-align: top;
 .dev_page .scripts li.selected {
   border: 1px solid red;
 }
-.sticker {
-  background-image: url(/img/sticker.png);
+
+
+
+.sticker,
+.sticker-promo,
+.sticker-action {
   background-repeat: no-repeat;
   background-position: right top;
   position: absolute;
   height: 70px;
-  width: 70px;
-  right: 5px;
   top: 5px;
   z-index: 10;
 }
+
+.sticker,
+.sticker-promo {
+  width: 70px;
+}
+.sticker {
+  background-image: url(/img/sticker.png);
+  right: 5px;
+}
+
+.sticker-promo,
+.sticker-action {
+  background-position: center;
+  left: 5px;
+}
+.sticker-promo {
+  background-image: url('/img/sticker_promo.png');
+}
+.sticker-action {
+  background-image: url('/img/sticker_action.jpg');
+  width: 180px;
+}
+
+
+
 .base_image.sales_leader .sticker_wrapper {
   display: inline-block;
   position: relative;

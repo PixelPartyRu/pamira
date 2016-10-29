@@ -74,6 +74,10 @@ class ProductController extends MyCrudController {
           $this->grid->add('cost','Цена товара',"cost");
           // $this->grid->add('is_sales_leader()','Лидер продаж',"sales_leader");
           $this->grid->add('is_sales_leader()','Рекомендуем',"sales_leader");
+
+          // $this->grid->add('is_sticker_promo()','Промо',"sticker_promo");
+          // $this->grid->add('is_sticker_action()','Акция',"sticker_action");
+
           $this->grid->add('has_img()','Фото',"img");
 
 
@@ -179,6 +183,10 @@ class ProductController extends MyCrudController {
         $this->edit->add('country', 'Страна', 'text')->rule('required');
         $this->edit->add('cost_trade', 'Цена', 'text')->rule('required');
         $this->edit->add('cost', 'Оптовая цена', 'text');
+
+        $this->edit->checkbox('sticker_promo', 'Промо');
+        $this->edit->checkbox('sticker_action', 'Акция');
+
         $this->edit->checkbox('sales_leader', 'Рекомендуем');
         $this->edit->checkbox('sales', 'Распродажа');
         $this->edit->checkbox('in_main_page', 'На главной странице');

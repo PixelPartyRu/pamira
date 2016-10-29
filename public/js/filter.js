@@ -6,14 +6,14 @@ function Filter() {
 
     this.message_window = $(".filter_tooltip");
     this.catalog_id = $("[name=catalog]").val();
-    //текущий чекбокс, который изменен  
+    //текущий чекбокс, который изменен
     this.checkbox_changed = null;
     this.product_box = _.template($("#product_template").html());
     this.timerId = null;
     this.getCatalogId = function() {
         return this.catalog_id;
     }
-    this.getProductBox = function() {   
+    this.getProductBox = function() {
             return this.product_box;
         }
         //события клика на фильтр и показ текущих значений
@@ -21,7 +21,7 @@ function Filter() {
         $(".select_line").click(function() {
             if (!$(this).hasClass("open")) {
                 $(".select_line").removeClass("open");
-                $(this).addClass("open"); 
+                $(this).addClass("open");
 
             } else {
                 $(this).removeClass("open");
@@ -54,16 +54,16 @@ function Filter() {
         return $(this.checkbox_changed);
 
     }
-    
+
 
 
     //все чекбоксы филтра
     this.getFilterCollection = function() {
-            
+
             return $(".select_checkbox input[type=checkbox],.filter_brands input[type=checkbox]");
 
         }
-        
+
         // Обновление набора выбранных чекбоксов
     this.getCheckedFilterCollection = function() {
             return $(".select_checkbox input[type=checkbox]:checked,.filter_brands input[type=checkbox]:checked,");
@@ -77,7 +77,7 @@ function Filter() {
         }
         //
     this.getSort = function() {
-        
+
         return $('[name="sort"]:checked').val();
 
     }
@@ -113,11 +113,11 @@ function Filter() {
     this.sendAjaxCountData = function ($cur_check) {
         var that = this;
 
-         
-        
-        
+
+
+
         $.get("/product_catalog/filter", that.getCountAjaxData($cur_check), function (data) {
-  
+
             that.setDataForWindow(data.count);
 
             var bh = (that.getDisabledBy() == "haracteristic"
@@ -142,11 +142,11 @@ function Filter() {
                     &&
                     that.getDisabledBy() == "haracteristic"
                     );
-            
 
-            
 
-            
+
+
+
             if (bh || bb) {
                 console.log("data");
                 console.log(data);
@@ -154,7 +154,7 @@ function Filter() {
                 console.log(data.disable_filters);
                 that.disable_filters(data.disable_filters);
             }
-            
+
 
 
         });
@@ -164,7 +164,7 @@ function Filter() {
     this.clearDisabledAll = function() {
        var collection =  this.getFilterCollection();
        $(".select_checkbox, .brand_filter_elem").removeClass("disabled");
-       collection.removeAttr("disabled").removeClass("disabled");  
+       collection.removeAttr("disabled").removeClass("disabled");
     }
     this.clearDisabled = function() {
         //убираются недоступные галки только из другой категории
@@ -177,8 +177,8 @@ function Filter() {
         else {
         this.clearDisabledAll();
         }
-        
-        
+
+
     }
     this.getHaracteristicCollection  = function() {
         return $(".select_checkbox input[type=checkbox]");
@@ -188,11 +188,11 @@ function Filter() {
     }
     this.getBrandCollection = function() {
         return $(".filter_brands input[type=checkbox]");
-        
+
     }
         this.getCheckedBrandCollection = function() {
         return $(".filter_brands input[type=checkbox]:checked");
-        
+
     }
 
     //событие клика на чекбокс фильтра
@@ -207,55 +207,55 @@ function Filter() {
                 that.setLine();
                 that.showWindowWithMessage();
                 that.sendAjaxCountData( $(this) );
-                
+
             });
 
         }
-    
+
     this.setLine = function() {
-        
+
         if( this.getChangedCheckbox().parent().hasClass("select_checkbox")) {
-            
+
             if(this.getChangedCheckbox().is(":checked")) {
                 this.appendFilterFromLine();
             }
             else {
                 this.deleteFilterFromLine();
             }
-            
+
         }
-        
-    
+
+
     }
-    
+
     this.appendFilterFromLine = function() {
-        
+
             var label = this.getChangedCheckbox().parent().find("label").html();
             this.getChangedCheckbox().parents(".select").find(".select_line").append("<div>"+label+"</div>");
 
     }
-    
+
     this.deleteFilterFromLine = function() {
 
         if(this.deleteFilterFromLine.arguments.length > 0) {
             var filter_class = this.deleteFilterFromLine.arguments[0];
-            
+
             var label = $(filter_class).find("label").html();
             $(filter_class).parents(".select").find(".select_line").find("div:contains('" + label + "')").remove();
-            
+
         }
         else {
         var label = this.getChangedCheckbox().parent().find("label").html();
         this.getChangedCheckbox().parents(".select").find(".select_line").find("div:contains('"+label+"')").remove();
         }
-        
+
     }
     //получение значений филтра в JSON
     this.getFilterJson = function() {
 
             return $.toJSON(this.getCheckedFilterCollection().serializeArray());
         }
-        //показ всплывающего окна с сообщение о загрузке 
+        //показ всплывающего окна с сообщение о загрузке
         // chekbox - чекбок возле которого надо показать окно
     this.showWindowWithMessage = function() {
             clearTimeout(this.timerId);
@@ -297,19 +297,19 @@ function Filter() {
         return (this.getDisabledBy() === "haracteristic" && this.getProductHaracteristicCheckedSize() > 0) || (this.getDisabledBy() === "brand" && this.getBrandCheckedSize() > 0);
 
     }
-    
+
 
 
     this.disable_filters = function(values) {
 
 
          console.log(values);
-         
+
       //  alert(1);
-        
+
         var that = this;
         that.clearDisabled();
-        
+
 
         if (that.needDisabled() === true)
 
@@ -318,9 +318,9 @@ function Filter() {
             $.each(values, function(name, values) {
 
                 $.each(values, function(i, value) {
-                     
+
                     that.set_disable_checkbox(name + value);
-                    
+
                 });
 
 
@@ -329,7 +329,7 @@ function Filter() {
     }
 
     this.set_disable_checkbox = function(filter_class) {
-        
+
         $("." + filter_class).addClass("disabled");
         $("." + filter_class + " input").removeAttr("checked");
         $("." + filter_class + " input").attr("disabled", "disabled");
@@ -338,7 +338,7 @@ function Filter() {
         this.deleteFilterFromLine("." + filter_class);
     }
 
-    
+
 
     this.filter_button_click = function() {
         var that = this;
@@ -347,15 +347,15 @@ function Filter() {
 
         });
     }
-    
+
     this.show_products = function () {
-                
+
         console.clear();
         var that = this;
         $(".product_list").html("");
         $.get("/product_catalog/getFilterProduct", that.getProductUpdateAjaxData(), function (data) {
             $.each(data, function (i, product) {
-                
+
                 that.appendProduct(product);
 
 
@@ -370,8 +370,8 @@ function Filter() {
            event.preventDefault();
            that.show_products();
         });
-        
-        
+
+
     }
     this.appendProduct = function(product) {
         var product_html = this.product_box({
@@ -380,7 +380,9 @@ function Filter() {
             name: product.name,
             id:product.id,
             alias:product.alias,
-            sales_leader:product.sales_leader
+            sales_leader:product.sales_leader,
+            sticker_promo: product.sticker_promo,
+            sticker_action: product.sticker_action
         });
         product_html = $(product_html);
         if(product.viewcost == 1)
@@ -392,10 +394,23 @@ function Filter() {
             product_html.find('.price_info:not(.nocost)').remove();
             product_html.find('.buy_button').remove();
         }
+
+
+            if(product.sticker_promo == 1) {
+                product_html.prepend('<div class="sticker-promo">&nbsp;</div>');
+            }
+            else if(product.sticker_action == 1) {
+                product_html.prepend('<div class="sticker-action">&nbsp;</div>');
+            }
+
         if(product.sales_leader == 1) {
             product_html.prepend('<div class="sticker">&nbsp;</div>');
+        }
+
+        if(product.sales_leader == 1 || product.sticker_action == 1 || product.sticker_promo == 1){
             product_html.addClass("with_sticker");
         }
+
         $(".product_list").append(product_html);
 
 
@@ -410,22 +425,22 @@ function Filter() {
             catalog: this.getCatalogId(),
             sort: this.getSort(),
             cost_trade:this.getPrice()
-            
+
         };
-        
+
         return ob;
     }
     this.getPrice = function() {
-        
+
         return {
             min: $("#minCost").val(),
             max: $("#maxCost").val()
         }
     }
     this.window_close_event = function() {
-        
+
         $(".filter_tooltip .close").click(function() {
-            
+
             clearTimeout(this.timerId);
             $(".filter_tooltip").removeClass("show");
         });
@@ -441,7 +456,7 @@ this.clearDisabledAll();
         this.window_close_event();
         this.show_click();
        // this.sh();
-        
+
       //  this.test_cache();
 
 
@@ -456,29 +471,29 @@ this.clearDisabledAll();
         $(".tc").click(function() {
             console.clear();
             var inf = that.getCountAjaxData();
-            
+
             $.ajax({
                 url: "/catalog/frame",
                 type: "POST",
                 data:inf,
                 beforeSend: function (jqXHR, settings) {
 
-                    
+
                     $(".link_info").html("<a class='hhh'>1</a>");
                     $(".hhh").attr("href","/product_catalog/filter/?"+settings.data);
-                    
-                    
+
+
                 },
                 success: function (data) {
                    // alert("Прибыли данные: " + data);
                 }
             });
 
-            
+
         });
-        
+
     }
-    
+
 
 
 };
@@ -489,14 +504,14 @@ this.clearDisabledAll();
 $(document).ready(function() {
 
     var filter = new Filter();
-    filter.init(); 
+    filter.init();
 
 
-}); 
+});
 
 
 
- 
+
 
 
 
@@ -539,12 +554,12 @@ $("#maxCost").val(max);
         $("#slider").slider("values", 0, value1);
     });
 
-	
+
 $("input#maxCost").change(function(){
-		
+
 	var value1=$("input#minCost").val();
 	var value2=$("input#maxCost").val();
-	
+
 	if (value2 > max) { value2 = max; $("input#maxCost").val(max)}
 
 	if(parseInt(value1) > parseInt(value2)){
@@ -560,15 +575,15 @@ $("input#maxCost").change(function(){
 	$('input').keypress(function(event){
 		var key, keyChar;
 		if(!event) var event = window.event;
-		
+
 		if (event.keyCode) key = event.keyCode;
 		else if(event.which) key = event.which;
-	
+
 		if(key==null || key==0 || key==8 || key==13 || key==9 || key==46 || key==37 || key==39 ) return true;
 		keyChar=String.fromCharCode(key);
-		
+
 		if(!/\d/.test(keyChar))	return false;
-	
+
 	});
 
 

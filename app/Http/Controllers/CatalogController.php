@@ -265,13 +265,15 @@ class CatalogController extends MyCrudController {
 
         $products_ret = array();
         foreach($products as $p) {
-            $el["id"]           = $p->id;
-            $el["alias"]        = $p->getPathAliasForCatalog();
-            $el["img"]          = $p->img;
-            $el["name"]         = $p->name;
-            $el["sales_leader"] = $p->sales_leader;
-            $el["cost_trade"]   = $p->getFormatCost();
-            $el["viewcost"]     = $p->viewcost;
+            $el["id"]             = $p->id;
+            $el["alias"]          = $p->getPathAliasForCatalog();
+            $el["img"]            = $p->img;
+            $el["name"]           = $p->name;
+            $el["sales_leader"]   = $p->sales_leader;
+            $el["sticker_promo"]  = $p->sticker_promo;
+            $el["sticker_action"] = $p->sticker_action;
+            $el["cost_trade"]     = $p->getFormatCost();
+            $el["viewcost"]       = $p->viewcost;
             $products_ret[] = $el;
         }
 

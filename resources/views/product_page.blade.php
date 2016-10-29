@@ -1,11 +1,18 @@
 <div class="product_header">{{ $product->name }}</div>
     <div class="gallery">
-        <div class="base_image {{ $product->sales_leader == 1?"sales_leader":"" }}">
-            @if($product->sales_leader == 1)
+        <div class="base_image {{ $product->sales_leader == 1?"sales_leader":"" }}"  style="position: relative;">
             <div class="sticker_wrapper">
-            <div class="sticker">&nbsp;</div>
+                @if($product->sales_leader == 1)
+                <div class="sticker">&nbsp;</div>
+                @endif
+
+                @if($product->sticker_promo == 1 )
+                <div class="sticker-promo">&nbsp;</div>
+                @elseif($product->sticker_action == 1 )
+                <div class="sticker-action">&nbsp;</div>
+                @endif
             </div>
-            @endif
+
            <a href="{{ $product->img !==''?'/uploads/product/img1/'.$product->img:'/img/no_image.png' }}" rel="slb_off" class="img_link">
                <img src="{{ $product->img !==''?'/uploads/product/img1/'.$product->img:'/img/no_image.png' }}" rel='slb_off' />
            </a>
