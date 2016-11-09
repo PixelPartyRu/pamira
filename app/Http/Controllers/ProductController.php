@@ -324,9 +324,8 @@ class ProductController extends MyCrudController {
         $gb_retail = intval($gb_retail);
         $gb_wholesale = intval($gb_wholesale);
 
-        $znamenatel = $gb_wholesale - 1;
-        if($znamenatel <> 0){
-            $markup = ( $gb_retail / $znamenatel ) * 100;
+        if($gb_wholesale > 0){
+            $markup = ( $gb_retail / $gb_wholesale - 1 ) * 100;
         }
         else {
             $markup = 0;
