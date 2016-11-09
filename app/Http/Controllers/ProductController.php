@@ -33,7 +33,8 @@ class ProductController extends MyCrudController {
        // $s = Product::where("catalog_id",$rd);
         $source = Product::query();
         if(isset($rd['catalog'])){
-            $source = $source->where("catalog_id", intval($rd['catalog']));
+            $source = $source->where("catalog_id", intval($rd['catalog']))
+                             ->where("deleted", "0");
         }
 
 
@@ -114,6 +115,7 @@ class ProductController extends MyCrudController {
 
         if (isset($params["do_delete"])) {
             $this->edit->model->deleted = 1;
+            $this->edit->model->moderated = 0;
             $this->edit->model->save();
             return redirect("/panel/Product/all");
         }
@@ -322,7 +324,13 @@ class ProductController extends MyCrudController {
         $gb_retail = intval($gb_retail);
         $gb_wholesale = intval($gb_wholesale);
 
-        $markup = ( $gb_retail / $gb_wholesale - 1 ) * 100;
+        $znamenatel = $gb_wholesale - 1;
+        if($znamenatel <> 0){
+            $markup = ( $gb_retail / $znamenatel ) * 100;
+        }
+        else {
+            $markup = 0;
+        }
         $gb_cost['markup'] = round($markup,2);
 
         return view("catalog.product_page",$data, $gb_cost);

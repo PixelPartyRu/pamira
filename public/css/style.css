@@ -2545,7 +2545,13 @@ vertical-align: top;
 }
 .sticker-action {
   background-image: url('/img/sticker_action.jpg');
-  width: 180px;
+  background-size: cover;
+  // width: 180px;
+  // height: 70px;
+  width: 90px;
+  height: 35px;
+  // border: 2px solid blue;
+  top: 22px;
 }
 
 
