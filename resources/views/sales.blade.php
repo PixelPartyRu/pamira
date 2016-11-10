@@ -7,12 +7,12 @@
 <!--Если это текущая страница, то ссылка делается не кликабельной-->
 <div class="breadcrumbs">
     <div class="main_page catalog_path breadcrumb"><a href="/sales">Распродажи</a></div>
-    
+
     <div class="catalog_path breadcrumb">
 
         <a href="">{{ $catalog_products->name }}</a>
     </div>
-    
+
 </div>
 
 <div class="product_list">
@@ -27,14 +27,14 @@
     <div class="brand_catalog_elem">
     <div class="img">
         <a href="/sales/{{ $cat->alias }}">
-        <img src="/imgresize?file={{public_path()}}/uploads/product/img1/{{ $cat->getCatalogImg() }}" />
+        <img src="/imgresize?file={{public_path()}}/uploads/product/img1/{{ $cat->getCatalogImgForSales() }}" />
         </a>
-    </div>    
+    </div>
     <a href="/sales/{{ $cat->alias }}">{{ $cat->name }}</a>
     </div>
     @endforeach
 </div>
 @endif
-   
+
 
 @stop

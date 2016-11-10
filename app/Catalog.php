@@ -13,7 +13,7 @@ class Catalog extends Model
   protected $table = 'catalog';
   public $cache_object;
   protected $fillable = array('name', 'level', 'alias','parent_id','order','title','description','keywords','h1','text','filter');
-  
+
   public static $noFilterArray = [
         'type' => [
             5, 8, 10, 16
@@ -25,13 +25,13 @@ class Catalog extends Model
             7, 8, 11, 12, 13, 16
         ],
         'style' => [
-            11, 12, 
+            11, 12,
         ],
         'material' => [
             11, 12, 3, 2
         ],
   ];
-  
+
   public static $filtersOrder = [
       "type" => 0,
       "material" => 1,
@@ -40,26 +40,26 @@ class Catalog extends Model
       "color" => 4,
       "device" => 5,
   ];
-  
+
   public function __construct(array $attributes = array()) {
-      
+
       parent::__construct($attributes);
 
   }
-  
+
   public function products() {
       return $this->hasMany("App\Product","catalog_id","id");
   }
   //доступные фильры для каталога
   public function getAccessFilters() {
        // $filter_param1 = explode("|", $this->filter);
-        
+
         $filter_param = PH::where("catalogs","like","%<".$this->id.">%")->lists("name")->unique()->toArray();
 
-        
+
         $haracteristic = \App\Product::getProductHaracteristic();
         $filters = array();
-       
+
         foreach ($filter_param as $k => $v) {
             if($v == "") continue;
             $filter = new \stdClass();
@@ -69,7 +69,7 @@ class Catalog extends Model
 
 
             $filter->values = $this->getAccessFiltersValues($v)->lists("value", "id");
-            
+
             if($filter->name == "width")
             {
                 $arr = $filter->values->toArray();
@@ -89,8 +89,8 @@ class Catalog extends Model
                 asort($arr);
                 $filter->values = collect($arr);
             }
-            
-            
+
+
             $filters[] = $filter;
         }
         foreach ($filters as $k =>$filter)
@@ -109,7 +109,7 @@ class Catalog extends Model
         });
         return $filters;
     }
-    
+
    public function getAccessFiltersWithCount() {
         $ah = $this->getAccessFilters();
         foreach ($ah as $h) {
@@ -127,19 +127,19 @@ class Catalog extends Model
                 });
                // $h->count = $products->count();
               //  $co = $this->getCacheObject();
-                
+
               //  $h->cache_count = count($co->getProductsByInfoId($param));
             }
         }
         return $ah;
     }
-    
+
     public function getCountProductByHid($hid) {
        $data["in_catalog"] = $this->products()->whereHas("phr", function($q) use($hid) {
 
             $q->where('haracteristic_id', $hid);
         })->count();
-        
+
 
         $data["in_cache"] = count($this->getCacheObject()->getProductsByInfoId($hid));
         return $data;
@@ -155,7 +155,7 @@ class Catalog extends Model
             $val_array = array();
             foreach ($filter->values as $k => $v) {
                 $elem = new \stdClass();
-                
+
                 if ($filter->name == "color") {
                     $val_array[] = $v["id"];
                 } else {
@@ -164,9 +164,9 @@ class Catalog extends Model
                 $elem->vals = $val_array;
                 $elem->name = $filter->name;
                 $filter_array[] = $elem;
-                
+
             }
-            
+
         }
 
         return $filter_array;
@@ -184,17 +184,17 @@ class Catalog extends Model
                    $val_array[] = $v["id"];
                }
                else {
-                 $val_array[] = $k;  
+                 $val_array[] = $k;
                }
-               
+
            }
           $filter_array[$filter->name] = $val_array;
        }
-  
+
        return $filter_array;
 
     }
-    
+
     public function getAFTypesArray() {
         $filter_array = array();
         $filters = $this->getAccessFiltersArrayFormat();
@@ -202,45 +202,45 @@ class Catalog extends Model
             $filter_array[] = $k;
         }
         return $filter_array;
-        
+
     }
-    
+
     public function hasFilter($name) {
        $filters = $this->getAccessFiltersArrayFormat();
 
        return isset($filters[$name])?$filters[$name]:null;
     }
-    
-    
-    
+
+
+
     //Получить доутпные id характеристик для каталога
     public function getAccessHIds() {
         $filters = $this->getAccessFilters();
         $ids = array();
-        
+
         foreach($filters as $filter) {
             foreach($filter->values as $k => $v) {
-              
+
                 if(!is_array($v)) {
-               $ids[] = $k; 
+               $ids[] = $k;
                 }
                 else {
-                   $ids[] = $v["id"]; 
+                   $ids[] = $v["id"];
                 }
-               
+
 
             }
-            
+
         }
         return $ids;
     }
-    
+
   /*  public function getTypes() {
         return $this->getAccessFiltersValues($v);
     }*/
     public function getEmptyFiltersValues($filter_name) {
         $values = PH::where("name", $filter_name);
-                        
+
         return $values;
     }
 
@@ -248,7 +248,7 @@ class Catalog extends Model
         $values = PH::where("name",$filter_name)
                 ->where("catalogs","like","%<".$this->id.">%");
         return $values;
-        
+
     }
     public function getAccessBrands() {
         return Brand::where("catalogs","like","%<".$this->id.">%")->get();
@@ -259,28 +259,28 @@ class Catalog extends Model
 
     public function getRandCategoryImg($category_id,$brand_id) {
 
-           $q =  
+           $q =
                    PHR::getProductsByHaracteristicId( $category_id )
                    ->where("catalog_id",$this->id)->where("brand_id",$brand_id)->orderBy("id","asc");
            if($q->count() > 0) {
                $products = $q->get()->toArray();
                return $products[ 0 ]["img"];
-               
+
            }
-           
+
            return null;
-                   
 
-        
-        
+
+
+
     }
-    
 
-    
+
+
     //Возвращает фильтры, которые не доступны
     //Параметры - текущие значения филтра и запрос с фильтрацией
     public function getDisableFilters($data,$disabled_by) {
-        
+
         unset($data['catalog']);
         unset($data['disabled_by']);
         if( $disabled_by === "brand") {
@@ -318,7 +318,7 @@ class Catalog extends Model
                 }
             }
         }
-        
+
         //$disable_filters["brand"] = $disable_filters;
         // dd($disable_filters);
         return $disable_filters;
@@ -331,14 +331,14 @@ class Catalog extends Model
       //  d($data);
         $dbb = $this->disableFiltersByBrand($data);
 
-        
+
         $cOb = $this->getCacheObject();
 
         //$product_brands_array = array_unique($q->lists("brand_id")->toArray());
 
         $product_id_array = array_unique($q->lists("id")->toArray());
 
-        
+
         $brands = []; //$this->getAccessBrandsIds();
         $result_brands = $brands;// array_diff($brands, $product_brands_array);
         $presult = array();
@@ -350,7 +350,7 @@ class Catalog extends Model
 
         $phf = $this->getAccessFiltersWithoutCheckValues($data);
 
-        
+
 //        d("data");
 //        d($data);
 //        d("phf");
@@ -362,13 +362,13 @@ class Catalog extends Model
 
           //  d($filter);
             foreach ($filter as $id => $value) {
-                
+
                 $has_product = count(array_intersect($product_id_array, $cOb->getProductsByInfoId($value)));
 
                 if ($has_product == 0) {
                     $disable_filters[$filter_name][] = $value;
                 }
-                
+
 
             }
         }
@@ -380,22 +380,22 @@ class Catalog extends Model
         $result["brand"] = $presult;
 
         $result = array_merge($result,$disable_filters);
-        
+
 
         $new_result_arr = array();
         $new_result_arr = array_merge($dbb,$result);
         $k_array = array();
-        
-        
+
+
         //d($dbb);
        // d($result);
-        
+
         foreach($new_result_arr as $k=>$v){
-            
+
             $brand = isset($dbb[$k])?$dbb[$k]:array();
             $har = isset($result[$k])?$result[$k]:array();
             $new_result_arr[$k] = array_unique(array_merge($brand,$har));
-            
+
         }
         //d($new_result_arr);
 
@@ -403,85 +403,85 @@ class Catalog extends Model
        //$cur_ph = PH::find(intval($cur));
        //if(isset($new_result_arr[$cur_ph->name])) unset($new_result_arr[$cur_ph->name]);
         return $new_result_arr;
-        
 
-        
+
+
     }
     //Удаляет из доступных фильтов уже выбранные значения
     private function getAccessFiltersWithoutCheckValues($values) {
-        
+
 
         foreach($values as $k=>&$param) {
-            
+
             foreach($param as &$value) {
                 $value = intval($value);
             }
-            
+
         }
      //   d($values);
-        
+
        // d("getAccessFiltersWithoutCheckValues");
       //  d($values);
-        
+
         $access_filters = $this->getAccessFiltersArrayFormat();
        // dd($access_filters);
         if(count($values) == 1){
-            
+
         }
         foreach($values  as $k=>$v) {
             if( isset($access_filters[$k]) ){
                 $access_filters[$k] = array_diff ($access_filters[$k], $v);
 
             }
-              
+
         }
 //        foreach($access_filters as $k=>$filter) {
 //            if( isset($values[$k]) ) {
-//                
-//                
+//
+//
 //               // d($values[$k]);
 //               // d($access_filters[$k]);
 //               // $access_filters[$k] = array_diff($access_filters[$k],$values[$k]);
 //               // d($access_filters[$k]);
-//                
-//                
+//
+//
 //            }
-//            
+//
 //        }
 //       // d("end");
         return $access_filters;
 
     }
-    
+
     public static function getByAlias($alias) {
         $q = self::where("alias",$alias);
         if( $q->count() == 0) return null;
-        
+
         return $q->get()->first();
-        
+
     }
-    
+
     //Алиас для типа в базе не хранится
     public function getCategotyByAlias($alias) {
-        
-        $categories =  $this->getAccessFiltersValues("type")->get();  
+
+        $categories =  $this->getAccessFiltersValues("type")->get();
         foreach($categories as $k=>$v) {
             if(  Helper::translit($v->value) == $alias ) {
                 return $v;
-                
+
             }
         }
         return null;
-        
+
     }
-    
+
     //Изначально была рандомная картинка, теперь первая
     public function getRandomImgByBrand($brand_id) {
-        
+
         $products = Product::where("catalog_id",$this->id)->where("brand_id",$brand_id)->orderBy("id","asc")->get()->first();
         return $products->img;
         //return Product::where("")
-        
+
     }
     //Изначально была рандомная картинка, теперь первая
     public function getCatalogImg() {
@@ -491,10 +491,26 @@ class Catalog extends Model
         //return Product::where("")
     }
 
+    /* Чтобы в разделе Распродажи у каждого подраздела была картинка-обложка
+     * первого товара среди прочих, которые входят в этот подраздел.
+     * ----- code by George Bramus
+     */
+    public function getCatalogImgForSales() {
+        $products = Product::where("catalog_id", $this->id)
+                           ->where("sales", "1")
+                           // ->orderBy("id", "asc")
+                           ->orderBy("cost_trade", "asc")
+                           ->get()
+                           ->first();
+        return $products->img;
+        //return Product::where("")
+    }
+
+
     public function getCacheObject() {
         return new Cache_catalog($this);
     }
-    
+
     public function prepareFilterFormat($filter_get){
          $filter_get['filter'] = json_decode($filter_get['filter']);
         $filter = array();
@@ -507,7 +523,7 @@ class Catalog extends Model
     }
     public function getCountProductByFilterValues($filter_get) {
       $ob = $this->getCacheObject();
-      
+
         if(isset($filter_get['filter'])) {
         $filter = $filter_get['filter'];
         }
@@ -526,10 +542,10 @@ class Catalog extends Model
         unset($filter["brand"]);
 
 
-        
+
         //Чекбоксы характеристик
-        $isEmptyHcb = empty($filter);   
-                
+        $isEmptyHcb = empty($filter);
+
         $data = array();
         foreach ($filter as $k => $v) {
             $data[$k] = $ob->get_hp_by_array($v);
@@ -538,11 +554,11 @@ class Catalog extends Model
 
 
         $hp = !empty($data) ? array_shift($data) : array();
-        
+
         foreach ($data as $k => $v) {
             $hp = array_intersect($v, $hp);
 
-            
+
         }
 
         return $this->prepareCountResult($hp, $brands,$isEmptyBcb,$isEmptyHcb);
@@ -568,15 +584,15 @@ class Catalog extends Model
         parent::boot();
 
         static::created(function($catalog) {
-            
+
             $catalog->alias = Helper::translit($catalog->name);
             $catalog->save();
-            
 
 
-            
+
+
         });
 
     }
-    
+
 }
