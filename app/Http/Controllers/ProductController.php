@@ -33,8 +33,9 @@ class ProductController extends MyCrudController {
        // $s = Product::where("catalog_id",$rd);
         $source = Product::query();
         if(isset($rd['catalog'])){
-            $source = $source->where("catalog_id", intval($rd['catalog']))
-                             ->where("deleted", "0");
+            $source = $source->where("catalog_id", intval($rd['catalog']));
+                             // ->where("deleted", "0")
+                            // ->orderBy("id", "asc");
         }
 
 
@@ -114,9 +115,11 @@ class ProductController extends MyCrudController {
         $params = Request::all();
 
         if (isset($params["do_delete"])) {
-            $this->edit->model->deleted = 1;
-            $this->edit->model->moderated = 0;
-            $this->edit->model->save();
+            // $this->edit->model->deleted = 1;
+            // $this->edit->model->moderated = 0;
+            // $this->edit->model->save();
+            DB::table('product')->where("id", $this->edit->model->id)
+                                ->delete();
             return redirect("/panel/Product/all");
         }
         if (isset($params["modify"])) {
