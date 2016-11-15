@@ -26,6 +26,7 @@
 
   @include("popups")
 
+
   <div class="search-container menu-row ">
     <div class="logo">
       <a class="main_href" href="/">
@@ -93,6 +94,10 @@
     @endif
     <div class="clear"></div>
   </div>
+
+
+
+
 <div class="container main">
   <div class="row menu-row menu_link">
     <div class="search">

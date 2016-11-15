@@ -884,7 +884,7 @@
   display: inline-block;
 }
 .footer {
-  width: 100%;
+  width: 95%;
   text-align: center;
   border-top: 2px solid #797878;
   border-bottom: 2px solid #797878;
@@ -1307,7 +1307,7 @@ acronym {
   width: 100%;
   z-index: 100;
   top: 27px;
-  margin-left: 35px;
+  // margin-left: 35px;
   font-family: arial narrow;
   font-weight: bold;
   font-size: 3.1em;

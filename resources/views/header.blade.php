@@ -1,5 +1,6 @@
 <!--            верхняя чать сайта, поиск и меню-->
-<div class="row menu-row"> 
+
+<div class="row menu-row">
 
     <div class="logo">
     <a class="main_href" href="/">
@@ -13,16 +14,17 @@
 
 
     </div>
-    
+
     <div class="tel last">
         <a class="big">253-30-20</a>
-        <a class="min"><span class="city">Воронеж</span> +7 (473)</a>   
+        <a class="min"><span class="city">Воронеж</span> +7 (473)</a>
     </div>
         </div>
 
     <div class="clear"></div>
 
-</div> 
+</div>
+
 
 <div class="row menu-row menu_link">
     <div class="menu">
