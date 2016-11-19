@@ -8,8 +8,8 @@ class Orders extends Model
 {
   protected $table = 'orders';
   protected $fillable = array('user_id');
-  
-  
+
+
 
   //позиции в корзине дилерв
   public function products() {
@@ -18,7 +18,7 @@ class Orders extends Model
   public function customer() {
         return $this->belongsTo("App\User", "user_id", "id");
   }
-  
+
   public function getEmailForDealer() {
       return $this->customer->region->email_for_dealer;
   }
@@ -28,33 +28,33 @@ class Orders extends Model
   public function getCustomerType() {
       return $this->customer->type;
   }
-  
-  
+
+
 
     public function cart() {
-      
+
   }
-  
+
   //Добавление товара в заказ
   public static function add_position_in_cart($product_id) {
       //Ищем заказ последний, который ещё не был закрыт, он и будет текущим
-     //$current_order 
-      
-      
+     //$current_order
+
+
   }
   public function addProduct($product_id) {
       //var_dump($this->id);
       $order_product = Order_product::addProductInfoInOrder($this->id,$product_id);
-     
+
 // $this->products->create($order_product);
 
-      
+
   }
-  
+
   public function getProductList() {
-      
+
   }
-  
+
   //считает количество позиций
   public function getProductsCount() {
       return $this->products->count();
@@ -63,15 +63,15 @@ class Orders extends Model
   public function getProductsCountAll() {
       return $this->products()->sum("count_product");
   }
-  
+
   public function recalcTotalCost() {
-      
+
       foreach($this->products as $k=>$product_info) {
           if(is_null($product_info->product))continue;
 
           if( $product_info->product_id == 0 ) continue;
-         
-          
+
+
           if(is_null($product_info->edit_cost) && !is_null($product_info->product)) {
           $cost = $product_info->product->cost_trade;
           }
@@ -88,7 +88,7 @@ class Orders extends Model
           $product_info->save();
       }
 
-      
+
   }
   public function getProductsSumm() {
       $this->recalcTotalCost();
@@ -97,7 +97,7 @@ class Orders extends Model
           $summ += $product_info->getPositionSummRecalc();
       }
       return $summ;
-      
+
   }
       public function getFormatProductsSumm() {
         return number_format(round($this->getProductsSumm()), 0, ',', ' ');
@@ -120,36 +120,63 @@ class Orders extends Model
       }
       return $summ;
     }
-  
-  
+
+
     public function getFormatSumWithDiscount() {
 return number_format(  round($this->getSumWithDiscount())  ,  0  ,  ','  ,  ' '  );
 
-      
+
   }
-  
+
     public static function updateCart($data) {
 
         $dealer = User::getLoginCustomerOrUser();
         $order = $dealer->getCurentOrder();
 
-        foreach($order->products as $position) {
-            if($position->product_id == 0) continue;
-            if(isset($data[$position->id]))
-            {
-                $position->count_product = $data[$position->id]["count"];
-                // $position->cost = $data[$position->id]["cost"];
-                $position->discount = $data[$position->id]["discount"];
-                $position->edit_cost = $data[$position->id]["cost_trade"];
+        // if(count($data)>10) {
+        //   $data_chunk = array_chunk($data, 10, true);
+        //   for($i = 0; $i < count($data_chunk); $i++) {
+        //     foreach($order->products as $position) {
+        //       if($position->product_id == 0) continue;
+        //       if(isset($data_chunk[$i][$position->id]))
+        //       {
+        //         $position->count_product = $data_chunk[$i][$position->id]["count"];
+        //         $position->discount = $data_chunk[$i][$position->id]["discount"];
+        //         $position->edit_cost = $data_chunk[$i][$position->id]["cost_trade"];
+        //         $position->save();
+        //       }
+        //     }
+        //   }
+        // }
+        // else {
+          foreach($order->products as $position) {
+              if($position->product_id == 0) continue;
+              if(isset($data[$position->id]))
+              {
+                  // DB::table('orders_product')
+                  //     ->where('id',$position->id)
+                  //     ->update(array(
+                  //           'count_product' =>  $data[$position->id]["count"],
+                  //           'discount' => $data[$position->id]["discount"],
+                  //           'edit_cost' => $data[$position->id]["cost_trade"]
+                  //         ));
 
-                $position->save();
-            }
-        }
+                  $position->count_product = $data[$position->id]["count"];
+                  // $position->cost = $data[$position->id]["cost"];
+                  $position->discount = $data[$position->id]["discount"];
+                  $position->edit_cost = $data[$position->id]["cost_trade"];
+                  // $position->edit_cost = 0;
+
+                  $position->save();
+              }
+          }
+        // }
     }
-  
+
   public static function formatAjaxCartData( $cart ) {
-      
+
       $new_cart_data = array();
+
       foreach($cart as &$cart_elem){
           $cart_elem = (array)$cart_elem;
           unset($cart_elem['withDCell']);
@@ -157,12 +184,18 @@ return number_format(  round($this->getSumWithDiscount())  ,  0  ,  ','  ,  ' ' 
           $id = $cart_elem['id'];
           unset($cart_elem["id"]);
           $new_cart_data[$id] = array();
-          
+
           $new_cart_data[$id] = $cart_elem;
       }
+
+      // foreach($cart as $key => $value)
+      //   foreach($value as $key_plus => $value_plus)
+      //     if($key_plus == 'count' || $key_plus == 'discount' || $key_plus == 'cost_trade')
+      //       $new_cart_data[$key][$key_plus] = $value_plus;
+
       return $new_cart_data;
-      
-      
+
+
   }
   //$order_ids - массив с id позиций в нужном порядке
   public function setProducrOrder($order_ids) {
@@ -179,17 +212,17 @@ return number_format(  round($this->getSumWithDiscount())  ,  0  ,  ','  ,  ' ' 
         //dd_not_die($sort);
         $this->products = $sort;
     }
-    
+
     public function setNextStep() {
         $this->order_step++;
         $this->save();
     }
-    
+
     public function setStep($step = 1) {
         $this->order_step = $step;
         $this->save();
     }
-    
+
     public function setComplitedStatus() {
        $this->status = 1;
        $this->status_change_date = date("Y-m-d H:i:s");
@@ -199,12 +232,12 @@ return number_format(  round($this->getSumWithDiscount())  ,  0  ,  ','  ,  ' ' 
     }
     public function getFormatComplitedDate() {
         $date = new \DateTime($this->status_change_date);
-        
+
         return  date("d-m-Y H:i",$date->getTimestamp());
     }
-    
+
     //Для админа
-    
+
     //Анулировать заказ
     public function nulled() {
         $this->admin_status = 2;
@@ -215,15 +248,15 @@ return number_format(  round($this->getSumWithDiscount())  ,  0  ,  ','  ,  ' ' 
         $this->admin_status = 1;
         $this->save();
     }
-    
+
     public function getAdminStatus() {
         if($this->admin_status == 1) return "Выполнен";
         if($this->admin_status == 2) return "Аннулирован";
         return "На рассмотрении";
     }
-    
+
     public function getProductTypes() {
-        
+
         $types = array();
         $product = $this->products;
         $product_arr = array();
@@ -233,13 +266,13 @@ return number_format(  round($this->getSumWithDiscount())  ,  0  ,  ','  ,  ' ' 
             {
                 $types_arr[] = $type;
             }
-            
+
         }
-        
+
         return $types_arr;
         //getPhrByName($name)
     }
-    
+
     public function getProductsByType($type) {
 
         $product = $this->products;

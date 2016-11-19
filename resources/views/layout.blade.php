@@ -47,6 +47,10 @@
         <a class="big">302-00-22</a>
         <a class="min"><span class="city">Ростов-на-Дону</span> +7 (863)</a>
       </div>
+      <div class="tel">
+        <a class="big">888-6-777</a>
+        <a class="min"><span class="city"></span> +7 (919)</a>
+      </div>
 
       <div class="tel last">
         <a class="big">253-30-20</a>

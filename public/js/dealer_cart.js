@@ -1,6 +1,6 @@
 //Управление формой заказов
 function Dealer_form() {
-    
+
     //Кнопки
     this.edit_form = ".cart_list";
     this.edit_button = "#edit";
@@ -9,12 +9,12 @@ function Dealer_form() {
     this.formalize_order_button = "#formalize_order_button";
     this.withoutSaveButton = "#withoutSaveButton";
     this.changeCostsButton = "#change_costs";
-    
+
     this.rowClass = ".product_info_row_data";
     this.idDataAttr = "id";
     this.countProductName = "[name='count_product']";
     this.costName = "[name='cost_trade']";
-    this.discountName = "[name='discount']"; 
+    this.discountName = "[name='discount']";
     //Итоговые ячейки сумм
     this.totalPriceWithoutDiscount = ".total_price_without_discount";
     this.totalPriceWithDiscount = ".total_price_with_discount";
@@ -22,15 +22,15 @@ function Dealer_form() {
     //Ячейки сумм для позиции
     this.priceWithoutDiscount = ".cost_without_discount";
     this.priceWithDiscount = ".cost_with_discount";
-    
+
     this.showEditModeButtons = function() {
-        
+
 
     }
 
     this.deletePosition = function () {
         var that = this;
-        
+
         $(that.rowClass + " .delete").click(function (event) {
             event.preventDefault();
             var id = $(this).parents(that.rowClass).data("id");
@@ -39,15 +39,15 @@ function Dealer_form() {
                 that.recalcForm();
             //alert(1);
             $.get("/buy/remove_position/" + id, function () {
-                
+
 
             })
 
 
         });
     }
-    
-    
+
+
     this.getTotalCount = function() {
         return $( this.totalCount );
     }
@@ -70,7 +70,6 @@ function Dealer_form() {
             data.push( that.getRowData( $(row) ) );
         });
         return data;
-    
     }
     //устанавливает значение из изменненых инпутов в таблицу
     this.setFormInputInValue = function() {
@@ -78,7 +77,7 @@ function Dealer_form() {
        $.each(this.getProductsInfoRows(),function(i,row) {
            that.setRowValueData( $(row) );
         });
-        
+
     }
     //Получает объект row и возвразает данные
     this.getRowData = function (row) {
@@ -91,17 +90,17 @@ function Dealer_form() {
             withoutDCell:row.find(this.priceWithoutDiscount)
         }
     }
-    
+
     this.setRowValueData = function(row) {
-        
+
         row.find(this.countProductName).prev(".value").html( parseInt(row.find(this.countProductName).val()) );
         row.find(this.costName).prev(".value").html( this.format(parseFloat(row.find(this.costName).val())) );
         row.find(this.discountName).prev(".value").html( parseInt(row.find(this.discountName).val()) );
-        
+
     }
     this.getRowDataById = function(id) {
         var row = this.getRowById(id);
-        return this.getRowData( row );        
+        return this.getRowData( row );
     }
     this.getRowById = function(id) {
         return this.getForm().find("."+this.rowClass+"[data-id='"+id+"']");
@@ -117,8 +116,8 @@ function Dealer_form() {
         }
         data.withDCell.find('span').html(this.format(price));
         data.withDCell.find('input').val(this.format(price));
-        
-        
+
+
     }
     this.recalcRows = function() {
         var that = this;
@@ -135,12 +134,12 @@ function Dealer_form() {
             total_count+=row.count;
             total_cost_witoutD += (row.cost_trade * row.count);
             if(!isNaN(row.discount)) {
-             total_cost_withD += (row.cost_trade * row.count - (row.cost_trade * row.count/100*row.discount));   
+             total_cost_withD += (row.cost_trade * row.count - (row.cost_trade * row.count/100*row.discount));
             }
             else{
-               total_cost_withD += (row.cost_trade * row.count); 
+               total_cost_withD += (row.cost_trade * row.count);
             }
-            
+
         });
 
         this.getTotalPriceWithDiscount().html( this.format(total_cost_withD) );
@@ -152,7 +151,7 @@ function Dealer_form() {
     this.recalcRowById = function (id) {
 
     }
-    
+
     this.getWithoutSaveButton = function() {
         return $(this.withoutSaveButton);
     }
@@ -165,7 +164,7 @@ function Dealer_form() {
     this.getChangeCostsButton = function() {
         return $(this.changeCostsButton);
     }
-    
+
     this.getForm = function() {
         return $(this.edit_form);
     }
@@ -177,11 +176,11 @@ function Dealer_form() {
     }
     this.setEditMode = function() {
         this.getForm().addClass("edit_mode");
-        
+
 
     }
     this.exitEdit = function() {
-        
+
         $(this.discountName).each(function() {
             var obj = $(this)
             if(obj.val() === '')
@@ -192,22 +191,23 @@ function Dealer_form() {
         });
         this.getForm().removeClass("edit_mode").removeClass("edit_cost").removeClass('can_change_costs');
     }
-    
+
     this.unsetEditMode = function() {
-        
+
     }
-    
+
     this.setEditCostMode = function() {
-        
+
         //this.getForm().addClass("edit_cost");
         var _this = $("#all_discount");
         if( _this.val() > 100 )
-            {    
+            {
                 _this.val(100);
-                
+
             }
         var discount = _this.val();
-        $('[name="discount"]').val(discount);
+        console.log('Скидка: '+discount);
+        $('[name="discount"]').val( discount );
         this.recalcForm();
     }
     //Включить режим редактирования формы
@@ -216,21 +216,21 @@ function Dealer_form() {
         that.getEditButton().click(function() {
             that.setEditMode();
         });
-        
+
     }
     this.bindEditCostEvent = function() {
         var that = this;
         that.getEditCostButton().click(function() {
             that.setEditCostMode();
         });
-        
+
     }
     this.bindExitWithoutSave = function() {
         var that = this;
         that.getWithoutSaveButton().click(function() {
             that.exitEdit();
         });
-        
+
     }
     this.bindChangeInput = function(){
         var that = this;
@@ -238,11 +238,11 @@ function Dealer_form() {
         this.getFormInputs().on('change keyup',function() {
             var _this = $(this);
             if(_this.attr('name') === 'discount' && _this.val() > 100)
-            {    
+            {
                 _this.val(100)
             }
             if( _this.attr('name') === 'count_product' && _this.val() < 1 )
-            {    
+            {
                 _this.val(1)
             }
             that.recalcForm();
@@ -253,7 +253,7 @@ function Dealer_form() {
         that.getCostInputs().on('change keyup',function() {
             var _this = $(this);
             var row = _this.parents(that.rowClass);
-            
+
             var singlePrice = row.find(that.costName).val();
             var count = row.find(that.countProductName).val();
             var fullPrice = singlePrice*count;
@@ -273,44 +273,43 @@ function Dealer_form() {
             }
             row.find(that.discountName).val( parseInt(percent) )
             row.find(that.countProductName).prev(".value").html( parseInt(percent) );
-            
+
             this.setFormInputInValue();
             this.recalcTotal();
-            
+
             /*that.recalcForm();*/
-            
+
         }).on('focusout', function(){
             that.recalcForm();
         });
     }
-    
+
     this.bindSaveFormData = function() {
-        
+
         var that = this;
         that.getSaveButton().click(function() {
 
-            that.recalcForm(); 
-            that.exitEdit(); 
+            that.recalcForm();
+            that.exitEdit();
             var rows = that.getRowsData();
             that.setFormInputInValue();
             //console.log(rows);
             $.get("/buy/dealer/save_dealer_cart_ajax",{cart:$.toJSON(rows)},function(data){
-                
+
             });
-            
-            
+
         });
-        
-        
+
+
     }
-    
+
     this.recalcForm = function() {
-        
+
         this.recalcRows();
         this.recalcTotal();
         this.setFormInputInValue();
         var that = this;
-        
+
         //alert($(".cart_list .table").hasClass("customer"));
         if ($(".cart_list .table").hasClass("customer")) {
             var rows = that.getRowsData();
@@ -320,7 +319,7 @@ function Dealer_form() {
 
             });
         }
-        
+
     }
     this.testHelper = function() {
 
@@ -328,22 +327,22 @@ function Dealer_form() {
     this.format = function(number) {
         return helper.number_format(number,0,' ',' ');
     }
-    
+
     this.sendMenegerOrderClick = function (){
         var that = this;
         $("#send_meneger_order").click(function () {
-            
+
           var user = $(".save_customer_pdf").attr("data-user");
             if(user === "0") {
             that.customerFormData();
             }
             else {
-               that.sendMenegerOrder(); 
+               that.sendMenegerOrder();
             }
-            
+
         });
     }
-    
+
     this.check_order_status = function() {
 
         //При скачивании pdf файла могут быть не заполнены личные данные
@@ -356,7 +355,7 @@ function Dealer_form() {
                 event.preventDefault();
                 var form = that.customerFormData();
                 form.addClass("save_pdf");
-                
+
             }
         });
     }
@@ -364,7 +363,7 @@ function Dealer_form() {
         $("#message_window_box .button.ok").click(function () {
            // alert(1);
             window.location.reload();
-        }); 
+        });
         //$("#send_meneger_order").click(function () {
            // alert(1);
             var id = $(".cart_list").data("id");
@@ -374,7 +373,7 @@ function Dealer_form() {
                 $("#message_window").height('150px');
                 $("#message_window_box .after_add").show();
                 $("#message_window_box .message").html("Заказ менеджеру успешно отправлен. В ближайшее время с Вами свяжется наш менеджер, для уточнения деталей заказа, и сроков доставки.");
-                
+
 
 
             })
@@ -382,7 +381,7 @@ function Dealer_form() {
     }
     //Показ формы заполнения личных данных покупателя
     this.customerFormData = function() {
-        
+
         $(".popup_container").hide();
         $("#customer_form_box").show();
         return $("#customer_form_box");
@@ -408,17 +407,17 @@ function Dealer_form() {
                         that.sendMenegerOrder();
                     }
                     else {
-      
+
                         $(".save_customer_pdf").attr("data-user","1");
                         $(".popup_container").hide();
                         $(".save_customer_pdf").unbind();
                         var href = $(".save_customer_pdf").attr("href");
                         window.location.href = href;
-                        
-                        
-                        
+
+
+
                     }
-                    
+
 
                 }
 
@@ -431,36 +430,30 @@ function Dealer_form() {
             that.getForm().addClass('can_change_costs');
         });
     }
-    
+
     this.init = function() {
-        
+
         this.bindEditModeEvent();
         this.bindEditCostEvent();
         this.bindExitWithoutSave();
-        
+
         this.bindChangeInput();
         this.bindChangeCost();
         this.bindSaveFormData();
         this.bindCanChangeCosts();
         this.deletePosition();
-        
+
         this.customerFormSendEvent();
         this.sendMenegerOrderClick();
         this.check_order_status();
-        
-
-        
-
     }
-    
-    
-    
+
 }
 
 $(document).ready(function() {
-    
+
     var dealer_form = new Dealer_form();
     dealer_form.init();
-    
-    
+    // dealer_form.lengthData();
+
 });

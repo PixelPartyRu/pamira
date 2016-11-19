@@ -17,8 +17,6 @@ use App\Http\Controllers\Extensions\MyDataGrid as DataGrid;
 use App\ParseXmlFile;
 
 
-
-
 class ProductController extends MyCrudController {
 
     public function __construct(\Lang $lang) {

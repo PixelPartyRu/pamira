@@ -311,6 +311,7 @@ $this->grid->paginate(1000);
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
         $data['order'] = $dealer->getCurentOrder();
         $this->setCartScripts();
+
         return view("cart.cart",$data);
     }
 
@@ -320,10 +321,8 @@ $this->grid->paginate(1000);
         $data['order'] = $dealer->getCurentOrder();
         $this->setCartScripts();
         return view("dealer.formalize_order_page",$data);
-
-
-
     }
+
     public function formalize_order_completion(Request $request) {
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
         $order = $dealer->getCurentOrder();
@@ -357,7 +356,9 @@ $this->grid->paginate(1000);
         $scripts = array(
             "/js/modules/jquery.json-2.3.js",
             "/js/modules/min/helpers.min.js",
-            "/js/min/dealer_cart.min.js"
+            // "/js/min/dealer_cart.min.js"
+            // "/js/dealer_cart.js"
+            "/js/dealer_cart.GeorgeBramus.js"
         );
         $this->set_scripts($scripts);
     }

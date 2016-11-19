@@ -100,18 +100,18 @@ class Dealer extends User {
         DB::table('margins')->where("type", $type)->where("default", 1)->update(array('default' => 0));
         DB::table('margins')->where("type", $type)->where("id", $margin_id)->update(array('default' => 1));
     }
-    
+
     public function bcrypt_pass(){
         $this->password = bcrypt($this->password);
         $this->save();
-        
+
     }
-    
+
     public function is_bcrypt_pass() {
 
         return strpos($this->password,"2y$10$");
     }
-    
+
     public static function boot() {
         parent::boot();
 
@@ -123,7 +123,7 @@ class Dealer extends User {
         });
         static::updated(function($user) {
             if ($user->type == "dealer" && !$user->is_md5_password() ) {
-                
+
                 $user->password = md5($user->password);
                 $user->save();
             }

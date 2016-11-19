@@ -1,5 +1,5 @@
 
-<div class="table {{ \App\User::getLoginUserType() }}">  
+<div class="table {{ \App\User::getLoginUserType() }}">
 <div class="product_info_row caption table-row">
         <div class="table-cell"></div>
         <div class="table-cell">Фото</div>
@@ -13,9 +13,9 @@
         @else
         <div class="table-cell price">Сумма ,руб.</div>
         @endif
-        
+
         <div class="table-cell delete"></div>
-        
+
     </div>
 <? $i=1; ?>
 
@@ -27,7 +27,7 @@
     <div class="table-cell id">{{$i++}}<input class="hidden_id" type="hidden" name="id_order[]" value="{{$product_info->id}}"></div>
     <div class="table-cell photo"><div><img src="/imgresize?file={{public_path()}}/uploads/product/img1/{{$product_info->product->img}}" /></div></div>
     <div class="table-cell name">{{$product_info->product->name}}</div>
-    
+
     <div class="table-cell edit count">
         <div class="value">{{$product_info->count_product}}</div>
         <input type="number" name="count_product" value="{{$product_info->count_product}}"/>
@@ -43,7 +43,7 @@
     </div>
     <div class="table-cell price cost_without_discount">{{ $product_info->getFormatPositionSumm() }}</div>
     @endif
-    
+
     <div class="table-cell price cost_with_discount">
         <span>
         @if(\App\User::getLoginUserType() == "dealer")
@@ -52,9 +52,9 @@
         {{ $product_info->getFormatPositionSumm() }}
         @endif
         </span>
-        <input type="text" name="cost_with_discount" value="{{ (\App\User::getLoginUserType() == "dealer")?$product_info->getFormatCostWithDiscount():$product_info->getFormatPositionSumm() }}">
+        <input type="text" name="cost_with_discount" value="{{ (\App\User::getLoginUserType() == "dealer")?$product_info->getFormatCostWithDiscount():$product_info->getFormatPositionSumm() }}_">
     </div>
-    
+
     <div class="table-cell delete">
         @if($order->status != 1)
         <a href="#">Х</a>

@@ -4,6 +4,7 @@
 <div class="cart_block">
 <div class="h1">Корзина</div>
 
+
 @if($order->products->count() == 0)
 <div> Корзина пуста </div>
 @else
@@ -18,7 +19,7 @@
         <button type="button" id="edit" class="float_right">Редактировать</button>
     </div>
     @endif
-    
+
 @include("cart.position_table_template",$order)
 
 @if(\App\User::getLoginUserType() == "dealer")
@@ -39,8 +40,8 @@
 @if(\App\User::getLoginUserType() == "customer")
 <div class="edit_button bottom">
 
-<a data-user="{{ is_null($order->customer->sns)?0:1 }}" class="button  save_customer_pdf" href="/customer/save_order_pdf/{{ $order->id }}">Сохранить заказ</a>   
-<button type="button" id="send_meneger_order" class="fr">Отправить заказ менеджеру</button>   
+<a data-user="{{ is_null($order->customer->sns)?0:1 }}" class="button  save_customer_pdf" href="/customer/save_order_pdf/{{ $order->id }}">Сохранить заказ</a>
+<button type="button" id="send_meneger_order" class="fr">Отправить заказ менеджеру</button>
 
 </div>
 @endif
@@ -57,15 +58,34 @@
 <script>
 
 $(document).ready(function() {
-    
+
     var im = new Inputmask("9{1,3}");
 
-    
+
     im.mask("[name='discount']");
     im.mask("#all_discount");
 
-});			
-			
+});
+$(document).ready(function(){
+    // $('button#save_form')
+    $('button#edit_cost')
+    .on("click", function(){
+
+        var t = '';
+        $('div.discount').each(function(i, val){
+            var gb_discount = $(this).children('div.value').html();
+            t += gb_discount;
+            $(this)
+                .children('input[name="discount"]')
+                .attr('value',gb_discount);
+        });
+        // alert(t);
+        console.log("Консоль в шаблоне Cart.");
+        // alert(glob);
+        console.log(glob);
+    });
+});
+
 
 </script>
 

@@ -11,7 +11,7 @@ use App\Compare;
 class Buy extends Controller {
 
     public function __construct() {
-        
+
     }
 
     //Добавление товара в корзину
@@ -81,16 +81,20 @@ class Buy extends Controller {
 
         return $info;
     }
-    
+
     public function save_dealer_cart_ajax() {
 
         $data = \Illuminate\Support\Facades\Request::all();
-        
+
+        // $data['cart'] = json_decode($data['cart']);
+        // $cart = \App\Orders::formatAjaxCartData($data['cart']);
         $data['cart'] = json_decode($data['cart']);
         $cart = \App\Orders::formatAjaxCartData($data['cart']);
         \App\Orders::updateCart($cart);
+
+        echo '<script>console.log("Я передал AJAX");</script>';
     }
-    
+
     public function remove_position($id) {
         //dd(!( is_null(Auth::guard("dealer")->user()) && is_null(Auth::guard("web")->user()) ));
         if (!( is_null(Auth::guard("dealer")->user()) && is_null(Auth::guard("web")->user()) )) {
@@ -98,23 +102,23 @@ class Buy extends Controller {
             $position->delete();
         }
     }
-    
+
     public function add_to_compare($pid,$type) {
         $user = User::getLoginCustomerOrUser();
         $compare_user_info = Compare::getUsersPositions($type);
         $compare_user_info->add_position($pid);
         return \Illuminate\Support\Facades\Response::json( $compare_user_info->count_position() );
-        
-        
+
+
     }
-    
+
     public function remove_position_compare($pid,$type) {
         $user = User::getLoginCustomerOrUser();
         $compare_user_info = Compare::getUsersPositions($type);
         $compare_user_info->remove_position($pid);
 
     }
-    
+
     public function order_compare_list() {
         $pi = Compare::getUsersPositions("order");
         $data["orders"] = $pi->get_positions();
@@ -129,7 +133,7 @@ class Buy extends Controller {
         $data["types"] = array_unique($data["types"]);
         return view("dealer.order_compare_list", $data);
     }
-    
+
     public function clear_compare_list() {
         $user = User::getLoginCustomerOrUser();
         if(Compare::where('user_id', $user->id)->delete())
