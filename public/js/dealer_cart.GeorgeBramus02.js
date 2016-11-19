@@ -20,12 +20,8 @@ function Dealer_form() {
     }, this.getRowsData = function() {
         var t = this,
             i = new Array;
-            // window.glob='';
         return $.each(this.getProductsInfoRows(), function(o, e) {
             i.push(t.getRowData($(e)));
-            // glob+=o;
-
-            // console.log(i[o])
 
         }), i
     }, this.setFormInputInValue = function() {
@@ -126,28 +122,45 @@ function Dealer_form() {
         }).on("focusout", function() {
             t.recalcForm()
         })
-    }, this.bindSaveFormData = function() {
+    },
+
+    this.sliceArrayAndSend = function(source_array,name) {
+        var t = this;
+        var truncated_array = new Array;
+        var from, to, last_from_index;
+
+        $.each(source_array, function(index, element){
+            if (index % 10 == 0 && index != 0) {
+                from = index - 10;
+                to = index;
+                last_from_index = to;
+
+                console.log('Очередной срез. '+name+': от '+from+' до '+to);
+
+                truncated_array = source_array.slice(from, to);
+                $.get("/buy/dealer/save_dealer_cart_ajax", {cart: $.toJSON(truncated_array)}, function(t) {});
+            }
+            else if(source_array[index+1] == null) {
+                from = last_from_index;
+                to = index + 1;
+
+                console.log('Последний срез. '+name+': от '+from+' до '+to);
+
+                truncated_array = source_array.slice(from, to);
+                $.get("/buy/dealer/save_dealer_cart_ajax", {cart: $.toJSON(truncated_array)}, function(t) {});
+            }
+        });
+    },
+
+    this.bindSaveFormData = function() {
         var t = this;
         t.getSaveButton().click(function() {
-            t.recalcForm(), t.exitEdit();
+            t.recalcForm(),
+            t.exitEdit();
             var i = t.getRowsData();
+            t.setFormInputInValue();
 
-
-            var truncated_array = new Array;
-            // window.glob = i.length;
-
-            // while(iterator < i.length) {
-            //     iterator++;
-            // }
-
-            i = i.slice(0,9);
-
-            t.setFormInputInValue(),
-            $.get("/buy/dealer/save_dealer_cart_ajax", {cart: $.toJSON(i)}, function(t) {});
-
-            // console.log($.toJSON(i))
-            // console.log(i);
-
+            t.sliceArrayAndSend(i,"bindSaveFormData");
         })
     },
 
@@ -156,10 +169,9 @@ function Dealer_form() {
         var t = this;
         if ($(".cart_list .table").hasClass("customer")) {
             var i = t.getRowsData();
-            i = i.slice(0,9);
-            t.setFormInputInValue(), $.get("/buy/dealer/save_dealer_cart_ajax", {
-                cart: $.toJSON(i)
-            }, function(t) {})
+            t.setFormInputInValue();
+
+            t.sliceArrayAndSend(i,"recalcForm");
         }
     },
 

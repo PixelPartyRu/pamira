@@ -358,7 +358,7 @@ $this->grid->paginate(1000);
             "/js/modules/min/helpers.min.js",
             // "/js/min/dealer_cart.min.js"
             // "/js/dealer_cart.js"
-            "/js/dealer_cart.GeorgeBramus.js"
+            "/js/dealer_cart.GeorgeBramus02.js"
         );
         $this->set_scripts($scripts);
     }

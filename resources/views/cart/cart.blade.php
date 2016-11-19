@@ -80,9 +80,9 @@ $(document).ready(function(){
                 .attr('value',gb_discount);
         });
         // alert(t);
-        console.log("Консоль в шаблоне Cart.");
+        // console.log("Консоль в шаблоне Cart.");
         // alert(glob);
-        console.log(glob);
+        console.log('Длина передаваемого массива: '+window.glob);
     });
 });
 
