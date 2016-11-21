@@ -125,6 +125,15 @@ function Dealer_form() {
     },
 
     this.sliceArrayAndSend = function(source_array,name) {
+
+        /**
+         * George Bramus | 2016-11-19
+         * Изменения в корзине не обновляют уже имеющиеся, если записей
+         * больше 10. Решение было реализовано на стороне JS и перед
+         * отправкой массив разбиваем на части по 10 элементо
+         * и поочередно отправляем.
+         */
+
         var t = this;
         var truncated_array = new Array;
         var from, to, last_from_index;

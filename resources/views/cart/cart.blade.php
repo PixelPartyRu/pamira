@@ -82,7 +82,7 @@ $(document).ready(function(){
         // alert(t);
         // console.log("Консоль в шаблоне Cart.");
         // alert(glob);
-        console.log('Длина передаваемого массива: '+window.glob);
+        // console.log('Длина передаваемого массива: '+window.glob);
     });
 });
 

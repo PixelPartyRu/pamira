@@ -251,7 +251,9 @@ class Catalog extends Model
 
     }
     public function getAccessBrands() {
-        return Brand::where("catalogs","like","%<".$this->id.">%")->get();
+        return Brand::where("catalogs","like","%<".$this->id.">%")
+                      ->orderBy("title","asc")
+                      ->get();
     }
     private function getAccessBrandsIds() {
         return Brand::where("catalogs", "like", "%<" . $this->id . ">%")->lists("id")->toArray();
