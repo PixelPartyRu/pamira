@@ -303,7 +303,7 @@ function Filter() {
     this.disable_filters = function(values) {
 
 
-         console.log(values);
+         console.log("Значения: " + values);
 
       //  alert(1);
 
@@ -319,7 +319,8 @@ function Filter() {
 
                 $.each(values, function(i, value) {
 
-                    that.set_disable_checkbox(name + value);
+                    if( !(name == "color" || name == "material") )
+                        that.set_disable_checkbox(name + value);
 
                 });
 
@@ -329,6 +330,8 @@ function Filter() {
     }
 
     this.set_disable_checkbox = function(filter_class) {
+
+        // console.log(filter_class);
 
         $("." + filter_class).addClass("disabled");
         $("." + filter_class + " input").removeAttr("checked");
@@ -448,7 +451,7 @@ function Filter() {
 
     this.init = function() {
 
-this.clearDisabledAll();
+        this.clearDisabledAll();
         this.select_live_event();
         this.changeFilter();
         this.reset_event();
@@ -591,3 +594,12 @@ $("input#maxCost").change(function(){
 
 
 
+// $(document).ready(function(){
+//     $('div.color .select_checkbox input')
+//     .click(function(){
+//         console.log("Выбрали чекбокс");
+//         $('div.color .select_checkboxes .clear .select_checkbox')
+//         .removeClass('disabled');
+//         console.log("После удаления классов..");
+//     });
+// });
