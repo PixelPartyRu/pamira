@@ -458,14 +458,14 @@ $this->grid->paginate(1000);
     public function save_order_pdf($order,$ids) {
         $order->setProducrOrder($ids);
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
-        $file_name = "Заказ для поставщика №" . $order->id . " от " . date("d.m.Y").".pdf";
+        $file_name = "Заказ для поставщика ".$dealer->name." №" . $order->id . " от " . date("d.m.Y").".pdf";
         $path = public_path() . '/uploads/pdf/' . $file_name.".pdf";
         $html = view('pdf.order_pdf',['order' => $order, 'dealer' => $dealer])->render();
         return PDF::load( $html )->filename($file_name)->download();
     }
     public function save_client_order_pdf($order,$ids) {
         $order->setProducrOrder($ids);
-        $file_name = "Заказ для клиента №" . $order->id . " от " . date("d.m.Y").".pdf";
+        $file_name = "Заказ для клиента ".$order->sns." №" . $order->id . " от " . date("d.m.Y").".pdf";
         $path = public_path() . '/uploads/pdf/' . $file_name.".pdf";
         $html = view('pdf.client_order_pdf',['order' => $order])->render();
         return PDF::load( $html )->filename($file_name)->download();
