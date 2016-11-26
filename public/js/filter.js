@@ -22,16 +22,22 @@ function Filter() {
             if (!$(this).hasClass("open")) {
                 $(".select_line").removeClass("open");
                 $(this).addClass("open");
-
             } else {
                 $(this).removeClass("open");
             }
-
-
-
-
         });
     }
+
+
+    // var checkbox_click_color = false;
+    // $('input.gb-color').click(function(){
+    //     checkbox_click_color = true;
+    // });
+    // $('input:not(.gb-color)').click(function(){
+    //     checkbox_click_color = false;
+    // });
+
+
     this.reset_event = function() {
         var that = this;
 
@@ -154,7 +160,6 @@ function Filter() {
                 console.log(data.disable_filters);
                 that.disable_filters(data.disable_filters);
             }
-
 
 
         });
@@ -300,12 +305,13 @@ function Filter() {
 
 
 
-    this.disable_filters = function(values) {
 
 
-         console.log("Значения: " + values);
-
-      //  alert(1);
+    this.disable_filters = function(values, checkbox_click_color="false") {
+        /**
+         * 03/005 | George Bramus | 2016-11-25
+         * Отследим нажатие чекбокса. Нас интересует Материал и Цвет.
+         */
 
         var that = this;
         that.clearDisabled();
@@ -319,7 +325,7 @@ function Filter() {
 
                 $.each(values, function(i, value) {
 
-                    if( !(name == "color" || name == "material") )
+                    // if( !(checkbox_click_color == true && name == "color") )
                         that.set_disable_checkbox(name + value);
 
                 });

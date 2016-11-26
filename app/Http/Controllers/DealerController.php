@@ -476,7 +476,7 @@ $this->grid->paginate(1000);
         $order->setProducrOrder($ids);
         $dealer = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
 
-        $file_name = "Заказ для поставщика №" . $order->id . " от " . date("d.m.Y") . '.pdf';
+        $file_name = "Заказ для поставщика ".$dealer->name." №" . $order->id . " от " . date("d.m.Y") . '.pdf';
         $html = view('pdf.order_pdf', ['order' => $order, 'dealer' => $dealer])->render();
         $path = public_path() . '/uploads/pdf/' . $file_name;
         PDF::load($html)
@@ -486,7 +486,7 @@ $this->grid->paginate(1000);
         $data['to'] = $order->getEmailForDealer();
 
         Mail::send('emails.customer_letter', $data, function($message) use($data,$order) {
-            $message->subject("Заказ для поставщика №" . $order->id . " от " . date("d.m.Y"));
+            $message->subject("Заказ для поставщика ".$dealer->name." №" . $order->id . " от " . date("d.m.Y"));
             $message->to($data['to'])->cc('heleonprime@ya.ru');
             $message->attach( $data['path'] );
         });

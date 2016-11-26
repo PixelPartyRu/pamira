@@ -4,10 +4,10 @@
         <div class="close"></div>
         <div class="clear"></div>
         <div class="product_info"><span>Товаров : <a class="count">2</a></span><span><a class="show_link" href="">Показать</a></span></div>
-        <div class="ajax_message">Идет подсчёт...</div>    
+        <div class="ajax_message">Идет подсчёт...</div>
     </div>
     <div class="beauty_filter_line"></div>
-    
+
     <div class="filter_brands">
             <label class="caption">Бренд</label>
         <div class="filter_parts">
@@ -20,7 +20,7 @@
             @endforeach
         </div>
 
-    </div>    
+    </div>
     <div class="product_haracteristic_filter">
         <input type="hidden" name="catalog" value="{{ $catalog_ob->id }}">
 
@@ -37,16 +37,16 @@
                 @foreach($filter->values as $key=>$color)
                 <?php if( $color["value"] == "" ) continue; ?>
                 <div class="select_checkbox color  {{ $filter->name }}{{$color['id']}}">
-                    <input type="checkbox" name="{{ $filter->name }}[]" value="{{$color['id']}}"/> 
+                    <input type="checkbox" name="{{ $filter->name }}[]" value="{{$color['id']}}" class="gb-color" />
                     <div class="color_sq" style="background-image: url(/uploads/color/{{ transliterate(str_replace(" ","%20",$color['value']))  }}.jpg)">&nbsp;</div>
                     <label class="filter_label">{!!str_ireplace(' ',"<br />",$color['value'])!!}</label>
-                </div>    
+                </div>
                 <?php $i++ ?>
                 @if($i > 5)
                 </div><div class="clear">
                 <?php $i = 1; ?>
                 @endif
-                @endforeach 
+                @endforeach
                 </div>
                 @else
                 <?php $i = 1; ?>
@@ -56,14 +56,14 @@
                 <div class="select_checkbox  {{ $filter->name }}{{$value}}">
                     <input type="checkbox" name="{{ $filter->name }}[]" value="{{$value}}"/>
                     <label class="filter_label">{{$label}}</label>
-                </div> 
+                </div>
                 <?php $i++ ?>
                     @if($i > 5)
                     </div><div class="clear">
                     <?php $i = 1; ?>
                     @endif
                 @endif
-                @endforeach 
+                @endforeach
                 </div>
                 @endif
             </div>
@@ -99,13 +99,13 @@
                     <div class="select_checkboxes">
 
                         <div class="select_checkbox">
-                            <input type="radio" name="sort" value="name" /> 
+                            <input type="radio" name="sort" value="name" />
                             По наименованию
-                        </div>    
+                        </div>
                         <div class="select_checkbox">
-                            <input type="radio" name="sort" value="cost_trade" checked="checked"/> 
+                            <input type="radio" name="sort" value="cost_trade" checked="checked"/>
                             По цене
-                        </div>    
+                        </div>
 
                     </div>
 
@@ -117,9 +117,9 @@
     </div>
     <div class="clear"></div>
     <div class="line">&nbsp;</div>
-    
+
     <div class="filter_buttons">
     <div class="button">Выбрать товары</div>
     <div class="reset button">Сбросить фильтр</div>
     </div>
-</div>    
+</div>
