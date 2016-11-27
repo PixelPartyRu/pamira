@@ -435,7 +435,6 @@ class ProductController extends MyCrudController {
             return redirect("/panel/Product/start_parse_script");
 
           //  d( $parts );
-
         }
 
 
@@ -487,7 +486,6 @@ class ProductController extends MyCrudController {
         foreach($products_name as $k=>$name){
             $attr = $products_attr[$k];
             $this->xml_product_to_base($name, $attr);
-
         }
 
     }
@@ -594,20 +592,15 @@ class ProductController extends MyCrudController {
     }
 
 
-public function set_cat() {
+    public function set_cat() {
         $id = Request::get("id");
         $product = Product::find($id);
-
 
         $res = $this->first_step_set_cat($id);
         if (!is_null($res)) {
             $this->setCatalogsForPh($id);
             return $res;
         }
-
-
-
-
 
         // d($product);
         // d($product->name);
@@ -692,7 +685,6 @@ public function set_cat() {
                $new_word =  $word_arr[0];
             }
             return $new_word;
-
         }
         public function get_max_array($arr) {
             $save_arr = $arr;
@@ -719,15 +711,10 @@ public function set_cat() {
           $product->moderated = 1;
           $product->save();
           $this->setCatalogsForPh($pid);
-
     }
 
     public function sales_page() {
-
-
         $data["catalogs"] = Product::get_sales_catalogs();
-
-
         return view("sales",$data);
     }
 
@@ -736,8 +723,6 @@ public function set_cat() {
         $data["products"] = Product::get_product_width_sales($catalog->id);
         $data["catalog_products"] = $catalog;
         return view("sales",$data);
-
-
     }
 
 }

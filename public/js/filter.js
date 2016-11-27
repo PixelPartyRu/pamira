@@ -114,6 +114,7 @@ function Filter() {
     }
 
 
+    // window.clickColor
 
 
     this.sendAjaxCountData = function ($cur_check) {
@@ -158,7 +159,7 @@ function Filter() {
                 console.log(data);
                 console.log("disable_filters");
                 console.log(data.disable_filters);
-                that.disable_filters(data.disable_filters);
+                that.disable_filters(data.disable_filters, window.clickColor);
             }
 
 
@@ -273,9 +274,9 @@ function Filter() {
         }
         //Устанавливаем количество товара в окне и показываем
     this.setDataForWindow = function(count) {
-        console.log("count");
-        console.log(count);
-        console.log(this.message_window.find(".product_info span:first a").html());
+        // console.log("count");
+        // console.log(count);
+        // console.log(this.message_window.find(".product_info span:first a").html());
         this.message_window.find(".product_info span:first a").html(count);
         $(".filter_tooltip").removeClass("width_message");
         this.timerId = setTimeout(function() {
@@ -306,8 +307,7 @@ function Filter() {
 
 
 
-
-    this.disable_filters = function(values, checkbox_click_color="false") {
+    this.disable_filters = function(values,clickColor="false") {
         /**
          * 03/005 | George Bramus | 2016-11-25
          * Отследим нажатие чекбокса. Нас интересует Материал и Цвет.
@@ -315,6 +315,7 @@ function Filter() {
 
         var that = this;
         that.clearDisabled();
+        // var clickColor = that.clickCheckboxColor();
 
 
         if (that.needDisabled() === true)
@@ -325,7 +326,7 @@ function Filter() {
 
                 $.each(values, function(i, value) {
 
-                    // if( !(checkbox_click_color == true && name == "color") )
+                    // if( !(clickColor == true && name == "color") )
                         that.set_disable_checkbox(name + value);
 
                 });
@@ -337,7 +338,7 @@ function Filter() {
 
     this.set_disable_checkbox = function(filter_class) {
 
-        // console.log(filter_class);
+        // console.log("Фильтр: " + filter_class);
 
         $("." + filter_class).addClass("disabled");
         $("." + filter_class + " input").removeAttr("checked");
@@ -511,6 +512,13 @@ function Filter() {
 
 
 $(document).ready(function() {
+
+    $('input[type="checkbox"]').click(function(){
+        window.clickColor = false;
+    });
+    $('input.gb-color').click(function(){
+        window.clickColor = true;
+    });
 
     var filter = new Filter();
     filter.init();

@@ -27,10 +27,10 @@
     <div class="row">
         {{ Form::open( array("enctype" => "multipart/form-data") ) }}
         <div class="form-group">
-            <label for="exampleInputFile">Выбирете файл</label> 
+            <label for="exampleInputFile">Выберите файл</label>
             {{ Form::file("file") }}
             <p class="help-block">
-            </p> 
+            </p>
         </div>
         <div class="form-group">
             {{ Form::submit() }}
@@ -38,27 +38,27 @@
         {{ Form::close() }}
     </div>
   @endif
-    
+
     @if(isset($parts))
     <p>Подождите</p>
     <div id ="stopwatch"></div>
 
     <div class="row parse_info">
         <div id="parts_line" class="parts" count="{{ $parts }}">
-            
+
         </div>
     </div>
-    <div class="button btn btn-warning start">Начать париснг</div>
+    <div class="button btn btn-warning start">Начать парсинг</div>
     <p>Всего товаров в файле {{ $count_product }}</p>
     <p>После обновления необходимо пройти процедуру кеширования каталога.</p>
-    
+
     <p>Консоль</p>
     <div class="console" style="width:100%; height:600px; border-top:1px solid black;"></div>
 
     @endif
-    
+
 </div>
 
 <script src="/js/parse_xml.js"></script>
 
-@stop 
+@stop
