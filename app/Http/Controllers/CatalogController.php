@@ -241,7 +241,12 @@ class CatalogController extends MyCrudController {
         $data = $catalog->prepareFilterFormat($data);
        // var_dump($data);
         if(!empty($data["filter"])) {
-        $products = Product::whereIn("id",$catalog
+            if( empty($data['sort']) || !isset($data['sort']) )
+                $sort = "cost_trade";
+            else
+                $sort = $data['sort'];
+
+            $products = Product::whereIn("id",$catalog
                 ->getCountProductByFilterValues($data))
                 ->where("catalog_id",$catalog->id)
                 ->where("cost_trade",">=",$data['cost_trade']['min'])
@@ -249,16 +254,17 @@ class CatalogController extends MyCrudController {
                 ->where("deleted",0)
                 // ->orderBy("sales_leader","desc")
                 // ->orderBy("cost_trade","asc")
-                ->orderBy($data['sort'],"asc")
+                ->orderBy($sort,"asc")
                 ->get();
         }
         else {
-                  $products = Product::where("catalog_id",$catalog->id)
+           $products = Product::where("catalog_id",$catalog->id)
                 ->where("cost_trade",">=",$data['cost_trade']['min'])
                 ->where("cost_trade","<=",$data['cost_trade']['max'])
                 ->where("deleted",0)
                 // ->orderBy("sales_leader","desc")
-                ->orderBy($data['sort'],"asc")
+                // ->orderBy($data['sort'],"asc")
+                ->orderBy("cost_trade","asc")
                 ->get();
         }
 

@@ -145,8 +145,7 @@ class BrandController extends MyCrudController {
         $data["category"] = $data['cur_catalog']->getCategotyByAlias($category);
         $data["category_alias"] =  $category;
         }
-        $product = \App\Product::getByAlias($product_alias)
-                            ->where("deleted",0);
+        $product = \App\Product::getByAlias($product_alias);
         if (is_null($product) || $product->moderated == 0) return view("message", array("message" => "Товар не найден"));
         $data['product'] = $product;
         $data['product_img'] = $product->getImageArr();
