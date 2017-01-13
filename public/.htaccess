@@ -2,7 +2,7 @@ AddDefaultCharset utf-8
 
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
-        Options -MultiViews
+      #  Options -MultiViews
     </IfModule>
 
     RewriteEngine On
