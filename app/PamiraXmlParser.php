@@ -4,11 +4,11 @@ namespace App;
 class PamiraXmlParser {
     protected $reader;
     
-    function __construct() {
+    public function __construct() {
         $this->reader = new \XMLReader();
     }
     
-    function parse($xmlPath) {
+    public function parse($xmlPath) {
         $products = [];
         $attrs = [];
         
@@ -42,7 +42,7 @@ class PamiraXmlParser {
         return false;
     }
 
-    function readAllAttributes() {
+    protected function readAllAttributes() {
         $this->reader->moveToFirstAttribute();
         $result = [ ];
         do {
