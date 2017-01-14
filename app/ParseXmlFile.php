@@ -153,8 +153,8 @@ class ParseXmlFile {
         $product_attr["img3"] = $attr['foto3'];
         $product_attr["img4"] = $attr['foto4'];
         $product_attr["analog"] = $attr['analog'];
-        $product_attr["sklad_kol"] = $attr['kol'];
-        $product_attr["sklad_kol_post"] = $attr['kolpost'];
+        $product_attr["sklad_kol"] = 'есть' == mb_strtolower($attr['kol'], 'utf8') ? 1 : 0;
+        $product_attr["sklad_kol_post"] = 'есть' == mb_strtolower($attr['kolpost'], 'utf8') ? 1 : 0;
         $product_attr["cost_old"] = $attr['cenaoptold'];
         $product_attr["cost_trade_old"] = $attr['cenarozold'];
         $product_attr["sales_leader"] = $attr['recomenduem'];
