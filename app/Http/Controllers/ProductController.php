@@ -182,7 +182,7 @@ class ProductController extends MyCrudController {
 
         $this->edit->add('brand_id', 'Бренд', 'select')->options(\App\Brand::lists("title", "id")->all());
 
-        $this->edit->add('article', 'Артикул', 'text')->rule('required');
+        $this->edit->add('article', 'Артикул', 'text');
         $this->edit->add('country', 'Страна', 'text')->rule('required');
         $this->edit->add('cost_trade', 'Цена', 'text')->rule('required');
         $this->edit->add('cost_trade_old', 'Старая цена', 'text'); // +
