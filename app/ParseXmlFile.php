@@ -74,8 +74,8 @@ class ParseXmlFile {
 
         $offset = $step * $this->step;
 
-        $this->name_arr = array_slice($this->name_arr, $offset, $this->step + 1);
-        $this->attr_arr = array_slice($this->attr_arr, $offset, $this->step + 1);
+        $this->name_arr = array_slice($this->name_arr, $offset, $this->step);
+        $this->attr_arr = array_slice($this->attr_arr, $offset, $this->step);
     }
     
     public function get_new_count() {
