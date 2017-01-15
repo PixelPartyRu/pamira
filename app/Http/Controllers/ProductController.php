@@ -185,8 +185,14 @@ class ProductController extends MyCrudController {
         $this->edit->add('article', 'Артикул', 'text')->rule('required');
         $this->edit->add('country', 'Страна', 'text')->rule('required');
         $this->edit->add('cost_trade', 'Цена', 'text')->rule('required');
+        $this->edit->add('cost_trade_old', 'Старая цена', 'text'); // +
         $this->edit->add('cost', 'Оптовая цена', 'text');
+        $this->edit->add('cost_old', 'Старая оптовая цена', 'text'); // +
 
+        $this->edit->checkbox('sklad_kol', 'Kol'); // +
+        $this->edit->checkbox('sklad_kol_post', 'KolPost'); // +
+        
+        
         $this->edit->checkbox('sticker_promo', 'Промо');
         $this->edit->checkbox('sticker_action', 'Акция');
 

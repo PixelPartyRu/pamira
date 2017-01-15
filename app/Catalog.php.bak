@@ -327,6 +327,7 @@ class Catalog extends Model
     }
 
 
+
     public function disableFiltersByHaracteristic($q,$data,$cur) {
 //var_dump($data);
       //  d($data);
@@ -351,10 +352,10 @@ class Catalog extends Model
         
 
         $phf = $this->getAccessFiltersWithoutCheckValues($data);
-        // $phf - все чекбоксы без выбранных
-        
-        
-        //var_dump($all_ids_except_selected);
+// $phf - все чекбоксы без выбранных
+        foreach(array_keys($data) as $filter_type) {
+            unset($phf[$filter_type]);
+        }
 //        d("data");
 //        d($data);
 //        d("phf");
@@ -365,13 +366,16 @@ class Catalog extends Model
         foreach ($phf as $filter_name => $filter) {
           //  d($filter);
             foreach ($filter as $id => $value) {
-                $filtered_ids = $cOb->getProductsByInfoId($value);
-                $has_product = count(array_intersect($product_id_array, $filtered_ids));
+                $has_product = count(array_intersect($product_id_array, $cOb->getProductsByInfoId($value)));
+//if($filter_name=="material") {
+    //var_dump($value . ' => ' . $has_product);
+//}
 
                 if ($has_product == 0) {
                     $disable_filters[$filter_name][] = $value;
                 }
-                //var_dump($filter_name . ': ' . $value . ' => ' . $has_product);
+
+
             }
         }
 
@@ -524,22 +528,26 @@ class Catalog extends Model
         return $filter_get;
     }
     public function getCountProductByFilterValues($filter_get) {
-        $ob = $this->getCacheObject();
-        
+      $ob = $this->getCacheObject();
+
         if(isset($filter_get['filter'])) {
         $filter = $filter_get['filter'];
         }
         else {
            $filter =  $filter_get;
         }
-        $filter_orig = $filter;
+
+
 
        // d($filter["brand"]);
-        $brands = !empty($filter["brand"]) ? $ob->get_bp_by_array($filter["brand"]) : array();
+        $brands = !empty($filter["brand"])?$ob->get_bp_by_array($filter["brand"]):array();
+
 
         //Чекбоксы бренда
         $isEmptyBcb = empty($filter["brand"]);
         unset($filter["brand"]);
+
+
 
         //Чекбоксы характеристик
         $isEmptyHcb = empty($filter);
@@ -548,55 +556,20 @@ class Catalog extends Model
         foreach ($filter as $k => $v) {
             $data[$k] = $ob->get_hp_by_array($v);
         }
-        
-        //$phf = $this->getAccessFiltersWithoutCheckValues($filter);
-        $phf = $this->getAccessFiltersWithoutCheckValues(array());
-        $disable_filters = array();
-        $all_brand_ids_without_checked = array_diff($this->getAccessBrandsIds(), !empty($filter_orig["brand"]) ?  $filter_orig["brand"] : array());
-        $phf['brand'] = $all_brand_ids_without_checked;
-        if(!empty($brands)) {
-            $data['brand'] = $brands;
-        }
-        //var_dump($filter_orig, $data);
-        
-        // чекбокс выключается если НЕ входит хоть в один из установленных
-        foreach($phf as $filter_type => $filter_values) {
-            foreach($filter_values as $filter_value) {
-                if($filter_type == 'brand') {
-                    $check_ids = $ob->get_bp_by_array(array($filter_value)); // все id для одного бренда
-                } else {
-                    $check_ids = $ob->get_hp_by_array(array($filter_value)); // все id для одной характеристики
-                }
-                
-                $found = 0;
-                foreach($data as $check_filter_type => $group_ids) {
-                    if($check_filter_type == $filter_type || count(array_intersect($check_ids, $group_ids)) > 0) {
-                        $found++;
-                    }
-                }
-                
-                if($found < count($data)) {
-                    $disable_filters[$filter_type][] = $filter_value;
-                }
-            }
-        }
-        unset($data['brand']);
-        
-        //var_dump($disable_filters);
+        //d($data);
+
 
         $hp = !empty($data) ? array_shift($data) : array();
 
         foreach ($data as $k => $v) {
             $hp = array_intersect($v, $hp);
+
         }
 
-        $return_obj = new \stdClass;
-        $return_obj->count_ids = $this->prepareCountResult($hp, $brands,$isEmptyBcb,$isEmptyHcb);
-        $return_obj->disable_filters = $disable_filters;
-        
-        return $return_obj;
+        return $this->prepareCountResult($hp, $brands,$isEmptyBcb,$isEmptyHcb);
+
+
     }
-    
     private function prepareCountResult($hp, $brands,$isEmptyBcb,$isEmptyHcb) {
         //Наборы чекбоксов для брендов и харакеристик не пустые
         if (!$isEmptyBcb && !$isEmptyHcb) {

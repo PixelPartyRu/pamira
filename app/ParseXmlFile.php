@@ -8,8 +8,10 @@
 
 namespace App;
 
-use Yangqi\Htmldom\Htmldom;
+//use Yangqi\Htmldom\Htmldom;
 use Intervention\Image\ImageManager;
+use App\PamiraXmlParser;
+use Illuminate\Support\Facades\DB;
 
 class ParseXmlFile {
 
@@ -45,49 +47,26 @@ class ParseXmlFile {
     }
 
     public function load_xml() {
-        $html = new Htmldom($this->file);
-
-        $elements = $html->find("Element");
-        unset($html);
-        $products_name = array();
-        $products_attr = array();
-
-
-
-
-        foreach ($elements as $k => $el) {
-
-            $product = new \stdClass();
-            $products_name[] = $el->innertext;
-            $products_attr[] = $el->attr;
-            unset($elements[$k]);
-        }
-        unset($elements);
-        $this->name_arr = $products_name;
-        $this->attr_arr = $products_attr;
-        unset($products_name);
-        unset($products_attr);
+        $parser = new PamiraXmlParser();
+        $result = $parser->parse($this->file);
+        $this->name_arr = $result->products;
+        $this->attr_arr = $result->attributes;
+        
         $_SESSION["name_arr"] = $this->name_arr;
         $_SESSION["attr_arr"] = $this->attr_arr;
-        
-
-
-
-
     }
 
     public function update($step) {
-  
-        $this->strip_data($step);
-        $products = array();
-
-  
-
-        foreach ($this->name_arr as $k => $name) {
-            $attr = $this->attr_arr[$k];
-            $products[] = $this->xml_product_to_base($name, $attr);
-        }
-        return $products;
+        return DB::transaction(function() use ($step) {
+            $this->strip_data($step);
+            $products = array();
+            
+            foreach ($this->name_arr as $k => $name) {
+                $attr = $this->attr_arr[$k];
+                $products[] = $this->xml_product_to_base($name, $attr);
+            }
+            return $products;
+        });
     }
 
     //Удаление из массиово эелементов, которые уже загруженны
@@ -95,8 +74,8 @@ class ParseXmlFile {
 
         $offset = $step * $this->step;
 
-        $this->name_arr = array_slice($this->name_arr, $offset, $this->step + 1);
-        $this->attr_arr = array_slice($this->attr_arr, $offset, $this->step + 1);
+        $this->name_arr = array_slice($this->name_arr, $offset, $this->step);
+        $this->attr_arr = array_slice($this->attr_arr, $offset, $this->step);
     }
     
     public function get_new_count() {
@@ -128,8 +107,8 @@ class ParseXmlFile {
             $pr_new = new Product();
             $pr_new->catalog_id = 10000;
              
-//Эта безумная цифра нужна, чтобы определять товары из текущей сессии
-//для работы раздела "Товары без каталога"
+            //Эта безумная цифра нужна, чтобы определять товары из текущей сессии
+            //для работы раздела "Товары без каталога"
             $pr_new->moderated = 0;
             $pr_new->code_1c = $attr["kod"];
             $pr_new->save();
@@ -174,6 +153,15 @@ class ParseXmlFile {
         $product_attr["img3"] = $attr['foto3'];
         $product_attr["img4"] = $attr['foto4'];
         $product_attr["analog"] = $attr['analog'];
+        $product_attr["sklad_kol"] = 'есть' == mb_strtolower($attr['kol'], 'utf8') ? 1 : 0;
+        $product_attr["sklad_kol_post"] = 'есть' == mb_strtolower($attr['kolpost'], 'utf8') ? 1 : 0;
+        $product_attr["cost_old"] = $attr['cenaoptold'];
+        $product_attr["cost_trade_old"] = $attr['cenarozold'];
+        $product_attr["sales_leader"] = $attr['recomenduem'];
+        $product_attr["sticker_promo"] = $attr['promo'];
+        $product_attr["sticker_action"] = $attr['action'];
+        $product_attr["sales"] = $attr['rasprodaja'];
+        
         
         $photo = array();
         $photo[2] = $attr['foto2'];
@@ -250,7 +238,7 @@ class ParseXmlFile {
 
     private function get_ph_for_save($attr, $catalog_id) {
         $ph_save_ids = array();
-
+        
         foreach ($attr as $k => $v) {
             if($v !== '')
             {
