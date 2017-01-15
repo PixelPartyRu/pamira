@@ -329,7 +329,7 @@ class Catalog extends Model
 
 
     public function disableFiltersByHaracteristic($q,$data,$cur) {
-
+//var_dump($data);
       //  d($data);
         $dbb = $this->disableFiltersByBrand($data);
 
@@ -349,10 +349,13 @@ class Catalog extends Model
             $presult[] = $r;
         }
 
+        
 
         $phf = $this->getAccessFiltersWithoutCheckValues($data);
-
-
+// $phf - все чекбоксы без выбранных
+        foreach(array_keys($data) as $filter_type) {
+            unset($phf[$filter_type]);
+        }
 //        d("data");
 //        d($data);
 //        d("phf");
@@ -361,11 +364,12 @@ class Catalog extends Model
         $disable_filters = array();
 
         foreach ($phf as $filter_name => $filter) {
-
           //  d($filter);
             foreach ($filter as $id => $value) {
-
                 $has_product = count(array_intersect($product_id_array, $cOb->getProductsByInfoId($value)));
+//if($filter_name=="material") {
+    //var_dump($value . ' => ' . $has_product);
+//}
 
                 if ($has_product == 0) {
                     $disable_filters[$filter_name][] = $value;
@@ -559,7 +563,6 @@ class Catalog extends Model
 
         foreach ($data as $k => $v) {
             $hp = array_intersect($v, $hp);
-
 
         }
 
