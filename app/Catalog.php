@@ -328,7 +328,6 @@ class Catalog extends Model
 
 
     public function disableFiltersByHaracteristic($q,$data,$cur) {
-//var_dump($data);
       //  d($data);
         $dbb = $this->disableFiltersByBrand($data);
 
@@ -354,7 +353,6 @@ class Catalog extends Model
         // $phf - все чекбоксы без выбранных
         
         
-        //var_dump($all_ids_except_selected);
 //        d("data");
 //        d($data);
 //        d("phf");
@@ -371,7 +369,6 @@ class Catalog extends Model
                 if ($has_product == 0) {
                     $disable_filters[$filter_name][] = $value;
                 }
-                //var_dump($filter_name . ': ' . $value . ' => ' . $has_product);
             }
         }
 
@@ -523,7 +520,12 @@ class Catalog extends Model
         $filter_get['filter'] = $filter;
         return $filter_get;
     }
-    public function getCountProductByFilterValues($filter_get) {
+    
+    /**
+    * Возвращает идентификаторы найденых продуктов удовлетворяющих условиям в фильтре 
+    * Если $filtersToDisable установлен в значение отличное от false, то в эту переменную устанавлвается массив фильтров которые необходимо выключить
+    */ 
+    public function getCountProductByFilterValues($filter_get, &$filtersToDisable = false) {
         $ob = $this->getCacheObject();
         
         if(isset($filter_get['filter'])) {
@@ -549,52 +551,51 @@ class Catalog extends Model
             $data[$k] = $ob->get_hp_by_array($v);
         }
         
-        //$phf = $this->getAccessFiltersWithoutCheckValues($filter);
-        $phf = $this->getAccessFiltersWithoutCheckValues(array());
-        $disable_filters = array();
-        $all_brand_ids_without_checked = array_diff($this->getAccessBrandsIds(), !empty($filter_orig["brand"]) ?  $filter_orig["brand"] : array());
-        $phf['brand'] = $all_brand_ids_without_checked;
-        if(!empty($brands)) {
-            $data['brand'] = $brands;
-        }
-        //var_dump($filter_orig, $data);
-        
-        // чекбокс выключается если НЕ входит хоть в один из установленных
-        foreach($phf as $filter_type => $filter_values) {
-            foreach($filter_values as $filter_value) {
-                if($filter_type == 'brand') {
-                    $check_ids = $ob->get_bp_by_array(array($filter_value)); // все id для одного бренда
-                } else {
-                    $check_ids = $ob->get_hp_by_array(array($filter_value)); // все id для одной характеристики
-                }
-                
-                $found = 0;
-                foreach($data as $check_filter_type => $group_ids) {
-                    if($check_filter_type == $filter_type || count(array_intersect($check_ids, $group_ids)) > 0) {
-                        $found++;
+        if(false !== $filtersToDisable) {
+            //$phf = $this->getAccessFiltersWithoutCheckValues($filter);
+            $phf = $this->getAccessFiltersWithoutCheckValues(array());
+            $disable_filters = array();
+            $all_brand_ids_without_checked = array_diff($this->getAccessBrandsIds(), !empty($filter_orig["brand"]) ?  $filter_orig["brand"] : array());
+            $phf['brand'] = $all_brand_ids_without_checked;
+            if(!empty($brands)) {
+                $data['brand'] = $brands;
+            }
+            //var_dump($filter_orig, $data);
+            
+            // чекбокс выключается если НЕ входит хоть в один из установленных
+            foreach($phf as $filter_type => $filter_values) {
+                foreach($filter_values as $filter_value) {
+                    if($filter_type == 'brand') {
+                        $check_ids = $ob->get_bp_by_array(array($filter_value)); // все id для одного бренда
+                    } else {
+                        $check_ids = $ob->get_hp_by_array(array($filter_value)); // все id для одной характеристики
+                    }
+                    
+                    $found = 0;
+                    foreach($data as $check_filter_type => $group_ids) {
+                        if($check_filter_type == $filter_type || count(array_intersect($check_ids, $group_ids)) > 0) {
+                            $found++;
+                        }
+                    }
+                    
+                    if($found < count($data)) {
+                        $disable_filters[$filter_type][] = $filter_value;
                     }
                 }
-                
-                if($found < count($data)) {
-                    $disable_filters[$filter_type][] = $filter_value;
-                }
             }
+            unset($data['brand']);
+            
+            //var_dump($disable_filters);
+            $filtersToDisable = $disable_filters;
         }
-        unset($data['brand']);
-        
-        //var_dump($disable_filters);
 
         $hp = !empty($data) ? array_shift($data) : array();
 
         foreach ($data as $k => $v) {
             $hp = array_intersect($v, $hp);
         }
-
-        $return_obj = new \stdClass;
-        $return_obj->count_ids = $this->prepareCountResult($hp, $brands,$isEmptyBcb,$isEmptyHcb);
-        $return_obj->disable_filters = $disable_filters;
         
-        return $return_obj;
+        return $this->prepareCountResult($hp, $brands,$isEmptyBcb,$isEmptyHcb);
     }
     
     private function prepareCountResult($hp, $brands,$isEmptyBcb,$isEmptyHcb) {
