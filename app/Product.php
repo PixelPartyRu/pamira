@@ -144,16 +144,26 @@ public static function query() {
         return 0;
     }
 
-    public function getCostWithMargin($opt = false) {
+    public function getCostWithMargin($opt = false, $newness = true) {
+        // newness - возвращаем либо новую, либо старую цену.
+        // newness = true - новая цена
+        // newness = false - старая цена
 
-        $cost = ($opt) ? $this->cost : $this->cost_trade;
-        $cost_rev = ($opt) ? $this->cost_trade : $this->cost;
+        $cost_newness = ($newness) ? $this->cost : $this->cost_old;
+        $cost_trade_newness = ($newness) ? $this->cost_trade : $this->cost_trade_old;
+
+        $cost = ($opt) ? $cost_newness : $cost_trade_newness;
+        $cost_rev = ($opt) ? $cost_trade_newness : $cost_newness;
+
         if ($opt) {$type='retail';} else {$type='wholesale';}
 
         if(User::getLoginUserType() == "dealer")
         {
             $dealer2 = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
-            $margin2 = \App\Margin::where('user_id', $dealer2->id)->where('default', 1)->where('type', $type)->first();
+            $margin2 = \App\Margin::where('user_id', $dealer2->id)
+                                  ->where('default', 1)
+                                  ->where('type', $type)
+                                  ->first();
         }
 
         if(!empty($margin2)){
@@ -184,8 +194,14 @@ public static function query() {
         }
 
     }
+    public function is_sales_for_current_product() {
+        return ($this->sales == 1) ? true : false;
+    }
     public function getFormatCost() {
         return number_format(  round($this->getCostWithMargin() )  ,  0  ,  ','  ,  ' '  );
+    }
+    public function getFormatCostOld() {
+        return number_format(  round($this->getCostWithMargin(false,false) )  ,  0  ,  ','  ,  ' '  );
     }
     public function getRoundCost() {
         return round( $this->getCostWithMargin() );
