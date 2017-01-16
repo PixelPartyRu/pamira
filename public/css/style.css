@@ -2811,7 +2811,9 @@ vertical-align: top;
 
 
 .cost_old {
+  display: block;
+  border: 1px solid green
   padding: 0;
-  margin: 0;
+  margin: 0.5em 0;
   color: #C50F0F;
 }
