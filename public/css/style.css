@@ -2801,3 +2801,51 @@ vertical-align: top;
   cursor: default;
   color: #3a3a3a;
 }
+
+
+
+
+
+
+
+
+
+.cost_old {
+  display: block;
+  // border: 1px solid green;
+  padding: 0;
+  margin: 0.5em 0;
+  color: #C50F0F;
+  text-align: center;
+  position: relative;
+}
+.cost_old span {
+  // border: 1px solid black;
+  position: relative;
+  text-align: center;
+}
+.cost_old span span {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background-color: grey;
+
+  -webkit-transform-origin: center;
+  -moz-transform-origin: center;
+  -o-transform-origin: center;
+  -ms-transform-origin: center;
+  transform-origin: center;
+
+  -webkit-transform: translate(0,150%) rotate(-15deg);
+  -moz-transform: translate(0,150%) rotate(-15deg);
+  -o-transform: translate(0,150%) rotate(-15deg);
+  -ms-transform: translate(0,150%) rotate(-15deg);
+  transform: translate(0,150%) rotate(-15deg);
+
+  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60); /* IE 5.5+*/
+  -moz-opacity: 0.60; /* Mozilla 1.6 и ниже */
+  -khtml-opacity: 0.60; /* Konqueror 3.1, Safari 1.1 */
+  opacity: 0.60; /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+, Chrome 5+, IE 9+ */
+}
