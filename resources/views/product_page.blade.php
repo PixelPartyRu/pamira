@@ -40,9 +40,20 @@
             <img src="/uploads/brands/{{ strtolower($product->brand->img) }}" />
         </div>
         @if($product->viewcost)
+
+            @if($product->is_sales_for_current_product() )
+            <span class="cost_old"><span><span></span>{{ $product->getFormatCostOld() }} р.</span></span>
+            @endif
+
         <div class="cost_trade"><span> Цена: {{ $product->getFormatCost() }} руб.</span></div>
 
             {{-- ОПТ и Наценка --}}
+
+            @if($product->is_sales_for_current_product() )
+            @if( \App\Dealer::is_login() )
+            <span class="cost_old"><span><span></span>{{ number_format($product->getCostWithMargin(true, false),0,',',' ') }} р.</span></span>
+            @endif
+            @endif
 
             @if( \App\Dealer::is_login() )
             <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
