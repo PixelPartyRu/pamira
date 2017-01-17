@@ -49,15 +49,13 @@
 
             {{-- ОПТ и Наценка --}}
 
-            @if($product->is_sales_for_current_product() )
             @if( \App\Dealer::is_login() )
-            <span class="cost_old"><span><span></span>{{ number_format($product->getCostWithMargin(true, false),0,',',' ') }} р.</span></span>
-            @endif
-            @endif
+                @if($product->is_sales_for_current_product() )
+                    <span class=" cost_old" id="gb-cost-wholesale-old"><span><span></span>{{ number_format($product->getCostWithMargin(true, false),0,',',' ') }} р.</span></span>
+                @endif
 
-            @if( \App\Dealer::is_login() )
-            <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
-            <div class="cost_trade gb-cost-mark-up" id="gb-cost-mark-up"><span> Наценка: {{ $markup }}%</span></div>
+                <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
+                <div class="cost_trade gb-cost-mark-up" id="gb-cost-mark-up"><span> Наценка: {{ $markup }}%</span></div>
             @endif
 
         <div class="buy_button" data-id="{{ $product->id }}"><img src="/img/button_buy1.gif"></div>
