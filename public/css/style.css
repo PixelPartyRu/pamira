@@ -2849,3 +2849,22 @@ vertical-align: top;
   -khtml-opacity: 0.60; /* Konqueror 3.1, Safari 1.1 */
   opacity: 0.60; /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+, Chrome 5+, IE 9+ */
 }
+
+
+
+
+
+
+
+.delivery-time {
+  display: inline-block;
+  margin-top: 3px;
+  background-color: #C50F0F;
+  padding: 3px;
+  color: white;
+  padding: 3px;
+  font-weight: lighter;
+}
+.delivery-time.product-missing {
+  background: linear-gradient(to bottom, #A5A4A4, #757575);
+}

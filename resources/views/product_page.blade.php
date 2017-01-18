@@ -59,12 +59,38 @@
             @endif
 
         <div class="buy_button" data-id="{{ $product->id }}"><img src="/img/button_buy1.gif"></div>
+
+        {{-- ОСТАТКИ на складе --}}
+        <div class="cost_trade">
+                @if( $product->product_in_stock() )
+
+                    <span class="delivery-time" style="font-size: 1.25em; font-weight: normal">Есть в наличии</span>
+
+                @elseif ( $product->product_delivery_time_of_five_to_ten_days() )
+
+                    <span class="delivery-time" style="font-size: 1.25em; font-weight: normal">Срок поставки 5-10 дней</span>
+
+                @elseif ( $product->specify_the_terms_of_delivery_of_goods() )
+
+                    <span class="delivery-time product-missing" style="font-size: 1.25em; background: linear-gradient(to bottom, #A5A4A4, #757575); font-weight: normal">Уточните сроки поставки</span>
+
+                @else
+
+                    <span class="delivery-time product-missing" style="font-size: 1.25em; background: linear-gradient(to bottom, #A5A4A4, #757575); font-weight: normal">Уточните сроки поставки</span>
+
+                @endif
+        </div>
+
         @else
         <div class="cost_trade"><span>Уточните цену у менеджера</span></div>
         @endif
         </div>
+
+
         @if(!is_null(\App\User::getLoginUserType()))
         <div class="compare" data-id="4">
+
+
 
             {{--
             <span class="compare_img"><img src="/img/compare.png"></span>
