@@ -44,16 +44,12 @@
 
     <div class="tel_wrap">
       <div class="tel">
-        <a class="big">302-03-04</a>
-        <a class="min"><span class="city">Ростов-на-Дону: розничный отдел</span><br> +7 (863)</a>
+        <a class="big">302-00-22</a>
+        <a class="min"><span class="city">Ростов-на-Дону</span> +7 (863)</a>
       </div>
       <div class="tel">
         <a class="big">888-6-777</a>
         <a class="min"><span class="city"></span> +7 (919)</a>
-      </div>
-      <div class="tel">
-        <a class="big">302-00-22</a>
-        <a class="min"><span class="city">Ростов-на-Дону: оптовый отдел</span><br> +7 (863)</a>
       </div>
 
       <div class="tel last">
