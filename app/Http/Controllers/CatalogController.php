@@ -291,6 +291,8 @@ class CatalogController extends MyCrudController {
             $el["sticker_action"] = $p->sticker_action;
             $el["cost_trade"]     = $p->getFormatCost();
             $el["viewcost"]       = $p->viewcost;
+            $el["sklad_kol"]       = $p->sklad_kol;
+            $el["sklad_kol_post"]  = $p->sklad_kol_post;
             $products_ret[] = $el;
         }
 
