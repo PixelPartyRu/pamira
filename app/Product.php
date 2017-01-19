@@ -124,26 +124,21 @@ public static function query() {
      * Сроки поставки
      */
     // Что в поле sklad_kol
-    public function is_slad_kol() {
-        return $this->sklad_kol == 1 ? true : false;
-    }
+    public function is_sklad_kol()
+        { return $this->sklad_kol == 1 ? true : false; }
     // Что в поле sklad_kol_post
-    public function is_sklad_kol_post() {
-        return $this->sklad_kol_post == 1 ? true : false;
-    }
+    public function is_sklad_kol_post()
+        { return $this->sklad_kol_post == 1 ? true : false; }
 
     // "Товар в наличии"
-    public function product_in_stock() {
-        return $this->is_slad_kol();
-    }
+    public function product_in_stock()
+        { return $this->is_sklad_kol(); }
     // "Срок поставки 5-10 дней"
-    public function product_delivery_time_of_five_to_ten_days() {
-        return ( !$this->is_slad_kol() && $this->is_sklad_kol_post() ) ? true : false;
-    }
+    public function product_delivery_time_of_five_to_ten_days()
+        { return ( !$this->is_sklad_kol() && $this->is_sklad_kol_post() ) ? true : false; }
     // "Уточните сроки поставки"
-    public function specify_the_terms_of_delivery_of_goods() {
-        return ( !$this->is_slad_kol() && !$this->is_sklad_kol_post() ) ? true : false;
-    }
+    public function specify_the_terms_of_delivery_of_goods()
+        { return ( !$this->is_sklad_kol() && !$this->is_sklad_kol_post() ) ? true : false; }
 
 
     /**
