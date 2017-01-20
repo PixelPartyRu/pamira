@@ -198,33 +198,6 @@ class CatalogController extends MyCrudController {
         
         $products['disable_filters'] = $filters_to_disable;
         
-        /*
-        $q = Product::whereIn("id", $catalog->getCountProductByFilterValues($data))
-                        ->where("cost_trade", ">=", $data['cost_trade']['min'])
-                        ->where("cost_trade", "<=", $data['cost_trade']['max'])
-                        ->where("catalog_id",$catalog_id)
-                        ->where("deleted",0)
-                        ->orderBy("cost_trade","asc");
-
-        $data_for_disable_detect = $data['filter'];
-
-        $q_fdd = Product::whereIn("id", $catalog->getCountProductByFilterValues($data_for_disable_detect))
-                        ->where("cost_trade", ">=", $data['cost_trade']['min'])
-                        ->where("cost_trade", "<=", $data['cost_trade']['max'])
-                        ->where("deleted",0)
-                        ->orderBy("cost_trade","asc");
-       // d($data['disabled_by']);
-        //if ($data['disabled_by'] !== "brand") {
-           // $data_for_disable_detect["brand"];
-            $products['disable_filters'] = Catalog::find($data['catalog'])->disableFiltersByHaracteristic($q_fdd,$data_for_disable_detect,$cur);
-        /*}
-        else {
-            $disable_filters = Catalog::find($data['catalog'])->getDisableFilters($data['filter'], $data['disabled_by']);
-            //unset($disable_filters["brand"]);
-            $products['disable_filters'] = $disable_filters;
-            //dd($disable_filters);
-        }*/
-
         $products_count = $product_query->count();
 
 
