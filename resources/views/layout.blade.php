@@ -20,11 +20,28 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
+
+
+
   </head>
 
   <body class="{{ $is_main_page == 1?"main_page":"" }} {{ \App\User::getLoginUserType() }}">
 
   @include("popups")
+
+
+
+
+
+
+ <!--  <div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">bootstarap</div>
+    <div class="col-xs-12 col-sm-6 col-md-4">bootstarap</div>
+    <div class="col-xs-12 col-sm-6 col-md-4">bootstarap</div>
+  </div>
+  </div> -->
+
 
 
   <div class="search-container menu-row ">
@@ -46,7 +63,7 @@
 
 
 
-  <div class="phone-wrapper">
+  <div class="phone-wrapper" style="float:right">
     <div class="phone-group">
       <div class="city-name">
         <span class="city">Ростов-на-Дону: </span>
@@ -103,8 +120,6 @@
 
 
 
-
-
     @if(!is_null(\App\Dealer::getLoginDealer()))
     <div class="dealer_menu">
       <div class="hello">Меню дилера: Hello, {{ \App\Dealer::getLoginDealer()->name}}</div>
@@ -141,13 +156,26 @@
 
     @endif
     <div class="clear"></div>
+
+
+
+
+
+
+
   </div>
 
 
 
 
+
+
+
+
+
+
 <div class="container main">
-  <div class="row menu-row menu_link">
+<div class="row menu-row menu_link">
     <div class="search">
       <div id="search_field" class="min">
         <form action="/search" method="GET">
@@ -198,6 +226,7 @@
       </ul>
     </div>
   </div>
+
 
 
 <!--            <div class="row">
