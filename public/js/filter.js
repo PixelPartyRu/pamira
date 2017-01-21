@@ -41,12 +41,14 @@ function Filter() {
     this.reset_event = function() {
         var that = this;
 
-        $(".reset").click(function(event) {
+        $(".filter .reset").click(function(event) {
             event.preventDefault();
             $("input").removeAttr("checked");
             $(".select_line").html("");
             that.clearDisabled();
-
+            
+            that.show_products();
+            $('#is_products_filtered').val(0);
         });
 
     }
@@ -117,14 +119,15 @@ function Filter() {
     // window.clickColor
 
 
-    this.sendAjaxCountData = function ($cur_check) {
+    this.sendAjaxCountData = function ($cur_check, donePre, donePost) {
         var that = this;
 
-
+        console.log("sendAjaxCountData");
 
 
         $.get("/product_catalog/filter", that.getCountAjaxData($cur_check), function (data) {
-
+            if(donePre) donePre(data);
+            
             that.setDataForWindow(data.count);
 
             var bh = (that.getDisabledBy() == "haracteristic"
@@ -162,7 +165,7 @@ function Filter() {
                 that.disable_filters(data.disable_filters, window.clickColor);
             }
 
-
+            if(donePost) donePost(data);
         });
 
     }
@@ -307,7 +310,7 @@ function Filter() {
 
 
 
-    this.disable_filters = function(values,clickColor="false") {
+    this.disable_filters = function(values,clickColor) {
         /**
          * 03/005 | George Bramus | 2016-11-25
          * Отследим нажатие чекбокса. Нас интересует Материал и Цвет.
@@ -352,23 +355,20 @@ function Filter() {
 
     this.filter_button_click = function() {
         var that = this;
-        $(".filter .button").click(function() {
+        $(".filter .filter-products").click(function() {
             that.show_products();
-
         });
     }
 
     this.show_products = function () {
-
-        console.clear();
+        $('#is_products_filtered').val(1);
+            
+        //console.clear();
         var that = this;
         $(".product_list").html("");
         $.get("/product_catalog/getFilterProduct", that.getProductUpdateAjaxData(), function (data) {
             $.each(data, function (i, product) {
-
                 that.appendProduct(product);
-
-
             });
 
         });
@@ -384,8 +384,6 @@ function Filter() {
 
     }
     this.appendProduct = function(product) {
-        console.log(product.sklad_kol);
-
         var product_html = this.product_box({
             img: product.img,
             cost_trade: product.cost_trade,
@@ -394,9 +392,7 @@ function Filter() {
             alias:product.alias,
             sales_leader:product.sales_leader,
             sticker_promo: product.sticker_promo,
-            sticker_action: product.sticker_action,
-            sklad_kol: product.sklad_kol,
-            sklad_kol_post: product.sklad_kol_post
+            sticker_action: product.sticker_action
         });
         product_html = $(product_html);
         if(product.viewcost == 1)
@@ -424,16 +420,6 @@ function Filter() {
         if(product.sales_leader == 1 || product.sticker_action == 1 || product.sticker_promo == 1){
             product_html.addClass("with_sticker");
         }
-
-        var text="";
-        var pm = ""; // pm = product-missimg
-        if (product.sklad_kol == 1) text = "Есть в наличии";
-        else if (product.sklad_kol == 0 && product.sklad_kol_post == 1) text = "Срок поставки 5-10 дней";
-        else if (product.sklad_kol == 0 && product.sklad_kol_post == 0) { text = "Уточните сроки поставки"; pm = "product-missing"; }
-        else { text = "Уточните сроки поставки"; pm = "product-missing"; }
-
-        product_html.find(".price_info").after('<span class="delivery-time ' + pm + '">' + text + '</span>');
-
 
         $(".product_list").append(product_html);
 
@@ -471,29 +457,36 @@ function Filter() {
     }
 
     this.init = function() {
-
-        this.clearDisabledAll();
+        var that = this;
+        //this.clearDisabledAll();
         this.select_live_event();
         this.changeFilter();
         this.reset_event();
         this.filter_button_click();
         this.window_close_event();
         this.show_click();
-       // this.sh();
-
-      //  this.test_cache();
-
-
-
+        
+        if(+$('#is_products_filtered').val() > 0) {
+            this.setChangedCheckbox(this.getCheckedFilterCollection().first());
+            
+            $(".product_list").hide();
+            this.sendAjaxCountData($('<input type="checkbox" value="1" />'), null, function(data) {
+                that.show_products();
+                $(".product_list").show();
+            });
+        }
+        // this.sh();
+        //  this.test_cache();
 
     }
+    
     this.test_cache = function() {
         var that = this;
         $(".filter").before("<div class='tc' style='background:red;width:30px;height:30px'></div>");
         $(".filter").before("<div class='link_info' ></div>");
 
         $(".tc").click(function() {
-            console.clear();
+            //console.clear();
             var inf = that.getCountAjaxData();
 
             $.ajax({
@@ -552,13 +545,21 @@ $(document).ready(function(){
 
 
 /* слайдер цен */
-var min = $("#slider").data("min");
-var max = $("#slider").data("max");
+var min = +$("#slider").data("min");
+var max = +$("#slider").data("max");
+
+if(+$("#minCost").val() < min || +$("#minCost").val() >= max) {
+    $("#minCost").val(min);
+}
+
+if(+$("#maxCost").val() <= +$("#minCost").val()) {
+    $("#maxCost").val(max);
+}
 
     $("#slider").slider({
         min: min,
         max: max,
-        values: [min, max],
+        values: [$("#minCost").val(), $("#maxCost").val()],
         range: true,
         stop: function (event, ui) {
             $("input#minCost").val($("#slider").slider("values", 0));
@@ -570,8 +571,6 @@ var max = $("#slider").data("max");
             $("input#maxCost").val($("#slider").slider("values", 1));
         }
     });
-
-$("#maxCost").val(max);
 
     $("input#minCost").change(function () {
 

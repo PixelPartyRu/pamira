@@ -79,8 +79,8 @@
                     <div class="select_checkboxes">
 
                         <div class="formCost">
-                            <label for="minCost">от</label> <input type="text" id="minCost" value="0">
-                            <label for="maxCost">до</label> <input type="text" id="maxCost" value="1000">
+                            <label for="minCost">от</label> <input type="text" id="minCost" value="-1">
+                            <label for="maxCost">до</label> <input type="text" id="maxCost" value="-1">
                         </div>
                         <div class="sliderCont">
                             <div id="slider" data-max="{{ round($filter_max_price) }}" data-min="{{ round($filter_min_price) }}"></div>
@@ -118,8 +118,9 @@
     <div class="clear"></div>
     <div class="line">&nbsp;</div>
 
+    <input type="hidden" id="is_products_filtered" name="is_products_filtered" value="0" />
     <div class="filter_buttons">
-    <div class="button">Выбрать товары</div>
+    <div class="filter-products button 123">Выбрать товары</div>
     <div class="reset button">Сбросить фильтр</div>
     </div>
 </div>
