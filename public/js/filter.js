@@ -466,10 +466,8 @@ function Filter() {
         this.window_close_event();
         this.show_click();
         
-        var $checked = this.getCheckedFilterCollection();
-        //if($checked.length) {
         if(+$('#is_products_filtered').val() > 0) {
-            this.setChangedCheckbox($checked.first());
+            this.setChangedCheckbox(this.getCheckedFilterCollection().first());
             
             $(".product_list").hide();
             this.sendAjaxCountData($('<input type="checkbox" value="1" />'), null, function(data) {
@@ -478,13 +476,10 @@ function Filter() {
             });
         }
         // this.sh();
-
-      //  this.test_cache();
-
-
-
+        //  this.test_cache();
 
     }
+    
     this.test_cache = function() {
         var that = this;
         $(".filter").before("<div class='tc' style='background:red;width:30px;height:30px'></div>");
