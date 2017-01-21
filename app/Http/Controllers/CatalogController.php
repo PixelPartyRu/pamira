@@ -177,9 +177,7 @@ class CatalogController extends MyCrudController {
     public function filter() {
 
         $data = Request::all();
-        $cur = $data["cur"];
-
-
+        //$cur = $data["cur"];
 
         $catalog_id = intval($data['catalog']);
         $catalog = Catalog::find(intval($data['catalog']));
@@ -189,21 +187,20 @@ class CatalogController extends MyCrudController {
 
         $filters_to_disable = true;
         $filtered_ids = $catalog->getCountProductByFilterValues($data, $filters_to_disable);
-        $product_query = Product::whereIn("id", $filtered_ids)                        ->where("cost_trade", ">=", $data['cost_trade']['min'])
+        $product_query = Product::whereIn("id", $filtered_ids)
+                        ->where("cost_trade", ">=", $data['cost_trade']['min'])
                         ->where("cost_trade", "<=", $data['cost_trade']['max'])
                         ->where("catalog_id",$catalog_id)
                         ->where("deleted",0)
                         ->orderBy("cost_trade","asc");
         
         $products['disable_filters'] = $filters_to_disable;
-        $products_count = $product_query->count();
+        $products['count'] = $product_query->count();
 
 
         if(empty($data["filter"])) {
             $products['disable_filters'] = array();
         }
-
-        $products['count'] = $products_count;
 
         //var_dump($data, $products, $count_result);
         return response()->json($products);
