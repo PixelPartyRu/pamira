@@ -120,6 +120,30 @@ public static function query() {
 
     }
 
+    /**
+     * Сроки поставки
+     */
+    // Что в поле sklad_kol
+    public function is_sklad_kol()
+        { return $this->sklad_kol == 1 ? true : false; }
+    // Что в поле sklad_kol_post
+    public function is_sklad_kol_post()
+        { return $this->sklad_kol_post == 1 ? true : false; }
+
+    // "Товар в наличии"
+    public function product_in_stock()
+        { return $this->is_sklad_kol(); }
+    // "Срок поставки 5-10 дней"
+    public function product_delivery_time_of_five_to_ten_days()
+        { return ( !$this->is_sklad_kol() && $this->is_sklad_kol_post() ) ? true : false; }
+    // "Уточните сроки поставки"
+    public function specify_the_terms_of_delivery_of_goods()
+        { return ( !$this->is_sklad_kol() && !$this->is_sklad_kol_post() ) ? true : false; }
+
+
+    /**
+     *
+     */
     public function getMargin( $type = 'wholesale' )
     {
         if(User::getLoginUserType() == "dealer")
@@ -144,16 +168,26 @@ public static function query() {
         return 0;
     }
 
-    public function getCostWithMargin($opt = false) {
+    public function getCostWithMargin($opt = false, $newness = true) {
+        // newness - возвращаем либо новую, либо старую цену.
+        // newness = true - новая цена
+        // newness = false - старая цена
 
-        $cost = ($opt) ? $this->cost : $this->cost_trade;
-        $cost_rev = ($opt) ? $this->cost_trade : $this->cost;
+        $cost_newness = ($newness) ? $this->cost : $this->cost_old;
+        $cost_trade_newness = ($newness) ? $this->cost_trade : $this->cost_trade_old;
+
+        $cost = ($opt) ? $cost_newness : $cost_trade_newness;
+        $cost_rev = ($opt) ? $cost_trade_newness : $cost_newness;
+
         if ($opt) {$type='retail';} else {$type='wholesale';}
 
         if(User::getLoginUserType() == "dealer")
         {
             $dealer2 = \Illuminate\Support\Facades\Auth::guard("dealer")->user();
-            $margin2 = \App\Margin::where('user_id', $dealer2->id)->where('default', 1)->where('type', $type)->first();
+            $margin2 = \App\Margin::where('user_id', $dealer2->id)
+                                  ->where('default', 1)
+                                  ->where('type', $type)
+                                  ->first();
         }
 
         if(!empty($margin2)){
@@ -184,8 +218,14 @@ public static function query() {
         }
 
     }
+    public function is_sales_for_current_product() {
+        return ($this->sales == 1) ? true : false;
+    }
     public function getFormatCost() {
         return number_format(  round($this->getCostWithMargin() )  ,  0  ,  ','  ,  ' '  );
+    }
+    public function getFormatCostOld() {
+        return number_format(  round($this->getCostWithMargin(false,false) )  ,  0  ,  ','  ,  ' '  );
     }
     public function getRoundCost() {
         return round( $this->getCostWithMargin() );

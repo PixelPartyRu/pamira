@@ -16,6 +16,27 @@
     </a>
     @if($product->viewcost)
     <div class="price_info">{{  $product->getFormatCost() }} руб.</div>
+
+        <div class="cost_trade">
+            @if( $product->product_in_stock() )
+
+                <span class="delivery-time">Есть в наличии</span>
+
+            @elseif ( $product->product_delivery_time_of_five_to_ten_days() )
+
+                <span class="delivery-time">Срок поставки 5-10 дней</span>
+
+            @elseif ( $product->specify_the_terms_of_delivery_of_goods() )
+
+                <span class="delivery-time product-missing">Уточните сроки поставки</span>
+
+            @else
+
+                <span class="delivery-time product-missing">Уточните сроки поставки</span>
+
+            @endif
+    </div>
+
     <div class='buy'><div class='buy_button' data-id = '{{ $product->id }}'><img src='/img/button_buy1.gif' /></div></div>
     @else
     <div class="price_info">Уточните цену у менеджера</div>

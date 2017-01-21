@@ -151,11 +151,13 @@ $(document).ready(function() {
 
     if(localStorage.viewinfoforprovider === "true"){
         $('#gb-cost-wholesale').show();
+        $('#gb-cost-wholesale-old').show();
         $('#gb-cost-mark-up').show();
         $('#gb-button-client').attr('class', 'no');
         $('#gb-button-provider').attr('class', 'current-button');
     } else {
         $('#gb-cost-wholesale').hide();
+        $('#gb-cost-wholesale-old').hide();
         $('#gb-cost-mark-up').hide();
         $('#gb-button-client').attr('class', 'current-button');
         $('#gb-button-provider').attr('class', 'no');
@@ -166,12 +168,14 @@ $(document).ready(function() {
         var button = $(this).attr('id');
         if(button=='gb-button-provider'){
             $('#gb-cost-wholesale').show();
+            $('#gb-cost-wholesale-old').show();
             $('#gb-cost-mark-up').show();
             $(this).attr('class', 'current-button');
             $('#gb-button-client').attr('class', 'no');
         }
         else {
             $('#gb-cost-wholesale').hide();
+            $('#gb-cost-wholesale-old').hide();
             $('#gb-cost-mark-up').hide();
             $(this).attr('class', 'current-button');
             $('#gb-button-provider').attr('class', 'no');

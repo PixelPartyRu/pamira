@@ -40,22 +40,57 @@
             <img src="/uploads/brands/{{ strtolower($product->brand->img) }}" />
         </div>
         @if($product->viewcost)
+
+            @if($product->is_sales_for_current_product() )
+            <span class="cost_old"><span><span></span>{{ $product->getFormatCostOld() }} р.</span></span>
+            @endif
+
         <div class="cost_trade"><span> Цена: {{ $product->getFormatCost() }} руб.</span></div>
 
             {{-- ОПТ и Наценка --}}
 
             @if( \App\Dealer::is_login() )
-            <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
-            <div class="cost_trade gb-cost-mark-up" id="gb-cost-mark-up"><span> Наценка: {{ $markup }}%</span></div>
+                @if($product->is_sales_for_current_product() )
+                    <span class=" cost_old" id="gb-cost-wholesale-old"><span><span></span>{{ number_format($product->getCostWithMargin(true, false),0,',',' ') }} р.</span></span>
+                @endif
+
+                <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
+                <div class="cost_trade gb-cost-mark-up" id="gb-cost-mark-up"><span> Наценка: {{ $markup }}%</span></div>
             @endif
 
         <div class="buy_button" data-id="{{ $product->id }}"><img src="/img/button_buy1.gif"></div>
+
+        {{-- ОСТАТКИ на складе --}}
+        <div class="cost_trade">
+                @if( $product->product_in_stock() )
+
+                    <span class="delivery-time" style="font-size: 1.25em; font-weight: normal">Есть в наличии</span>
+
+                @elseif ( $product->product_delivery_time_of_five_to_ten_days() )
+
+                    <span class="delivery-time" style="font-size: 1.25em; font-weight: normal">Срок поставки 5-10 дней</span>
+
+                @elseif ( $product->specify_the_terms_of_delivery_of_goods() )
+
+                    <span class="delivery-time product-missing" style="font-size: 1.25em; background: linear-gradient(to bottom, #A5A4A4, #757575); font-weight: normal">Уточните сроки поставки</span>
+
+                @else
+
+                    <span class="delivery-time product-missing" style="font-size: 1.25em; background: linear-gradient(to bottom, #A5A4A4, #757575); font-weight: normal">Уточните сроки поставки</span>
+
+                @endif
+        </div>
+
         @else
         <div class="cost_trade"><span>Уточните цену у менеджера</span></div>
         @endif
         </div>
+
+
         @if(!is_null(\App\User::getLoginUserType()))
         <div class="compare" data-id="4">
+
+
 
             {{--
             <span class="compare_img"><img src="/img/compare.png"></span>
