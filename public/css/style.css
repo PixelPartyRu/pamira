@@ -2868,3 +2868,46 @@ vertical-align: top;
 .delivery-time.product-missing {
   background: linear-gradient(to bottom, #A5A4A4, #757575);
 }
+
+
+
+/* Контакты на главной странице в шапке сайт */
+.phone-wrapper {
+  // border: 1px solid Green;
+  width: 23%;
+  position: relative;
+  top: -25px;
+  display: inline-block;
+  float: right;
+  padding: 0.2em 0.3em;
+}
+.phone-wrapper div {
+  // border: 1px solid Green;
+  // text-align: right;
+}
+
+.phone-wrapper .phone-group {
+  color: Grey;
+}
+.phone-wrapper .phone-group .city-name {
+  // text-align: left;
+  padding-left: 40%;
+}
+
+.phone-wrapper .phone-group .city-name .city {
+  font-weight: bold;
+  font-size: 0.7em;
+}
+.phone-wrapper .phone-group .city-name .department {
+  font-size: 0.7em;
+}
+
+.phone-wrapper .phone-group .phone-number .prefix {
+  padding-left: 60%;
+  font-size: 0.7em;
+}
+.phone-wrapper .phone-group .phone-number .number {
+  font-size: 1.2em;
+  // font-weight: bold;
+  color: Black;
+}

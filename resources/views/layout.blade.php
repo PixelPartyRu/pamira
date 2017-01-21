@@ -42,7 +42,48 @@
     @endif
     <div class="clear"></div>
 
-    <div class="tel_wrap">
+
+
+
+
+  <div class="phone-wrapper">
+    <div class="phone-group">
+      <div class="city-name">
+        <span class="city">Ростов-на-Дону: </span>
+        <span class="department">розничный отдел</span>
+      </div>
+      <div class="phone-number">
+        <span class="prefix">+7 (863) </span>
+        <span class="number">302-03-04</span>
+      </div>
+      <div class="phone-number">
+        <span class="prefix">+7 (919) </span>
+        <span class="number">888-6-777</span>
+      </div>
+    </div>
+    <div class="phone-group">
+      <div class="city-name">
+        <span class="city">Ростов-на-Дону: </span>
+        <span class="department">оптовый отдел</span>
+      </div>
+      <div class="phone-number">
+        <span class="prefix">+7 (863) </span>
+        <span class="number">302-00-22</span>
+      </div>
+    </div>
+    <div class="phone-group">
+      <div class="city-name">
+        <span class="city">Воронеж: </span>
+        <span class="department"></span>
+      </div>
+      <div class="phone-number">
+        <span class="prefix">+7 (473) </span>
+        <span class="number">253-30-20</span>
+      </div>
+    </div>
+  </div>
+
+    <!-- <div class="tel_wrap" style="border: 1px solid blue">
       <div class="tel">
         <a class="big">302-00-22</a>
         <a class="min"><span class="city">Ростов-на-Дону</span> +7 (863)</a>
@@ -56,20 +97,23 @@
         <a class="big">253-30-20</a>
         <a class="min"><span class="city">Воронеж</span> +7 (473)</a>
       </div>
-    </div>
+    </div> -->
+
+
+
+
+
+
+
     @if(!is_null(\App\Dealer::getLoginDealer()))
     <div class="dealer_menu">
       <div class="hello">Меню дилера: Hello, {{ \App\Dealer::getLoginDealer()->name}}</div>
 
-
       {{-- Кнопки для отображения и скрытия Оптовой цены/Наценки --}}
-
       <div class="gb-wrapper-for-buttons">
         <span class="current-button" id="gb-button-client">Работа с клиентом</span>
         <span class="" id="gb-button-provider">Работа с поставщиком</span>
       </div>
-
-
 
       <ul>
         <li>
