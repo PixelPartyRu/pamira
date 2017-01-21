@@ -310,7 +310,7 @@ function Filter() {
 
 
 
-    this.disable_filters = function(values,clickColor="false") {
+    this.disable_filters = function(values,clickColor) {
         /**
          * 03/005 | George Bramus | 2016-11-25
          * Отследим нажатие чекбокса. Нас интересует Материал и Цвет.
