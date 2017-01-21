@@ -41,12 +41,14 @@ function Filter() {
     this.reset_event = function() {
         var that = this;
 
-        $(".reset").click(function(event) {
+        $(".filter .reset").click(function(event) {
             event.preventDefault();
             $("input").removeAttr("checked");
             $(".select_line").html("");
             that.clearDisabled();
-
+            
+            that.show_products();
+            $('#is_products_filtered').val(0);
         });
 
     }
@@ -117,14 +119,15 @@ function Filter() {
     // window.clickColor
 
 
-    this.sendAjaxCountData = function ($cur_check) {
+    this.sendAjaxCountData = function ($cur_check, donePre, donePost) {
         var that = this;
 
-
+        console.log("sendAjaxCountData");
 
 
         $.get("/product_catalog/filter", that.getCountAjaxData($cur_check), function (data) {
-
+            if(donePre) donePre(data);
+            
             that.setDataForWindow(data.count);
 
             var bh = (that.getDisabledBy() == "haracteristic"
@@ -162,7 +165,7 @@ function Filter() {
                 that.disable_filters(data.disable_filters, window.clickColor);
             }
 
-
+            if(donePost) donePost(data);
         });
 
     }
@@ -352,23 +355,20 @@ function Filter() {
 
     this.filter_button_click = function() {
         var that = this;
-        $(".filter .button").click(function() {
+        $(".filter .filter-products").click(function() {
             that.show_products();
-
         });
     }
 
     this.show_products = function () {
-
-        console.clear();
+        $('#is_products_filtered').val(1);
+            
+        //console.clear();
         var that = this;
         $(".product_list").html("");
         $.get("/product_catalog/getFilterProduct", that.getProductUpdateAjaxData(), function (data) {
             $.each(data, function (i, product) {
-
                 that.appendProduct(product);
-
-
             });
 
         });
@@ -457,15 +457,27 @@ function Filter() {
     }
 
     this.init = function() {
-
-        this.clearDisabledAll();
+        var that = this;
+        //this.clearDisabledAll();
         this.select_live_event();
         this.changeFilter();
         this.reset_event();
         this.filter_button_click();
         this.window_close_event();
         this.show_click();
-       // this.sh();
+        
+        var $checked = this.getCheckedFilterCollection();
+        //if($checked.length) {
+        if(+$('#is_products_filtered').val() > 0) {
+            this.setChangedCheckbox($checked.first());
+            
+            $(".product_list").hide();
+            this.sendAjaxCountData($('<input type="checkbox" value="1" />'), null, function(data) {
+                that.show_products();
+                $(".product_list").show();
+            });
+        }
+        // this.sh();
 
       //  this.test_cache();
 
@@ -479,7 +491,7 @@ function Filter() {
         $(".filter").before("<div class='link_info' ></div>");
 
         $(".tc").click(function() {
-            console.clear();
+            //console.clear();
             var inf = that.getCountAjaxData();
 
             $.ajax({
@@ -538,13 +550,21 @@ $(document).ready(function(){
 
 
 /* слайдер цен */
-var min = $("#slider").data("min");
-var max = $("#slider").data("max");
+var min = +$("#slider").data("min");
+var max = +$("#slider").data("max");
+
+if(+$("#minCost").val() < min || +$("#minCost").val() >= max) {
+    $("#minCost").val(min);
+}
+
+if(+$("#maxCost").val() <= +$("#minCost").val()) {
+    $("#maxCost").val(max);
+}
 
     $("#slider").slider({
         min: min,
         max: max,
-        values: [min, max],
+        values: [$("#minCost").val(), $("#maxCost").val()],
         range: true,
         stop: function (event, ui) {
             $("input#minCost").val($("#slider").slider("values", 0));
@@ -556,8 +576,6 @@ var max = $("#slider").data("max");
             $("input#maxCost").val($("#slider").slider("values", 1));
         }
     });
-
-$("#maxCost").val(max);
 
     $("input#minCost").change(function () {
 
