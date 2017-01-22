@@ -91,11 +91,10 @@
     <div class="phone-group">
       <div class="city-name">
         <span class="city">Воронеж: </span>
-        <span class="department"></span>
-      </div>
-      <div class="phone-number">
-        <span class="prefix">+7 (473) </span>
-        <span class="number">253-30-20</span>
+        <span class="department-phone-number">
+          <span class="prefix">+7 (473) </span>
+          <span class="number">253-30-20</span>
+        </span>
       </div>
     </div>
   </div>
