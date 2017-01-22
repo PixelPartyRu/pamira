@@ -53,7 +53,8 @@ class Catalog extends Model
   //доступные фильры для каталога
   public function getAccessFilters() {
        // $filter_param1 = explode("|", $this->filter);
-
+       $valid_filters = array_map('trim', explode('|', $this->filter));
+       
         $filter_param = PH::where("catalogs","like","%<".$this->id.">%")->lists("name")->unique()->toArray();
 
 
@@ -95,7 +96,8 @@ class Catalog extends Model
         }
         foreach ($filters as $k =>$filter)
         {
-            if(isset(self::$noFilterArray[$filter->name]) && in_array($this->id, self::$noFilterArray[$filter->name]))
+            //if(isset(self::$noFilterArray[$filter->name]) && in_array($this->id, self::$noFilterArray[$filter->name]))
+            if(!in_array($filter->name, $valid_filters) || (isset(self::$noFilterArray[$filter->name]) && in_array($this->id, self::$noFilterArray[$filter->name])))
             {
                 unset($filters[$k]);
             }
