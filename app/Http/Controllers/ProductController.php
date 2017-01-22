@@ -589,7 +589,7 @@ class ProductController extends MyCrudController {
     }
 
     public function setCatalogsForPh($id) {
-        $id = Request::get("pid");
+        //$id = Request::get("pid");
         $product = Product::find($id);
         $phs = $product->getPHs();
         foreach($phs as $ph){
