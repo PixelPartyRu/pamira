@@ -124,27 +124,43 @@
       <div class="hello">Меню дилера: Hello, {{ \App\Dealer::getLoginDealer()->name}}</div>
 
       {{-- Кнопки для отображения и скрытия Оптовой цены/Наценки --}}
-      <div class="gb-wrapper-for-buttons">
-        <span class="current-button" id="gb-button-client">Работа с клиентом</span>
-        <span class="" id="gb-button-provider">Работа с поставщиком</span>
-      </div>
+      {{-- <div class="gb-wrapper-for-buttons">
+        <span class="current-button" id="gb-button-client">Работа&nbsp;с&nbsp;клиентом</span>
+        <span class="" id="gb-button-provider">Работа&nbsp;с&nbsp;поставщиком</span>
+      </div> --}}
 
       <ul>
+        <li>
+
+          <ul class="buttons_for_wholesale_prices_and_margins">
+            <li>
+             <span class="current-button" id="gb-button-client">Работа&nbsp;с&nbsp;клиентом</span>
+            </li>
+            <li>
+              <span class="" id="gb-button-provider">Работа&nbsp;с&nbsp;поставщиком</span>
+            </li>
+          </ul>
+
+        </li>
+
         <li>
           <a href="/dealer/order_history" {{ $cur_path === "dealer/order_history"?"class=active":"" }} >
             Заказы
           </a>
         </li>
+
         <li>
           <a href="/dealer/cart" {{ $cur_path === "dealer/cart"?"class=active":"" }} >
             Корзина
           </a>
         </li>
+
         <li>
           <a href="/dealer/margin_list" {{ $cur_path === "dealer/margin_list"?"class=active":"" }} >
             Администратор
           </a>
         </li>
+
         <li>
           <a id="gb-exit" href="/dealer/logout">
             Выход
@@ -155,11 +171,6 @@
 
     @endif
     <div class="clear"></div>
-
-
-
-
-
 
 
   </div>
@@ -199,12 +210,12 @@
         </li>
         <li>
           <a href="/content/article_page/contacts" {{ $cur_path === "content/article_page/contacts"?"class=active":"" }} >
-             <span> Контакты </span>
+             <span>Контакты</span>
           </a>
         </li>
         <li>
           <a href="/content/article_page/about" {{ $cur_path === "content/article_page/about"?"class=active":"" }} >
-             <span> О компании </span>
+             <span>О компании</span>
 
           </a>
         </li>
@@ -212,15 +223,15 @@
         @if( !is_null(\App\User::getLoginUserType()) )
         <li>
           <a href="/news" {{ $cur_path === "news"?"class=active":"" }} >
-             <span>  Новости  </span>
+             <span>Новости</span>
           </a>
         </li>
         @endif
 
         <li><a href="/help" {{ $cur_path === "help"?"class=active":"" }}>
-            <span> Помощь в выборе </span>
+            <span>Помощь&nbsp;в&nbsp;выборе</span>
           </a></li>
-        <li class="last"><a href="#">  <span>Виртуальный тур </span></a></li>
+        <li class="last"><a href="#">  <span>Виртуальный&nbsp;тур</span></a></li>
 
       </ul>
     </div>
