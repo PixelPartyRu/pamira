@@ -205,8 +205,7 @@
         </li>
         <li>
           <a href="/sales" {{ starts_with($cur_path, "sales")?"class=active":"" }} >
-              <?php $clazz = isset($catalog_products) || (isset($catalogs) && count($catalogs) > 0) ? "iridescent_button" : ""; ?>
-            <span class="{{ $clazz }}" {!! $style !!}>Распродажи</span>
+            <span class="{{ $is_any_sales_now ? "iridescent_button" : "" }}">Распродажи</span>
           </a>
         </li>
         <li>

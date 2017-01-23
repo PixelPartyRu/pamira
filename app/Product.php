@@ -551,6 +551,10 @@ public static function get_sales_catalogs() {
         return $catalogs;
     }
 
+public static function is_any_sales_now() {
+    return count(self::query()->where("sales",1)->limit(1)->get()) > 0;
+}
+
 public static function get_product_width_sales($catalog_id) {
     return self::query()->where("sales",1)->where("catalog_id",$catalog_id)->get();
 }
