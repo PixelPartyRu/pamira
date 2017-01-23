@@ -144,7 +144,7 @@
         </li>
 
         <li>
-          <a href="/dealer/order_history" {{ starts_with($cur_path, "dealer/order_history")?"class=active":"" }} >
+          <a href="/dealer/order_history" {{ starts_with($cur_path, "dealer/order_history") || starts_with($cur_path, "dealer/completed_order") ? "class=active" : "" }} >
             Заказы
           </a>
         </li>
@@ -156,7 +156,7 @@
         </li>
 
         <li>
-          <a href="/dealer/margin_list" {{ starts_with($cur_path, "dealer/margin_list")?"class=active":"" }} >
+          <a href="/dealer/margin_list" {{ starts_with($cur_path, "dealer/margin")?"class=active":"" }} >
             Администратор
           </a>
         </li>
