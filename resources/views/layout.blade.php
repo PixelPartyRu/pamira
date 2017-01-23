@@ -205,7 +205,7 @@
         </li>
         <li>
           <a href="/sales" {{ $cur_path === "sales"?"class=active":"" }} >
-            <span>Распродажи</span>
+            <span class="iridescent_button">Распродажи</span>
           </a>
         </li>
         <li>

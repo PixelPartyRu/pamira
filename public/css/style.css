@@ -2976,3 +2976,17 @@ vertical-align: top;
   background: linear-gradient(to bottom, #A5A4A4, #757575);
 }
 
+
+/**
+ * Переливающаяся кнопка(Рспродажи)
+ */
+.menu-row .menu ul li a span.iridescent_button {
+  box-shadow: 0 -20px 10px -12px #efefef inset;
+  animation: move 2s infinite;
+}
+@keyframes move {
+  50% {
+    box-shadow: 0 -30px 10px -10px #bcbcbc inset;
+    color: #2a2a2a;
+  }
+}

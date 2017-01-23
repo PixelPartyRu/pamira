@@ -140,6 +140,14 @@ public static function query() {
     public function specify_the_terms_of_delivery_of_goods()
         { return ( !$this->is_sklad_kol() && !$this->is_sklad_kol_post() ) ? true : false; }
 
+    /**
+     * Узнаем, есть ли рспродажи
+     */
+    public function is_sales_all() {
+        $is_sales_all = \App\Product::where("sale", 1)->first();
+        return (isset($is_sales_all) && !empty($is_sales_all)) ? true : false;
+    }
+
 
     /**
      *
