@@ -205,7 +205,15 @@
         </li>
         <li>
           <a href="/sales" {{ starts_with($cur_path, "sales")?"class=active":"" }} >
-            <span class="{{ $is_any_sales_now ? "iridescent_button" : "" }}">Распродажи</span>
+            <?php
+                $clazz = '';
+                if(starts_with($cur_path, "sales")) {
+                    $clazz = "active";
+                } else if(!empty($is_any_sales_now)) {
+                    $clazz = "iridescent_button";
+                }
+            ?>
+            <span class="{{ $clazz }}">Распродажи</span>
           </a>
         </li>
         <li>
