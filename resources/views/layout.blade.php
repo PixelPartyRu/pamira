@@ -20,11 +20,28 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
+
+
+
   </head>
 
   <body class="{{ $is_main_page == 1?"main_page":"" }} {{ \App\User::getLoginUserType() }}">
 
   @include("popups")
+
+
+
+
+
+
+ <!--  <div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">bootstarap</div>
+    <div class="col-xs-12 col-sm-6 col-md-4">bootstarap</div>
+    <div class="col-xs-12 col-sm-6 col-md-4">bootstarap</div>
+  </div>
+  </div> -->
+
 
 
   <div class="search-container menu-row ">
@@ -42,7 +59,47 @@
     @endif
     <div class="clear"></div>
 
-    <div class="tel_wrap">
+
+
+
+
+  <div class="phone-wrapper" style="float:right">
+    <div class="phone-group">
+      <div class="city-name">
+        <span class="city">Ростов-на-Дону: </span>
+        <span class="department">розничный отдел</span>
+      </div>
+      <div class="phone-number">
+        <span class="prefix">+7 (863) </span>
+        <span class="number">302-03-04</span>
+      </div>
+      <div class="phone-number">
+        <span class="prefix">+7 (919) </span>
+        <span class="number">888-6-777</span>
+      </div>
+    </div>
+    <div class="phone-group">
+      <div class="city-name">
+        <span class="city">Ростов-на-Дону: </span>
+        <span class="department">оптовый отдел</span>
+      </div>
+      <div class="phone-number">
+        <span class="prefix">+7 (863) </span>
+        <span class="number">302-00-22</span>
+      </div>
+    </div>
+    <div class="phone-group">
+      <div class="city-name">
+        <span class="city">Воронеж: </span>
+        <span class="department-phone-number">
+          <span class="prefix">+7 (473) </span>
+          <span class="number">253-30-20</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+    <!-- <div class="tel_wrap" style="border: 1px solid blue">
       <div class="tel">
         <a class="big">302-00-22</a>
         <a class="min"><span class="city">Ростов-на-Дону</span> +7 (863)</a>
@@ -56,37 +113,54 @@
         <a class="big">253-30-20</a>
         <a class="min"><span class="city">Воронеж</span> +7 (473)</a>
       </div>
-    </div>
+    </div> -->
+
+
+
+
+
     @if(!is_null(\App\Dealer::getLoginDealer()))
     <div class="dealer_menu">
       <div class="hello">Меню дилера: Hello, {{ \App\Dealer::getLoginDealer()->name}}</div>
 
-
       {{-- Кнопки для отображения и скрытия Оптовой цены/Наценки --}}
-
-      <div class="gb-wrapper-for-buttons">
-        <span class="current-button" id="gb-button-client">Работа с клиентом</span>
-        <span class="" id="gb-button-provider">Работа с поставщиком</span>
-      </div>
-
-
+      {{-- <div class="gb-wrapper-for-buttons">
+        <span class="current-button" id="gb-button-client">Работа&nbsp;с&nbsp;клиентом</span>
+        <span class="" id="gb-button-provider">Работа&nbsp;с&nbsp;поставщиком</span>
+      </div> --}}
 
       <ul>
         <li>
-          <a href="/dealer/order_history" {{ $cur_path === "dealer/order_history"?"class=active":"" }} >
+
+          <ul class="buttons_for_wholesale_prices_and_margins">
+            <li>
+             <span class="current-button" id="gb-button-client">Работа&nbsp;с&nbsp;клиентом</span>
+            </li>
+            <li>
+              <span class="" id="gb-button-provider">Работа&nbsp;с&nbsp;поставщиком</span>
+            </li>
+          </ul>
+
+        </li>
+
+        <li>
+          <a href="/dealer/order_history" {{ starts_with($cur_path, "dealer/order_history")?"class=active":"" }} >
             Заказы
           </a>
         </li>
+
         <li>
-          <a href="/dealer/cart" {{ $cur_path === "dealer/cart"?"class=active":"" }} >
+          <a href="/dealer/cart" {{ starts_with($cur_path, "dealer/cart")?"class=active":"" }} >
             Корзина
           </a>
         </li>
+
         <li>
-          <a href="/dealer/margin_list" {{ $cur_path === "dealer/margin_list"?"class=active":"" }} >
+          <a href="/dealer/margin_list" {{ starts_with($cur_path, "dealer/margin_list")?"class=active":"" }} >
             Администратор
           </a>
         </li>
+
         <li>
           <a id="gb-exit" href="/dealer/logout">
             Выход
@@ -97,13 +171,21 @@
 
     @endif
     <div class="clear"></div>
+
+
   </div>
 
 
 
 
+
+
+
+
+
+
 <div class="container main">
-  <div class="row menu-row menu_link">
+<div class="row menu-row menu_link">
     <div class="search">
       <div id="search_field" class="min">
         <form action="/search" method="GET">
@@ -116,44 +198,46 @@
       <ul>
 
         <li>
-          <a href="/shares" {{ $cur_path === "shares"?"class=active":"" }} >
+          <a href="/shares" {{ starts_with($cur_path, "shares")?"class=active":"" }} >
             <span>Акции</span>
 
           </a>
         </li>
         <li>
-          <a href="/sales" {{ $cur_path === "sales"?"class=active":"" }} >
-            <span>Распродажи</span>
+          <a href="/sales" {{ starts_with($cur_path, "sales")?"class=active":"" }} >
+              <?php $clazz = isset($catalog_products) || (isset($catalogs) && count($catalogs) > 0) ? "iridescent_button" : ""; ?>
+            <span class="{{ $clazz }}" {!! $style !!}>Распродажи</span>
           </a>
         </li>
         <li>
-          <a href="/content/article_page/contacts" {{ $cur_path === "content/article_page/contacts"?"class=active":"" }} >
-             <span> Контакты </span>
+          <a href="/content/article_page/contacts" {{ starts_with($cur_path, "content/article_page/contacts")?"class=active":"" }} >
+             <span>Контакты</span>
           </a>
         </li>
         <li>
-          <a href="/content/article_page/about" {{ $cur_path === "content/article_page/about"?"class=active":"" }} >
-             <span> О компании </span>
+          <a href="/content/article_page/about" {{ starts_with($cur_path, "content/article_page/about")?"class=active":"" }} >
+             <span>О компании</span>
 
           </a>
         </li>
 
         @if( !is_null(\App\User::getLoginUserType()) )
         <li>
-          <a href="/news" {{ $cur_path === "news"?"class=active":"" }} >
-             <span>  Новости  </span>
+          <a href="/news" {{ starts_with($cur_path, "news")?"class=active":"" }} >
+             <span>Новости</span>
           </a>
         </li>
         @endif
 
-        <li><a href="/help" {{ $cur_path === "help"?"class=active":"" }}>
-            <span> Помощь в выборе </span>
+        <li><a href="/help" {{ starts_with($cur_path, "help")?"class=active":"" }}>
+            <span>Помощь&nbsp;в&nbsp;выборе</span>
           </a></li>
-        <li class="last"><a href="#">  <span>Виртуальный тур </span></a></li>
+        <li class="last"><a href="#">  <span>Виртуальный&nbsp;тур</span></a></li>
 
       </ul>
     </div>
   </div>
+
 
 
 <!--            <div class="row">
