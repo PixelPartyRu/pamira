@@ -40,7 +40,7 @@ class ProductController extends MyCrudController {
         $this->filter = \DataFilter::source($source);
         $cat_arr = array(""=>"Каталог");
 
-        $cat_info = \App\Catalog::all();
+        $cat_info = \App\Catalog::orderBy('order', 'asc')->get();
         foreach($cat_info as $cat){
             $cat_arr[$cat->id] = $cat->name;
         }
@@ -173,7 +173,7 @@ class ProductController extends MyCrudController {
 
 
         $catalog_field = $this->edit->add('catalog_id', 'Каталог', 'App\Http\Controllers\Extensions\MySelect')
-                ->options(\App\Catalog::lists("name", "id")->all());
+                ->options(\App\Catalog::orderBy('order', 'asc')->lists("name", "id")->all());
 
         $this->edit->add('img', 'Картинка 1', 'image')->move('uploads/product/img1')->preview(100, 100);
         $this->edit->add('img2', 'Картинка 2', 'image')->move('uploads/product/img2')->preview(100, 100);
