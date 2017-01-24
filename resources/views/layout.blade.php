@@ -144,19 +144,19 @@
         </li>
 
         <li>
-          <a href="/dealer/order_history" {{ $cur_path === "dealer/order_history"?"class=active":"" }} >
+          <a href="/dealer/order_history" {{ starts_with($cur_path, "dealer/order_history") || starts_with($cur_path, "dealer/completed_order") ? "class=active" : "" }} >
             Заказы
           </a>
         </li>
 
         <li>
-          <a href="/dealer/cart" {{ $cur_path === "dealer/cart"?"class=active":"" }} >
+          <a href="/dealer/cart" {{ starts_with($cur_path, "dealer/cart")?"class=active":"" }} >
             Корзина
           </a>
         </li>
 
         <li>
-          <a href="/dealer/margin_list" {{ $cur_path === "dealer/margin_list"?"class=active":"" }} >
+          <a href="/dealer/margin_list" {{ starts_with($cur_path, "dealer/margin")?"class=active":"" }} >
             Администратор
           </a>
         </li>
@@ -198,23 +198,31 @@
       <ul>
 
         <li>
-          <a href="/shares" {{ $cur_path === "shares"?"class=active":"" }} >
+          <a href="/shares" {{ starts_with($cur_path, "shares")?"class=active":"" }} >
             <span>Акции</span>
 
           </a>
         </li>
         <li>
-          <a href="/sales" {{ $cur_path === "sales"?"class=active":"" }} >
-            <span class="iridescent_button">Распродажи</span>
+          <a href="/sales" {{ starts_with($cur_path, "sales")?"class=active":"" }} >
+            <?php
+                $clazz = '';
+                if(starts_with($cur_path, "sales")) {
+                    $clazz = "active";
+                } else if(!empty($is_any_sales_now)) {
+                    $clazz = "iridescent_button";
+                }
+            ?>
+            <span class="{{ $clazz }}">Распродажи</span>
           </a>
         </li>
         <li>
-          <a href="/content/article_page/contacts" {{ $cur_path === "content/article_page/contacts"?"class=active":"" }} >
+          <a href="/content/article_page/contacts" {{ starts_with($cur_path, "content/article_page/contacts")?"class=active":"" }} >
              <span>Контакты</span>
           </a>
         </li>
         <li>
-          <a href="/content/article_page/about" {{ $cur_path === "content/article_page/about"?"class=active":"" }} >
+          <a href="/content/article_page/about" {{ starts_with($cur_path, "content/article_page/about")?"class=active":"" }} >
              <span>О компании</span>
 
           </a>
@@ -222,13 +230,13 @@
 
         @if( !is_null(\App\User::getLoginUserType()) )
         <li>
-          <a href="/news" {{ $cur_path === "news"?"class=active":"" }} >
+          <a href="/news" {{ starts_with($cur_path, "news")?"class=active":"" }} >
              <span>Новости</span>
           </a>
         </li>
         @endif
 
-        <li><a href="/help" {{ $cur_path === "help"?"class=active":"" }}>
+        <li><a href="/help" {{ starts_with($cur_path, "help")?"class=active":"" }}>
             <span>Помощь&nbsp;в&nbsp;выборе</span>
           </a></li>
         <li class="last"><a href="#">  <span>Виртуальный&nbsp;тур</span></a></li>

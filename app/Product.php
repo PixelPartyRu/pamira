@@ -140,14 +140,6 @@ public static function query() {
     public function specify_the_terms_of_delivery_of_goods()
         { return ( !$this->is_sklad_kol() && !$this->is_sklad_kol_post() ) ? true : false; }
 
-    /**
-     * Узнаем, есть ли рспродажи
-     */
-    public function is_sales_all() {
-        $is_sales_all = \App\Product::where("sale", 1)->first();
-        return (isset($is_sales_all) && !empty($is_sales_all)) ? true : false;
-    }
-
 
     /**
      *
@@ -558,6 +550,10 @@ public static function get_sales_catalogs() {
         }
         return $catalogs;
     }
+
+public static function is_any_sales_now() {
+    return count(self::query()->where("sales",1)->limit(1)->get()) > 0;
+}
 
 public static function get_product_width_sales($catalog_id) {
     return self::query()->where("sales",1)->where("catalog_id",$catalog_id)->get();
