@@ -266,12 +266,12 @@
   width: 8px;
   background-image: url('/img/menu_link_right.jpg') no-repeat top left;
 }
-.dealer_menu ul li a.active {
+/* .dealer_menu ul li a.active {
   color: white;
   background-image: url('');
   background-color: #888;
   border-radius: 0.7em;
-}
+} */
 
 
 
@@ -1166,61 +1166,6 @@ acronym {
   float: right;
   text-shadow: 0 -1px 1px #F69E9E;
 }
-
-// MENU
-
-.menu-row .menu {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  text-align: left;
-  margin-left: 30px;
-  width: 88%;
-  margin: 0 0 0 15%;
-}
-.menu-row .menu ul {
-  display: inline-block;
-}
-.menu-row .menu ul li {
-  text-align: center;
-  float: left;
-  margin-left: 10px;
-}
-.menu-row .menu ul li a {
-  font: 12px verdana;
-  color: #0747bb;
-}
-.menu-row .menu ul li a:not(.main_href) {
-  background: url(/img/menu_link.jpg) no-repeat top left;
-  font: italic 12px verdana;
-  color: #5d5d5d;
-  text-decoration: none;
-  height: 25px;
-  padding: 0 0 0 10px;
-  margin: 0;
-  float: left;
-}
-.menu-row .menu ul li a:not(.main_href) span {
-  background: url(/img/menu_link.jpg) no-repeat top right;
-  text-decoration: none;
-  height: 25px;
-  padding: 0 10px 0 0;
-  float: left;
-  line-height: 23px;
-  cursor: pointer;
-  width: 115px;
-}
-
-
-.menu-row .menu ul li a.active {
-  color: white;
-  background-image: url('');
-}
-.menu-row .menu ul li a.active span {
-  background-image: url('');
-  background-color: #888;
-  border-radius: 0.7em;
-}
-
 
 .top_scallop {
   background: url(../img/top_scallop.png) repeat-x;
@@ -2765,6 +2710,9 @@ vertical-align: top;
   display: none;
 }
 
+/**
+ * Кнопки для показа/скытия оптовой цены и наценки
+ */
 .gb-wrapper-for-buttons {
   display: inline-block;
   float: left;
@@ -2792,7 +2740,6 @@ vertical-align: top;
 }
 .gb-wrapper-for-buttons span:hover {
   background-color: #dedede;
-
 }
 
 .gb-wrapper-for-buttons span.current-button {
@@ -2803,13 +2750,9 @@ vertical-align: top;
 }
 
 
-
-
-
-
-
-
-
+/**
+ * Для распродаж зачеркнём старую цену
+ */
 .cost_old {
   display: block;
   // border: 1px solid green;
@@ -2851,11 +2794,9 @@ vertical-align: top;
 }
 
 
-
-
-
-
-
+/**
+ * Информация о возможности доставки
+ */
 .delivery-time {
   display: inline-block;
   margin-top: 3px;
@@ -2867,4 +2808,185 @@ vertical-align: top;
 }
 .delivery-time.product-missing {
   background: linear-gradient(to bottom, #A5A4A4, #757575);
+}
+
+
+/**
+ * Контакты на главной странице в шапке сайта
+ */
+.phone-wrapper {
+  // border: 1px solid Green;
+  width: 23%;
+  position: relative;
+  top: -25px;
+  display: inline-block;
+  float: right;
+  padding: 0.2em 0.3em;
+}
+.phone-wrapper div {
+  // border: 1px solid Green;
+  // text-align: right;
+}
+
+.phone-wrapper .phone-group {
+  color: Grey;
+}
+.phone-wrapper .phone-group .city-name {
+  // text-align: left;
+  padding-right: 10%;
+  text-align: right;
+}
+
+.phone-wrapper .phone-group .city-name .city {
+  font-weight: bold;
+  font-size: 0.7em;
+}
+.phone-wrapper .phone-group .city-name .department {
+  font-size: 0.7em;
+}
+
+.phone-wrapper .phone-group .phone-number {
+  text-align: right;
+  padding-right: 10%;
+}
+
+.phone-wrapper .phone-group .phone-number .prefix {
+  font-size: 0.7em;
+}
+.phone-wrapper .phone-group .phone-number .number {
+  font-size: 1.2em;
+  // font-weight: bold;
+  color: Black;
+}
+
+.phone-wrapper .phone-group .city-name .department-phone-number .prefix {
+  font-size: 0.7em;
+}
+.phone-wrapper .phone-group .city-name .department-phone-number .number {
+  padding-rigth: 10%;
+  font-size: 1.2em;
+  color: Black;
+}
+
+
+/**
+ * Новое основное меню
+ */
+.menu-row .menu {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  text-align: left;
+  // margin-left: 30px;
+  width: 88%;
+  margin-left: 23%;
+}
+.menu-row .menu ul {
+  display: inline-block;
+  // border: 1px solid red;
+}
+.menu-row .menu ul li {
+  text-align: center;
+  float: left;
+  margin-left: 10px;
+}
+.menu-row .menu ul li a {
+  font: 12px verdana;
+  color: #0747bb;
+}
+.menu-row .menu ul li a:not(.main_href) {
+  // background: url(/img/menu_link.jpg) no-repeat top left;
+  font: italic 12px verdana;
+  color: #5d5d5d;
+  text-decoration: none;
+  // height: 25px;
+  // padding: 0 0 0 10px;
+  // margin: 0;
+  float: left;
+}
+.menu-row .menu ul li a:not(.main_href) span {
+  // background: url(/img/menu_link.jpg) no-repeat top right;
+  text-decoration: none;
+  // height: 25px;
+  // padding: 0 10px 0 0;
+  float: left;
+  // line-height: 23px;
+  cursor: pointer;
+  min-width: 115px;
+}
+
+
+/* .menu-row .menu ul li a.active {
+  color: white;
+  background-image: url('');
+}
+.menu-row .menu ul li a.active span {
+  background-image: url('');
+  background-color: #888;
+  border-radius: 0.7em;
+} */
+
+
+/**
+ * Новое меню для дилера
+ */
+.dealer_menu ul ul {
+  width: 200px;
+  padding-right: 5px;
+}
+.dealer_menu ul ul li {
+  display: block;
+
+  margin-bottom: 5px;
+}
+.dealer_menu ul li a,
+.menu-row .menu ul li a span {
+  background: none;
+}
+.dealer_menu ul ul li span,
+.dealer_menu ul li a,
+.menu-row .menu ul li a span {
+  display: block;
+  font-weight: normal;
+  font-size: 12px;
+  font-style: italic;
+  font-family: verdana;
+  // margin-bottom: 0.35em;
+  padding: 5px 10px;
+  background-color: #efefef;
+  cursor: pointer;
+  border-radius: 0.5em;
+  border: 1px solid #ababab;
+  color: #5d5d5d;
+}
+.dealer_menu ul ul li span:hover,
+.dealer_menu ul li a:hover,
+.menu-row .menu ul li a span:hover {
+  background-color: #dedede;
+}
+
+.dealer_menu ul ul li span.current-button {
+  background-color: #c50f0f;
+  font-weight: bold;
+  cursor: default;
+  color: #3a3a3a;
+}
+.dealer_menu ul li a.active,
+.menu-row .menu ul li a.active span {
+  color: white;
+  background: linear-gradient(to bottom, #A5A4A4, #757575);
+}
+
+
+/**
+ * Переливающаяся кнопка(Рспродажи)
+ */
+.menu-row .menu ul li a span.iridescent_button {
+  box-shadow: 0 -20px 10px -12px #efefef inset;
+  animation: move 2s infinite;
+}
+@keyframes move {
+  50% {
+    box-shadow: 0 -30px 10px -10px #bcbcbc inset;
+    color: #2a2a2a;
+  }
 }

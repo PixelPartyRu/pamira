@@ -163,7 +163,7 @@ $(document).ready(function() {
         $('#gb-button-provider').attr('class', 'no');
     }
 
-    $('.gb-wrapper-for-buttons span')
+    $('.buttons_for_wholesale_prices_and_margins li span')
     .click(function(){
         var button = $(this).attr('id');
         if(button=='gb-button-provider'){

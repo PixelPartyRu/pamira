@@ -432,7 +432,7 @@ function Filter() {
         else if (product.sklad_kol == 0 && product.sklad_kol_post == 0) { text = "Уточните сроки поставки"; pm = "product-missing"; }
         else { text = "Уточните сроки поставки"; pm = "product-missing"; }
 
-        product_html.find(".price_info").after('<span class="delivery-time ' + pm + '">' + product.sklad_kol_post + '</span>');
+        product_html.find(".price_info").after('<span class="delivery-time ' + pm + '">' + text + '</span>');
 
 
         $(".product_list").append(product_html);
