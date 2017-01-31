@@ -316,7 +316,7 @@ class ProductController extends MyCrudController {
       //  $data[]
         if($product)
         {
-            $data['product']->haracteristic = str_replace('&amp;', '', $data['product']->haracteristic);
+            $data['product']->haracteristic = str_replace(array('&amp;', '&'), '', $data['product']->haracteristic);
         }
         $data['product_img'] = $product->getImageArr();
 
