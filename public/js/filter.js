@@ -384,8 +384,6 @@ function Filter() {
 
     }
     this.appendProduct = function(product) {
-        console.log(product.sklad_kol);
-
         var product_html = this.product_box({
             img: product.img,
             cost_trade: product.cost_trade,
@@ -394,9 +392,7 @@ function Filter() {
             alias:product.alias,
             sales_leader:product.sales_leader,
             sticker_promo: product.sticker_promo,
-            sticker_action: product.sticker_action,
-            sklad_kol: product.sklad_kol,
-            sklad_kol_post: product.sklad_kol_post
+            sticker_action: product.sticker_action
         });
         product_html = $(product_html);
         if(product.viewcost == 1)
@@ -424,16 +420,6 @@ function Filter() {
         if(product.sales_leader == 1 || product.sticker_action == 1 || product.sticker_promo == 1){
             product_html.addClass("with_sticker");
         }
-
-        var text="";
-        var pm = ""; // pm = product-missimg
-        if (product.sklad_kol == 1) text = "Есть в наличии";
-        else if (product.sklad_kol == 0 && product.sklad_kol_post == 1) text = "Срок поставки 5-10 дней";
-        else if (product.sklad_kol == 0 && product.sklad_kol_post == 0) { text = "Уточните сроки поставки"; pm = "product-missing"; }
-        else { text = "Уточните сроки поставки"; pm = "product-missing"; }
-
-        product_html.find(".price_info").after('<span class="delivery-time ' + pm + '">' + text + '</span>');
-
 
         $(".product_list").append(product_html);
 

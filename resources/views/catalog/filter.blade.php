@@ -120,7 +120,8 @@
 
     <input type="hidden" id="is_products_filtered" name="is_products_filtered" value="0" />
     <div class="filter_buttons">
-    <div class="filter-products button">Выбрать товары</div>
-    <div class="reset button">Сбросить фильтр</div>
+        <div class="filter-products button 123">Выбрать товары</div>
+        <!-- <div class="filter-products button">Выбрать товары</div> -->
+        <div class="reset button">Сбросить фильтр</div>
     </div>
 </div>
