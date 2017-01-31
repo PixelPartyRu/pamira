@@ -235,7 +235,8 @@
   line-height: 23px;
   box-sizing: border-box;
   cursor: pointer;
-  width: 150px;
+  width: 110px;
+  min-width: 110px;
   font: italic 12px verdana;
   color: #5d5d5d;
   text-align: center;
