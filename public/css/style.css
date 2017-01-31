@@ -2891,11 +2891,14 @@ vertical-align: top;
 .menu-row .menu ul li a {
   font: 12px verdana;
   color: #0747bb;
+  // color: red;
 }
 .menu-row .menu ul li a:not(.main_href) {
   // background: url(/img/menu_link.jpg) no-repeat top left;
   font: italic 12px verdana;
   color: #5d5d5d;
+  // color: red;
+  // font-weight: bold;
   text-decoration: none;
   // height: 25px;
   // padding: 0 0 0 10px;
@@ -2912,17 +2915,6 @@ vertical-align: top;
   cursor: pointer;
   min-width: 115px;
 }
-
-
-/* .menu-row .menu ul li a.active {
-  color: white;
-  background-image: url('');
-}
-.menu-row .menu ul li a.active span {
-  background-image: url('');
-  background-color: #888;
-  border-radius: 0.7em;
-} */
 
 
 /**
@@ -2954,6 +2946,10 @@ vertical-align: top;
   border-radius: 0.5em;
   border: 1px solid #ababab;
   color: #5d5d5d;
+}
+.menu-row .menu ul li a span {
+  color: #191919;
+  font-weight: bold;
 }
 .dealer_menu ul ul li span:hover,
 .dealer_menu ul li a:hover,
@@ -2995,7 +2991,7 @@ vertical-align: top;
 
 
 /**
- * Переливающаяся кнопка(Рспродажи)
+ * Переливающаяся кнопка(Распродажи)
  */
 .menu-row .menu ul li a span.iridescent_button {
   box-shadow: 0 -20px 10px -12px #efefef inset;
