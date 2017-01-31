@@ -7,6 +7,7 @@ use App\Http\Controllers\Extensions\MyCrudController;
 use App\Http\Controllers\Extensions\MyDataGrid as DataGrid;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 use stdClass;
 
 
@@ -30,8 +31,8 @@ class OrdersController extends MyCrudController {
 
 
 
-
-        $this->filter = \DataFilter::source($this->getViewQuery());
+        $view_query = $this->getViewQuery();
+        $this->filter = \DataFilter::source($view_query);
         
         $this->filter->add('customer_type', 'Тип заказчика', 'select')->options(
                 array('dealer' => "Дилер", "user" => "Покупатель")
@@ -41,31 +42,26 @@ class OrdersController extends MyCrudController {
         
         $this->filter->build();
         
-        
-        
         $this->grid = DataGrid::source($this->filter);
         $this->removeErrorWhere();
-        $this->setGridDataQuery($this->getViewQuery());
-       // dd($this->grid->source->query->getQuery()->wheres);
 
         $this->grid->add('id', 'ID', true)->style("width:100px");
-        $this->grid->add("id", "Номер заказа", "text");
-        $this->grid->add("customer.name", "Дилер (если заказ от дилера)", "text");
-        $this->grid->add("sns", "ФИО заказчика", "text");
-        $this->grid->add("customer.type", "Тип заказчика", "text");
-        $this->grid->add("customer.phone", "Телефон заказчика", "text");
-        $this->grid->add("customer.email", "Email заказчика", "text");
+        $this->grid->add("id", "Номер заказа", "id");
+        $this->grid->add("customer_name", "Дилер (если заказ от дилера)", "customer_name"); // *
+        $this->grid->add("sns", "ФИО заказчика", "sns");
+        $this->grid->add("customer_type", "Тип заказчика", "customer_type"); // *
+        $this->grid->add("customer_phone", "Телефон заказчика", "customer_phone"); // *
+        $this->grid->add("customer_email", "Email заказчика", "customer_email"); // *
 
-        $this->grid->add("getProductsSumm()", "Сумма заказа,руб.", "text");
+        $this->grid->add("getProductsSumm()", "Сумма заказа,руб.", "order_summ");
+        //$this->grid->add("order_summ", "Сумма заказа(sql),руб.", "order_summ");
 
-        $this->grid->add("status_change_date", "Дата заказа", "date");
-        
+        $this->grid->add("status_change_date", "Дата заказа", "status_change_date");
         $this->grid->add('parent',"Подробности заказа")->actions("order_product", array("order"));
         
         $this->grid->setRelation(array("customer"));
-        
-        $grid = $this->grid;
-        $grid->build("",$this->getViewQuery()->get());
+        $this->setGridDataQuery($view_query);
+        $this->grid->build("",$this->getViewQuery()->get());
         
         $this->grid->paginate(1000);
         $view_data = array(
@@ -78,29 +74,40 @@ class OrdersController extends MyCrudController {
             );
         //dd(view('panelViews::all',$view_data));
         return view('panelViews::all',$view_data);
-
-
-
-
-
         //return $this->returnView();
-        
     }
     
     //Формирует запрос отображаемых данных на основе фильтров
     private function getViewQuery() {
-        $q = \App\Orders::query()->where("status",1);
+        $q = \App\Orders::query()
+                ->where("status",1)
+                ->join('users', 'orders.user_id', '=', 'users.id')
+                ->select(
+                    'orders.*',
+                    'users.type as customer_type',
+                    'users.name as customer_name',
+                    'users.phone as customer_phone',
+                    'users.email as customer_email',
+                    DB::raw('(
+                        select 
+                            -- Какой алгоритм расчета? по идее должно быть coalesce(op.edit_cost, p.cost_trade) , но в карточке товара рассчитывает только по p.cost_trade. поэтому сделал так:
+                            cast(sum(coalesce(p.cost_trade, op.edit_cost, p.cost_trade) * (100 - op.discount) * op.count_product) / 100 as decimal(12, 0))
+                            from orders_product as op 
+                                left join product p on p.id=op.product_id
+                            where op.order_id=orders.id
+                        ) as order_summ'
+                    )
+                    
+                );
 
         $param = Request::all();
-        //var_dump($param);
         if (isset($param["customer_type"]) && $param["customer_type"] !== "" ) {
             unset($param["search"]);
-            $q = $q->whereHas("customer", function($q) use($param) {
-                $q->where("type", $param["customer_type"]);
-            });
             
+            $q = $q->where("users.type", "=", $param["customer_type"]);            
         }
 
+        //dd($q->toSql());exit;
         return $q;
     }
     

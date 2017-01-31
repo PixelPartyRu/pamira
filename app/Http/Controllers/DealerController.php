@@ -42,11 +42,11 @@ class DealerController extends MyCrudController {
         $this->filter = \DataFilter::source(\App\User::query()->where("type","dealer"));
 
         $this->grid = DataGrid::source($this->filter);
-        $this->grid->add('id', 'ID', "text");
-        $this->grid->add("name", "Имя", "text");
-        $this->grid->add("email", "Email", "text");
+        $this->grid->add('id', 'ID', "id");
+        $this->grid->add("name", "Имя", "name");
+        $this->grid->add("email", "Email", "email");
         $this->addStylesToGrid();
-$this->grid->paginate(1000);
+        $this->grid->paginate(1000);
         return $this->returnView();
     }
 

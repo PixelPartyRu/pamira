@@ -22,8 +22,10 @@ class AppServiceProvider extends ServiceProvider
         view()->share('is_main_page', "false");
         view()->share('cur_path', $link);
         view()->share('user_agent', $this->GetUserAgent());
+        view()->share('is_any_sales_now', \App\Product::is_any_sales_now());
+
         if (Schema::hasTable('region') && Schema::hasTable('brands') && Schema::hasTable('catalog') && Schema::hasTable('users')) {
-            view()->share('catalog', \App\Catalog::all());
+            view()->share('catalog', \App\Catalog::orderBy('order', 'asc')->get());
             view()->share('brands', \App\Brand::where("main_page",1)->get());
             
             view()->share('brands_right', \App\Brand::where("main_page",1)->get());

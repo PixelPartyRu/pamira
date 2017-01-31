@@ -231,8 +231,8 @@ class ParseXmlFile {
     }
 
     public function get_parts() {
-        if(count($this->name_arr) < $this->step ) return 1;
-        return intval(ceil(count($this->name_arr) / $this->step));
+        if($this->getSize() < $this->step ) return 1;
+        return intval(ceil($this->getSize() / $this->step));
         
     }
 
