@@ -2947,11 +2947,11 @@ vertical-align: top;
   cursor: pointer;
   border-radius: 0.5em;
   border: 1px solid #ababab;
-  color: #5d5d5d;
-}
-.menu-row .menu ul li a span {
+  // color: #5d5d5d;
   color: #191919;
   font-weight: bold;
+}
+.menu-row .menu ul li a span {
 }
 .dealer_menu ul ul li span:hover,
 .dealer_menu ul li a:hover,
