@@ -2878,7 +2878,7 @@ vertical-align: top;
   padding-bottom: 0px;
   text-align: left;
   // margin-left: 30px;
-  width: 88%;
+  width: 77%;
   margin-left: 23%;
 }
 .menu-row .menu ul {
@@ -2915,6 +2915,7 @@ vertical-align: top;
   float: left;
   // line-height: 23px;
   cursor: pointer;
+  width: 115px;
   min-width: 115px;
 }
 
