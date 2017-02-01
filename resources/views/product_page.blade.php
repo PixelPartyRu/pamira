@@ -37,6 +37,7 @@
     <div class="product_base_info">
         <div class="inner_wrapper">
         <div class="brand_link">
+            <?php /*dd($product);*/ ?>
             <img src="/uploads/brands/{{ strtolower($product->brand->img) }}" />
         </div>
         @if($product->viewcost)
