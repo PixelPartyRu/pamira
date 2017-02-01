@@ -2758,6 +2758,8 @@ vertical-align: top;
   padding: 0;
   margin: 0.5em 0;
   color: #C50F0F;
+  font-size: 1.5em;
+  font-weight: bold;
   text-align: center;
   position: relative;
 }
@@ -2770,8 +2772,8 @@ vertical-align: top;
   display: inline-block;
   position: absolute;
   width: 100%;
-  height: 4px;
-  border-radius: 2px;
+  height: 2px;
+  // border-radius: 2px;
   background-color: grey;
 
   -webkit-transform-origin: center;
@@ -2780,16 +2782,16 @@ vertical-align: top;
   -ms-transform-origin: center;
   transform-origin: center;
 
-  -webkit-transform: translate(0,150%) rotate(-15deg);
-  -moz-transform: translate(0,150%) rotate(-15deg);
-  -o-transform: translate(0,150%) rotate(-15deg);
-  -ms-transform: translate(0,150%) rotate(-15deg);
-  transform: translate(0,150%) rotate(-15deg);
+  -webkit-transform: translate(0,700%) rotate(-15deg);
+  -moz-transform: translate(0,700%) rotate(-15deg);
+  -o-transform: translate(0,700%) rotate(-15deg);
+  -ms-transform: translate(0,700%) rotate(-15deg);
+  transform: translate(0,700%) rotate(-15deg);
 
-  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60); /* IE 5.5+*/
-  -moz-opacity: 0.60; /* Mozilla 1.6 и ниже */
-  -khtml-opacity: 0.60; /* Konqueror 3.1, Safari 1.1 */
-  opacity: 0.60; /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+, Chrome 5+, IE 9+ */
+  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=85); /* IE 5.5+*/
+  -moz-opacity: 0.85; /* Mozilla 1.6 и ниже */
+  -khtml-opacity: 0.85; /* Konqueror 3.1, Safari 1.1 */
+  opacity: 0.85; /* CSS3 - Mozilla 1.7b +, Firefox 0.9 +, Safari 1.2+, Opera 9+, Chrome 5+, IE 9+ */
 }
 
 
