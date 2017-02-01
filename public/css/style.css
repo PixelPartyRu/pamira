@@ -2974,6 +2974,7 @@ vertical-align: top;
 @media (max-width: 1370px) {
   .menu-row .menu {
     margin-left: 18%;
+    width: 82%;
   }
   .menu-row .menu ul li a:not(.main_href) span {
     width: 90px;
