@@ -1235,7 +1235,7 @@ acronym {
   background-size: cover;
   width: 100%;
   float: left;
-  top: -38px;
+  // top: -38px;
 }
 .row-slider-info .slider-center .advertising-img {
   position: absolute;
