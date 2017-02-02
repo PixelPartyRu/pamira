@@ -23,8 +23,8 @@ class DictionaryController extends MyCrudController {
 
         $this->grid->add('id', 'ID', true)->style("width:100px");
         $this->addStylesToGrid();
-        $this->grid->add("name", "Ключ", "text");
-        $this->grid->add("value", "Значение", "text");
+        $this->grid->add("name", "Ключ", "name");
+        $this->grid->add("value", "Значение", "value");
 
         $this->grid->paginate(1000);
         
