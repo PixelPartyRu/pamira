@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
         view()->share('cur_path', $link);
         view()->share('user_agent', $this->GetUserAgent());
         view()->share('is_any_sales_now', \App\Product::is_any_sales_now());
+        
+        $view = view();
+        foreach(\App\Dictionary::getAll() as $item) {
+            $view->share($item->name, $item->value);
+        }
 
         if (Schema::hasTable('region') && Schema::hasTable('brands') && Schema::hasTable('catalog') && Schema::hasTable('users')) {
             view()->share('catalog', \App\Catalog::orderBy('order', 'asc')->get());
