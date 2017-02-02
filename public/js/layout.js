@@ -98,7 +98,7 @@ var Layout = function() {
     this.slider = function() {
 
         var h = $(".center_text").height();
-        $(".slider-center").css("top","-"+h+"px")
+        // $(".slider-center").css("top","-"+h+"px")
 
     }
 
