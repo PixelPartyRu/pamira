@@ -12,7 +12,6 @@ use App\Region;
 
 Class InsertData extends Controller {
     public function admin_link() {
-        \Serverfireteam\Panel\Link::create(array("display" => "Список значений","url" => "Brand"));
         \Serverfireteam\Panel\Link::create(array("display" => "Бренды","url" => "Brand"));
         \Serverfireteam\Panel\Link::create(array("display" => "Каталог","url" => "Catalog"));
         \Serverfireteam\Panel\Link::create(array("display" => "Товары","url" => "Product"));
