@@ -485,9 +485,10 @@ class DealerController extends MyCrudController {
         $data['path'] = $path;
         $data['to'] = $order->getEmailForDealer();
 
-        Mail::send('emails.customer_letter', $data, function($message) use($data,$order) {
+        Mail::send('emails.customer_letter', $data, function($message) use($data,$order,$dealer) {
             $message->subject("Заказ для поставщика ".$dealer->name." №" . $order->id . " от " . date("d.m.Y"));
-            $message->to($data['to'])->cc('heleonprime@ya.ru');
+            // $message->to($data['to'])->cc('heleonprime@ya.ru');
+            $message->to($data['to']);
             $message->attach( $data['path'] );
         });
 
