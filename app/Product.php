@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 use App\Jobs\Helper;
 use App\PH;
 use App\PHR;
-use App\Product;
 use App\User;
 // use App\Margin;
 
