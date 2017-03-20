@@ -149,16 +149,18 @@ Route::group(array('middleware' => ['web']), function() {
     });*/
     
     /***************************/
-    
+
+
 
     /*******************/
     Route::group(['middleware' => array(), 'prefix' => 'catalog'], function() {
 
-                 
+        Route::get("export-to-yml", "CatalogController@catalogExportToYml");
+
 
          Route::get("catalog_test/{catalog}", "CatalogController@catalog_test");
         Route::get("{catalog}", "CatalogController@catalog");
-        
+
         Route::get("cache_catalog/{catalog_id}", "CatalogController@cache_catalog");
         Route::get("test_cache/{catalog_id}", "CatalogController@test_cache");
         Route::get("cache_all/{catalog_id}", "CatalogController@cache_all");

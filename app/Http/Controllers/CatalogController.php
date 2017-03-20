@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Extensions\MyCrudController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Request;
 
 use \Illuminate\Support\Facades\Schema;
@@ -150,6 +151,23 @@ class CatalogController extends MyCrudController {
         return view("catalog.catalog_page",$data);
 
     }
+
+    public function catalogExportToYml(\Illuminate\Http\Request $request)
+    {
+        if($request->input('secret_code') !== \Config::get('yandex-market.export_secret_code')) {
+            return App::abort(403);
+        }
+
+        $yam = new \App\YaMarket();
+
+        $shop_name = \Config::get('yandex-market.shop_name');
+        $company_name = \Config::get('yandex-market.company_name');
+        $company_url = \Config::get('yandex-market.url');
+
+        header('Content-Type: text/xml');
+        $yam->exportToYml('php://output', $shop_name, $company_name, $company_url);
+    }
+
     public function catalog_test($catalog) {
 
         $data['catalog_ob'] = Catalog::where("alias", $catalog)->get()->first();
