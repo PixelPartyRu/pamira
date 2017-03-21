@@ -74,6 +74,7 @@ class YaMarket {
     public function exportToYml($outputFile, $shopName, $companyName, $companyUrl) {
         $categories = $this->sanitizeCategoriesForExport(Catalog::all());
         $categories_id = $categories->pluck('id');
+        $products_name = [ ];
 
         $products = Product::where("deleted", 0)->get();
 
@@ -118,6 +119,9 @@ class YaMarket {
                             if(!$product->viewcost) continue;
                             if(empty($product->catalog_id)) continue;
                             if(false === $categories_id->search($product->catalog_id)) continue;
+                            if(isset($products_name[$product->name])) continue;
+
+                            $products_name[$product->name] = true;
 
                             $writer->startElement('offer'); {
                                 $writer->writeAttribute('available', $product->product_in_stock() ? 'true' : 'false');
