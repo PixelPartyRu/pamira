@@ -350,7 +350,7 @@ class ProductController extends MyCrudController {
             $data['similar_product_prices'] = $market->getSimilarPrices($product->name);
         }
 
-        dd($data['similar_product_prices']);
+        //dd($data['similar_product_prices']);
 
         return view("catalog.product_page",$data, $gb_cost);
 

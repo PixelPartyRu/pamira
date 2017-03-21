@@ -3,6 +3,7 @@ namespace App;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Database\Eloquent\Collection;
 
 class YaMarket {
     private $oauth_token;
@@ -71,11 +72,12 @@ class YaMarket {
     }
 
     public function exportToYml($outputFile, $shopName, $companyName, $companyUrl) {
-        $categories = Catalog::all();
+        $categories = $this->sanitizeCategoriesForExport(Catalog::all());
+        $categories_id = $categories->pluck('id');
+
         $products = Product::where("deleted", 0)->get();
 
         $hars_text = $this->prepareHaracteristicsForExport(\App\Product::getProductHaracteristic());
-
 
         $writer = new \XMLWriter();
         $writer->openURI($outputFile);
@@ -115,6 +117,7 @@ class YaMarket {
                         foreach($products as $product) {
                             if(!$product->viewcost) continue;
                             if(empty($product->catalog_id)) continue;
+                            if(false === $categories_id->search($product->catalog_id)) continue;
 
                             $writer->startElement('offer'); {
                                 $writer->writeAttribute('available', $product->product_in_stock() ? 'true' : 'false');
@@ -170,6 +173,19 @@ class YaMarket {
             $writer->endElement();
         }
         $writer->endDocument();
+    }
+
+    protected function sanitizeCategoriesForExport($categories) {
+        $ignore_list = [
+            'мелкая бытовая техника',
+            'посуда для приготовления',
+            'дозаторы мыла',
+            'кухонные смесители',
+        ];
+
+        return $categories->filter(function($cat) use ($ignore_list) {
+            return !in_array(mb_strtolower($cat->name, 'utf-8'), $ignore_list);
+        });
     }
 
     protected function sanitizeCountryForExport($country) {
