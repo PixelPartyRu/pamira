@@ -216,7 +216,8 @@ class ParseXmlFile {
             "razmer" => "width",
             "shirina" => "width",
             "stil" => "style",
-            "tip" => "type"
+            "tip" => "type",
+            "assortiment" => "assortment",
         );
         foreach ($attr as $k => $v) {
             if (isset($main_ph[$k])) {

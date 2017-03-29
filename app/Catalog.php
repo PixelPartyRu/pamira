@@ -39,6 +39,7 @@ class Catalog extends Model
       "width" => 3,
       "color" => 4,
       "device" => 5,
+      "assortment" => 6
   ];
 
   public function __construct(array $attributes = array()) {
