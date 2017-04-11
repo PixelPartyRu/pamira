@@ -76,6 +76,9 @@ class YaMarket {
         $categories_id = $categories->pluck('id');
         $products_name = [ ];
 
+        /**
+         * @var $products Product[]
+         */
         $products = Product::where("deleted", 0)->get();
 
         $hars_text = $this->prepareHaracteristicsForExport(\App\Product::getProductHaracteristic());
@@ -145,6 +148,14 @@ class YaMarket {
                                     $writer->writeCData($this->sanitizeDescriptionForExport($product->haracteristic));
                                 }
                                 $writer->endElement();
+
+                                $sales_notes = $this->getSalesNotes($product);
+                                if(!empty($sales_notes)) {
+                                    $writer->startElement('sales_notes'); {
+                                        $writer->writeCData($sales_notes);
+                                    }
+                                    $writer->endElement();
+                                }
 
                                 if(!empty($product->country)) {
                                     $country = $this->sanitizeCountryForExport(
@@ -216,5 +227,10 @@ class YaMarket {
         unset($hars_text['device']);
 
         return $hars_text;
+    }
+
+    private function getSalesNotes(Product $product)
+    {
+        return $product->product_in_stock() ? '' : 'Необходима предоплата 50%.';
     }
 }
