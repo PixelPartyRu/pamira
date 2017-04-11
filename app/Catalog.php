@@ -33,13 +33,13 @@ class Catalog extends Model
   ];
 
   public static $filtersOrder = [
-      "type" => 0,
-      "material" => 1,
-      "style" => 2,
-      "width" => 3,
-      "color" => 4,
-      "device" => 5,
-      "assortment" => 6
+      "assortment" => 0,
+      "device" => 1,
+      "type" => 2,
+      "material" => 3,
+      "style" => 4,
+      "width" => 5,
+      "color" => 6,
   ];
 
   public function __construct(array $attributes = array()) {
