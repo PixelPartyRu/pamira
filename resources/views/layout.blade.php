@@ -169,6 +169,30 @@
       </ul>
     </div>
 
+    @else
+
+    <div class="wrapper-for-ticker">
+      <div class="ticker" style="position: relative">
+        <!-- <div class="ticker-text">text for ticker</div> -->
+        <div class="ticker-text">
+          {{-- {{ $mysterious_fog_text }} --}}
+          Торг уместен!
+        </div>
+
+        <div class="img_left_one" style="z-index: -5">
+          <img src="/img/ticker/left_one.png" />
+        </div>
+        <div class="img_left_two" style="z-index: -5">
+          <img src="/img/ticker/left_two.png" />
+        </div>
+        <div class="img_right_two" style="z-index: -5">
+          <img src="/img/ticker/right_one.png" alt="">
+        </div>
+
+      </div>
+    </div>
+
+
     @endif
     <div class="clear"></div>
 
