@@ -3,7 +3,7 @@ return array(
     'export_secret_code' => '9481jaskfm2375487w98jaLkj07w528u5lkjfldskjf0uolkfjdL',
     'shop_name' => 'Памира',
     'company_name' => 'Памира',
-    'url' => 'http://www.pamira.ru/',
+    'url' => 'https://www.pamira.ru/',
 
     'region_id' => 39, // Ростов-на-дону
     'token' => 'AQAAAAAcb2B6AAQkHNGAvlAm5URVhEHPYKBoGMg',
