@@ -155,8 +155,6 @@ Route::group(array('middleware' => ['web']), function() {
     /*******************/
     Route::group(['middleware' => array(), 'prefix' => 'catalog'], function() {
 
-        Route::get("export-to-yml", "CatalogController@catalogExportToYml");
-
 
          Route::get("catalog_test/{catalog}", "CatalogController@catalog_test");
         Route::get("{catalog}", "CatalogController@catalog");

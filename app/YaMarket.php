@@ -8,11 +8,17 @@ use Illuminate\Database\Eloquent\Collection;
 class YaMarket {
     private $oauth_token;
     private $client_id;
+    private $shop_name;
+    private $company_name;
+    private $company_url;
 
-    function __construct($outhToken = null, $clientId = null)
+    function __construct($shop_name, $company_name, $company_url, $outhToken = null, $clientId = null)
     {
-        $this->oauth_token = null !== $outhToken ? $outhToken : \Config::get('yandex-market.token');
-        $this->client_id = null !== $clientId ? $clientId : \Config::get('yandex-market.client_id');
+        $this->shop_name = $shop_name;
+        $this->company_name = $company_name;
+        $this->company_url = $company_url;
+        $this->oauth_token = $outhToken;
+        $this->client_id = $clientId;
     }
 
     public function getSimilarPrices($modelName, $regionId = null) {
@@ -71,7 +77,7 @@ class YaMarket {
         return \GuzzleHttp\json_decode($response->getBody());
     }
 
-    public function exportToYml($outputFile, $shopName, $companyName, $companyUrl) {
+    public function exportToYml($outputFile) {
         $categories = $this->sanitizeCategoriesForExport(Catalog::all());
         $categories_id = $categories->pluck('id');
         $products_name = [ ];
@@ -92,9 +98,9 @@ class YaMarket {
                 $writer->writeAttribute('date', date('Y-m-d H:i'));
 
                 $writer->startElement('shop'); {
-                    $writer->writeElement('name', $shopName);
-                    $writer->writeElement('company', $companyName);
-                    $writer->writeElement('url', $companyUrl);
+                    $writer->writeElement('name', $this->shop_name);
+                    $writer->writeElement('company', $this->company_name);
+                    $writer->writeElement('url', $this->company_url);
 
                     $writer->startElement('currencies'); {
                         $writer->startElement('currency'); {
@@ -129,14 +135,14 @@ class YaMarket {
                             $writer->startElement('offer'); {
                                 $writer->writeAttribute('available', $product->product_in_stock() ? 'true' : 'false');
 
-                                $writer->writeElement('url', $companyUrl . 'product_catalog/get/' . (!is_null($product->catalog) ? $product->catalog->alias : "_") . '/' . $product->alias);
+                                $writer->writeElement('url', $this->company_url . 'product_catalog/get/' . (!is_null($product->catalog) ? $product->catalog->alias : "_") . '/' . $product->alias);
                                 $writer->writeElement('price', sprintf('%.02f', $product->getCostWithMargin()));
                                 $writer->writeElement('currencyId', 'RUR');
                                 $writer->writeElement('categoryId', $product->catalog->id);
 
                                 foreach($product->getImageArr() as $k => $img) {
                                     if(!empty($img)) {
-                                        $writer->writeElement('picture', $companyUrl . 'uploads/product/img' . ($k + 1) . '/' . $img);
+                                        $writer->writeElement('picture', $this->company_url . 'uploads/product/img' . ($k + 1) . '/' . $img);
                                     }
                                 }
 
