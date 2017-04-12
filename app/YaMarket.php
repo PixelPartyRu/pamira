@@ -26,11 +26,9 @@ class YaMarket {
             $regionId = \Config::get('yandex-market.region_id');
         }
 
-        $result = $this->callMarketApi('models', [
-            'query' => $modelName,
-            'regionId' => $regionId,
-            'pageSize' => 10
-        ]);
+        if(false === $result = $this->suggestModel($modelName, $regionId)) {
+            return false;
+        }
 
         foreach($result->models as $model) {
             $similar = $this->callMarketApi("models/{$model->id}/offers", [
@@ -38,7 +36,26 @@ class YaMarket {
                 'currency' => 'RUR',
             ]);
 
-            $model->similar = $similar;
+            $model->offers = isset($similar->models[0]->offers) ? $similar->models[0]->offers : null;
+        }
+
+        return $result;
+    }
+
+    protected function suggestModel($modelName, $regionId) {
+        if(empty($modelName)) {
+            return false;
+        }
+
+        $result = $this->callMarketApi('models', [
+            'query' => $modelName,
+            'regionId' => $regionId,
+            'pageSize' => 10
+        ]);
+
+        if(!count($result->models)) {
+            $new_model = trim(implode(' ', array_slice(explode(' ', $modelName), 0, -1)));
+            return $this->suggestModel($new_model, $regionId);
         }
 
         return $result;
@@ -73,6 +90,8 @@ class YaMarket {
                 $e
             );
         }
+
+        //var_dump($response->getHeaders());
 
         return \GuzzleHttp\json_decode($response->getBody());
     }
