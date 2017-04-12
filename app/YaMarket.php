@@ -47,6 +47,8 @@ class YaMarket {
             return false;
         }
 
+        //var_dump("Try $modelName");
+
         $result = $this->callMarketApi('models', [
             'query' => $modelName,
             'regionId' => $regionId,

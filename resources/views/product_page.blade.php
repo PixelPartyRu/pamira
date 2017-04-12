@@ -103,6 +103,37 @@
         @endif
 
     </div>
+
+    @if( \App\Dealer::is_login() )
+        @if(false !== $ya_market_product)
+            <table class="similar-prices">
+                <thead>
+                    <tr>
+                        <th>Магазин</th>
+                        <th>Цена</th>
+                        <th>Доступность</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($ya_market_product->models as $prod)
+                        <?php $offers = $prod->offers; usort($offers, function($a, $b) { return $b->price - $a->price; }) ?>
+
+                        <tr>
+                            <th colspan="3">{{ $prod->name }}</th>
+                        </tr>
+                        @foreach($offers as $offer)
+                            <tr>
+                                <td>{{ $offer->shopName }}</td>
+                                <td>{{ $offer->price }} руб.</td>
+                                <td>{{ $offer->inStock ? 'В наличии' : 'Нет в наличии' }}</td>
+                            </tr>
+                        @endforeach
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+    @endif
+
     <div class="product_description">
         <div class="articul">Артикул: {{ $product->article }}</div>
         <div class="haracteristic">
