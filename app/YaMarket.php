@@ -42,7 +42,35 @@ class YaMarket {
         return $result;
     }
 
+    protected function sanitizeModelName($modelName) {
+        $to_remove = "
+            холодильник однокамерный двухкамерный винный шкаф холодильная морозильная камера
+            смеситель мойка миска лоток
+            дозатор мыла
+            измельчитель
+            сортер
+            духовой шкаф
+            плита кухонная
+            варочная поверхность
+            Микроволновая печь
+            вытяжка угольный фильтр
+            Посудомоечная машина
+            Сушильная машина Сушильный шкаф
+            сковорода кастрюля
+            чайник
+        ";
+
+        $to_remove = array_filter(array_map('trim', explode(" ", $to_remove)));
+
+        $result = trim(preg_replace('/' . implode('|', array_map('preg_quote', $to_remove)) . '/iu', '', $modelName));
+
+        //dd($modelName, $result);
+
+        return $result;
+    }
+
     protected function suggestModel($modelName, $regionId) {
+        $modelName = $this->sanitizeModelName($modelName);
         if(empty($modelName)) {
             return false;
         }
