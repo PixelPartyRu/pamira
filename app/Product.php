@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 use App\Jobs\Helper;
 use App\PH;
 use App\PHR;
-use App\Product;
 use App\User;
 // use App\Margin;
 
@@ -34,7 +33,8 @@ class Product extends Model
             "style" => "Стиль",
             "type" => "Тип",
             "width" => "Ширина (мм)",
-            "panel_material" => "Материал панели управления"
+            "panel_material" => "Материал панели управления",
+            "assortment" => "Ассортимент"
 
         );
 

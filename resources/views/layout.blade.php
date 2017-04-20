@@ -175,8 +175,7 @@
       <div class="ticker" style="position: relative">
         <!-- <div class="ticker-text">text for ticker</div> -->
         <div class="ticker-text">
-          {{-- {{ $mysterious_fog_text }} --}}
-          Торг уместен!
+          {{ $mysterious_fog_text }}
         </div>
 
         <div class="img_left_one" style="z-index: -5">
