@@ -17,7 +17,7 @@
         <div class="table-cell delete"></div>
 
     </div>
-<? $i=1; ?>
+<?php $i=1; ?>
 
 @foreach($order->products as $product_info)
 <?php if(is_null($product_info)) continue; ?>

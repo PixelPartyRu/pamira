@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Dealer;
 use App\Http\Controllers\Extensions\MyCrudController;
+use App\YaMarket;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Zofe\Rapyd\Facades\Rapyd;
 use App\Catalog;
@@ -338,6 +342,14 @@ class ProductController extends MyCrudController {
             $markup = 0;
         }
         $gb_cost['markup'] = round($markup,2);
+
+
+        $data['ya_market_product'] = false;
+
+        if(Dealer::is_login() && Dealer::getLoginDealer()->can_compare_prices) {
+            $market = App::make(YaMarket::class);
+            $data['ya_market_product'] = $market->getSimilarPrices($product->name);
+        }
 
         return view("catalog.product_page",$data, $gb_cost);
 

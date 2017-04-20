@@ -3158,3 +3158,29 @@ vertical-align: top;
     opacity: 0;
     -webkit-transform: rotate(60deg);
     transform: rotate(60deg); } }
+
+.similar-prices {
+  width: 80%;
+  margin: 50px auto;
+  font-size: 14px;
+  overflow: hidden;
+  clear: both;
+}
+
+.similar-prices:after {
+  display: table;
+  clear: both;
+  content: '';
+}
+
+.similar-prices th,
+.similar-prices td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.similar-prices th {
+  text-align: center;
+  font-weight: bold;
+}
+

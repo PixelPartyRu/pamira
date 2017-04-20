@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Extensions\MyCrudController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Request;
 
 use \Illuminate\Support\Facades\Schema;
@@ -150,6 +151,7 @@ class CatalogController extends MyCrudController {
         return view("catalog.catalog_page",$data);
 
     }
+
     public function catalog_test($catalog) {
 
         $data['catalog_ob'] = Catalog::where("alias", $catalog)->get()->first();

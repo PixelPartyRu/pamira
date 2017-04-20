@@ -73,6 +73,7 @@ class DealerController extends MyCrudController {
 
         $this->edit->add('name', 'Имя', 'text')->rule('required');
         $this->edit->add('email', 'Email', 'text')->rule('required|email');
+        $this->edit->add('can_compare_prices', 'Имеет возможность сравнивать цены', 'checkbox');
         $typeField = $this->edit->add('type', '', 'hidden');
         $typeField->insertValue('dealer');
         $typeField->updateValue('dealer');
