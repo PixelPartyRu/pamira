@@ -48,6 +48,8 @@ class YmlCommand extends Command
 
         $yam->exportToYml($output_file === '-' ? 'php://output' : $output_file);
 
+        $this->info("Yml updated at " . date("r"));
+
         return 0;
     }
 }
