@@ -43,7 +43,11 @@
         @if($product->viewcost)
 
             @if($product->is_sales_for_current_product() )
-            <span class="cost_old"><span><span></span>{{ $product->getFormatCostOld() }} р.</span></span>
+
+                @unless( $product->getFormatCostOld() == $product->getFormatCost() )
+                    <span class="cost_old"><span><span></span>{{ $product->getFormatCostOld() }} р.</span></span>
+                @endunless
+
             @endif
 
         <div class="cost_trade"><span> Цена: {{ $product->getFormatCost() }} руб.</span></div>
@@ -52,7 +56,9 @@
 
             @if( \App\Dealer::is_login() )
                 @if($product->is_sales_for_current_product() )
-                    <span class=" cost_old" id="gb-cost-wholesale-old"><span><span></span>{{ number_format($product->getCostWithMargin(true, false),0,',',' ') }} р.</span></span>
+                    @unless( number_format($product->getCostWithMargin(true, false),0,',',' ') == number_format($product->getCostWithMargin(true),0,',',' ') )
+                        <span class=" cost_old" id="gb-cost-wholesale-old"><span><span></span>{{ number_format($product->getCostWithMargin(true, false),0,',',' ') }} р.</span></span>
+                    @endunless
                 @endif
 
                 <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
