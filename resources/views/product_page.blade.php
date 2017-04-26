@@ -131,6 +131,8 @@
                     @endforeach
                 </tbody>
             </table>
+        @else
+            <h1 class="product_header" style="text-align: center">Предложения не найдены на яндекс маркете</h1>
         @endif
     @endif
 

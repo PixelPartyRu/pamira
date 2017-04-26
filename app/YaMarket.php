@@ -84,8 +84,19 @@ class YaMarket {
         ]);
 
         if(!count($result->models)) {
-            $new_model = trim(implode(' ', array_slice(explode(' ', $modelName), 0, -1)));
-            return $this->suggestModel($new_model, $regionId);
+            $words = explode(' ', $modelName);
+
+            if(count($words) > 1) {
+                $last = $words[count($words) - 1];
+
+                if(preg_match('/^[А-ЯЁ\-]+$/ui', $last) || mb_strlen($last, 'utf8') < 3) {
+                    $new_model = trim(implode(' ', array_slice($words, 0, -1)));
+
+                    return $this->suggestModel($new_model, $regionId);
+                }
+            }
+
+            return false;
         }
 
         return $result;
