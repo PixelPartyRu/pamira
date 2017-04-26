@@ -134,7 +134,9 @@ class YaMarket {
         /**
          * @var $products Product[]
          */
-        $products = Product::where("deleted", 0)->get();
+        $products = Product::where("deleted", 0)
+            ->where('export_to_yml', 1)
+            ->get();
 
         $hars_text = $this->prepareHaracteristicsForExport(\App\Product::getProductHaracteristic());
 

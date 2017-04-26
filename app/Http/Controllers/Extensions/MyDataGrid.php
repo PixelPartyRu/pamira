@@ -200,7 +200,7 @@ class MyDataGrid extends DataGrid {
                     
                     if ($column->cell_callable) {
                         $callable = $column->cell_callable;
-                        $cell->value($callable($cell->value));
+                        $cell->value($callable($cell->value, $tablerow));
                     
                     }
                     $row->add($cell);
