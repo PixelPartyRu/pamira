@@ -83,15 +83,13 @@ class YaMarket {
             'pageSize' => 10
         ]);
 
-        //var_dump('Try ' . $modelName);
-
         if(!count($result->models)) {
             $words = explode(' ', $modelName);
 
             if(count($words) > 1) {
                 $last = $words[count($words) - 1];
 
-                if(!preg_match('~[A-Z]{2,}+$~ui', $last) || mb_strlen($last, 'utf8') < 3) {
+                if(!preg_match('~[A-Z]{2,}~ui', $last) || mb_strlen($last, 'utf8') < 3) {
                     $new_model = trim(implode(' ', array_slice($words, 0, -1)));
 
                     return $this->suggestModel($new_model, $regionId);
