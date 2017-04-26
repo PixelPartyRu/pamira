@@ -75,13 +75,13 @@ class YaMarket {
             return false;
         }
 
-        //var_dump("Try $modelName");
-
         $result = $this->callMarketApi('models', [
             'query' => $modelName,
             'regionId' => $regionId,
             'pageSize' => 10
         ]);
+
+        //var_dump('Try ' . $modelName);
 
         if(!count($result->models)) {
             $words = explode(' ', $modelName);
