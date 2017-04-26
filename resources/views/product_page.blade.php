@@ -108,6 +108,11 @@
         @if(false !== $ya_market_product)
             <table class="similar-prices">
                 <thead>
+                    @if(count($ya_market_product->models) > 1)
+                    <tr>
+                        <th colspan="3">ВНИМАНИЕ: Яндекс маркет возвратил несколько товаров на наш запрос</th>
+                    </tr>
+                    @endif
                     <tr>
                         <th>Магазин</th>
                         <th>Цена</th>
