@@ -126,13 +126,19 @@
                         <tr>
                             <th colspan="3">{{ $prod->name }}</th>
                         </tr>
-                        @foreach($offers as $offer)
+                        @if(count($offers))
+                            @foreach($offers as $offer)
+                                <tr>
+                                    <td>{{ $offer->shopName }}</td>
+                                    <td>{{ $offer->price }} руб.</td>
+                                    <td>{{ $offer->inStock ? 'В наличии' : 'Нет в наличии' }}</td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
-                                <td>{{ $offer->shopName }}</td>
-                                <td>{{ $offer->price }} руб.</td>
-                                <td>{{ $offer->inStock ? 'В наличии' : 'Нет в наличии' }}</td>
+                                <th colspan="3">Предложений нет</th>
                             </tr>
-                        @endforeach
+                        @endif
                     @endforeach
                 </tbody>
             </table>
