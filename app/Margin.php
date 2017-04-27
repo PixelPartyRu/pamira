@@ -21,10 +21,12 @@ class Margin extends Model
   }
 
 
+
   // public static function saveFormData($margin, $brand_id_values, $brand_margin_values, $default) {
   public static function saveFormData($margin, $brand_id_values, $brand_margin_values, $default, $current_type_margin="", $add_text_for_name="", $rev=false) {
 
-        $validator = Validator::make($margin,array('name' => array('required', 'min:5')));
+        //$validator = Validator::make($margin,array('name' => array('required', 'min:5')));
+        $validator = Validator::make($margin,array('name' => array('required')));
 
         if($validator->fails()){
             return false;

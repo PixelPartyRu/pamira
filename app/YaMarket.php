@@ -75,17 +75,28 @@ class YaMarket {
             return false;
         }
 
-        //var_dump("Try $modelName");
-
         $result = $this->callMarketApi('models', [
             'query' => $modelName,
             'regionId' => $regionId,
             'pageSize' => 10
         ]);
 
+        //var_dump('Try ' . $modelName);
+
         if(!count($result->models)) {
-            $new_model = trim(implode(' ', array_slice(explode(' ', $modelName), 0, -1)));
-            return $this->suggestModel($new_model, $regionId);
+            $words = explode(' ', $modelName);
+
+            if(count($words) > 1) {
+                $last = $words[count($words) - 1];
+
+                if(!preg_match('~[A-Z]{2,}~ui', $last) || mb_strlen($last, 'utf8') < 3) {
+                    $new_model = trim(implode(' ', array_slice($words, 0, -1)));
+
+                    return $this->suggestModel($new_model, $regionId);
+                }
+            }
+
+            return false;
         }
 
         return $result;
@@ -134,7 +145,9 @@ class YaMarket {
         /**
          * @var $products Product[]
          */
-        $products = Product::where("deleted", 0)->get();
+        $products = Product::where("deleted", 0)
+            ->where('export_to_yml', 1)
+            ->get();
 
         $hars_text = $this->prepareHaracteristicsForExport(\App\Product::getProductHaracteristic());
 
