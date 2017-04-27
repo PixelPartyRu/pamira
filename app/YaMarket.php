@@ -138,7 +138,8 @@ class YaMarket {
     }
 
     public function exportToYml($outputFile) {
-        $categories = $this->sanitizeCategoriesForExport(Catalog::all());
+        //$categories = $this->sanitizeCategoriesForExport(Catalog::all());
+        $categories = Catalog::all();
         $categories_id = $categories->pluck('id');
         $products_name = [ ];
 
