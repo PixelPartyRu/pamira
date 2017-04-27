@@ -22,6 +22,7 @@ class YaMarket {
     }
 
     public function getSimilarPrices($modelName, $regionId = null) {
+        // TODO: move this to ctor
         if(null === $regionId) {
             $regionId = \Config::get('yandex-market.region_id');
         }
@@ -34,6 +35,7 @@ class YaMarket {
             $similar = $this->callMarketApi("models/{$model->id}/offers", [
                 'regionId' => $regionId,
                 'currency' => 'RUR',
+                //'orderByPrice' => 'DESC'
             ]);
 
             $model->offers = isset($similar->models[0]->offers) ? $similar->models[0]->offers : null;
