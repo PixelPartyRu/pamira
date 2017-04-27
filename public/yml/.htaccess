@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Private Login"
+AuthUserFile "/var/www/pamira.ru/.htpasswd"
+Require valid-user
