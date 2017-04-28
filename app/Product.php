@@ -84,7 +84,10 @@ class Product extends Model
   }
 
 public static function query() {
-    return parent::query()->where("deleted","=",0);
+    return parent::query()
+        ->where("deleted","=",0)
+        ->where('moderated', 1)
+        ;
 }
   public function scopeFilter($query, $params) {
       unset($params['catalog']);
@@ -556,7 +559,7 @@ public static function is_any_sales_now() {
 }
 
 public static function get_product_width_sales($catalog_id) {
-    return self::query()->where("sales",1)->where("catalog_id",$catalog_id)->get();
+    return self::query()->where("sales",1)->where("catalog_id",$catalog_id)->where('moderated', 1)->get();
 }
 
 public function getPHWithNumberCat($num) {
