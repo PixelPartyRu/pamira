@@ -74,7 +74,7 @@ class PricesCommand extends Command
                     $this->info(sprintf("%d completed in %.2f; speed = %.2f models per sec\n", $i, $e - $b, $mps));
 
                     if($i > 1000) {
-                        break;
+                        //break;
                     }
                 }
             }
