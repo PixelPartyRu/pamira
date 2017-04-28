@@ -135,6 +135,7 @@ class CatalogController extends MyCrudController {
                                     // ->orderBy("sales_leader","desc")
                                     ->orderBy("cost_trade","asc")
                                     ->where("deleted",0)
+                                    ->where('moderated', 1)
                                     ->paginate(12);//get()
         $data['filters'] = $data['catalog_ob']->getAccessFilters();
 
