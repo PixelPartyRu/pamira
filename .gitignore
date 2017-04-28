@@ -7,5 +7,5 @@ Homestead.json
 .creds
 /.idea
 /*.iml
-*.csv
-*.yml
+*/*.csv
+*/*.yml
