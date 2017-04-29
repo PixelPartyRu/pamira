@@ -380,10 +380,12 @@ class ProductController extends MyCrudController {
 
         $data['ya_market_product'] = false;
 
+        /*
         if(Dealer::is_login() && Dealer::getLoginDealer()->can_compare_prices) {
             $market = App::make(YaMarket::class);
             $data['ya_market_product'] = $market->getSimilarPrices($product->name);
         }
+        */
 
         return view("catalog.product_page",$data, $gb_cost);
 

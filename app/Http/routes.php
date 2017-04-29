@@ -321,6 +321,8 @@ Route::group(array('middleware' => ['web']), function() {
             Route::post("margin_edit/{margin_id}", "DealerController@margin_edit");
 
 
+            Route::get("prices", "DealerController@yandexMarketPrices");
+
             // Route::group(array('middleware' => array()), function() {
             //Роуты с определением шага заказа    
             Route::get("cart", "DealerController@cart_step"); //шаг 1

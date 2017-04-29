@@ -38,6 +38,10 @@ class YaMarket {
                 //'orderByPrice' => 'DESC'
             ]);
 
+            if(false === $similar) {
+                return false;
+            }
+
             $model->offers = isset($similar->models[0]->offers) ? $similar->models[0]->offers : null;
         }
 
@@ -83,6 +87,9 @@ class YaMarket {
             'pageSize' => 10
         ]);
 
+        if(false === $result) {
+            return false;
+        }
         //var_dump('Try ' . $modelName);
 
         if(!count($result->models)) {
@@ -118,7 +125,10 @@ class YaMarket {
 
         try {
             $response = $client->send($request);
-        } catch (ClientException $e) {
+        } catch (\Exception $e) {
+        //} catch (ClientException $e) {
+            return false;
+            /*
             $response = $e->getRequest();
 
             $extra_message = '';
@@ -132,6 +142,7 @@ class YaMarket {
                 $e->getResponse(),
                 $e
             );
+            */
         }
 
         //var_dump($response->getHeaders());

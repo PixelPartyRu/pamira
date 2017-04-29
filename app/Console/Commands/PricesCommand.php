@@ -6,9 +6,20 @@ use App\Product;
 use App\YaMarket;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PricesCommand extends Command
 {
+    protected $HEADERS = [
+        "Магазин",
+        "Название товара в магазине",
+        "Цена (руб)",
+        "Доступность",
+        "В домашнем регионе"
+    ];
+
+    const SHOP_NAME = 'Памира';
+
     /**
      * The name and signature of the console command.
      *
@@ -33,6 +44,17 @@ class PricesCommand extends Command
         parent::__construct();
     }
 
+    protected static function getNameFromNumber($num) {
+        $numeric = $num % 26;
+        $letter = chr(65 + $numeric);
+        $num2 = intval($num / 26);
+        if ($num2 > 0) {
+            return self::getNameFromNumber($num2 - 1) . $letter;
+        } else {
+            return $letter;
+        }
+    }
+
     /**
      * Execute the console command.
      *
@@ -45,78 +67,161 @@ class PricesCommand extends Command
 
         $region_id = \Config::get('yandex-market.region_id');
 
-        $fh = fopen($output_file, 'w');
-        fputs($fh, "\xEF\xBB\xBF"); // utf-8 bom for excel
+        $yam = App::make(YaMarket::class);
 
-        $this->writeRow($fh, ["Название товара в pamira.ru", "Модель товара(в Яндекс.Маркет)", "Магазин", "Название товара в магазине", "Цена (руб)", "Доступность", "В домашнем регионе"]);
-        $this->writeRow($fh, ["Дата обновления", date('d.m.Y H:i') . ' UTC', "", "", "", "", ""]);
-        $this->writeRow($fh, ["", "", "", "", "", "", ""]);
+        $products = Product::where("deleted", 0)
+            ->where('export_to_yml', 1)
+            ->get();
 
-        try {
-            $yam = App::make(YaMarket::class);
+        $file_name = 'prices_' . date('d.m.Y H;i;s,u');
 
-            $products = Product::where("deleted", 0)
-                ->where('export_to_yml', 1)
-                ->get();
+        $export_result = Excel::create($file_name, function($excel) use ($yam, $products, $region_id) {
 
-            $b = microtime(true);
-            $i = 0;
-            foreach ($products as $product) {
-                $prices = $yam->getSimilarPrices($product->name, $region_id);
+            $excel->sheet('цены обновлены ' . date('d.m.y H;i'), function($sheet) use ($yam, $products, $region_id) {
+                $sheet->setOrientation('landscape');
 
-                $this->dump($fh, $product, $prices, $region_id);
+                $row = 1;
+                $this->dumpHeader($sheet);
+                $row++;
 
-                $i++;
-                if (0 === ($i % 5)) {
-                    $e = microtime(true);
-                    $mps = $i / ($e - $b);
 
-                    $this->info(sprintf("%d completed in %.2f; speed = %.2f models per sec\n", $i, $e - $b, $mps));
+                $b = microtime(true);
+                $i = 0;
+                foreach ($products as $product) {
+                    $prices = $yam->getSimilarPrices($product->name, $region_id);
 
-                    if($i > 1000) {
-                        //break;
+                    $row = $this->dump($sheet, $row, $product, $prices, $region_id);
+
+                    $i++;
+                    if (0 === ($i % 1)) {
+                        $e = microtime(true);
+                        $mps = $i / ($e - $b);
+
+                        $this->info(sprintf("%d completed in %.2f; speed = %.2f models per sec", $i, $e - $b, $mps));
+
+                        if($i > 2) {
+                            //break;
+                        }
                     }
                 }
-            }
-            $e = microtime(true);
+                $e = microtime(true);
 
-            $this->info("Done in " . ($e - $b) . ' s');
-        } finally {
-            fclose($fh);
-        }
+                $this->info("Done in " . ($e - $b) . ' s');
+            });
+        })->save('xls', storage_path('prices'), true);
+
+        copy($export_result['full'], storage_path('prices') . '/last_prices.xls');
 
         return 0;
     }
 
-    protected function dump($fh, $product, $prices, $homeRegionId)
+    protected function getEndColumn() {
+        return $this->getNameFromNumber(count($this->HEADERS) - 1);
+    }
+
+    /**
+     * @param $sheet
+     */
+    protected function dumpHeader($sheet)
     {
-        if(false === $prices) return false;
+        $headers = $this->HEADERS;
+        $end_column = self::getEndColumn();
+
+        $sheet->appendRow($headers);
+
+        $sheet->setHeight(1, 50);
+        $sheet->setAutosize(true);
+
+        $sheet->cells('A1:' . $end_column . '1', function ($cells) {
+            $cells->setBackground('#F3F3F3');
+
+            $cells->setFont(array(
+                'family' => 'Calibri',
+                'size' => '14',
+                'bold' => true
+            ));
+
+        });
+        $sheet->setBorder('A1:' . $end_column . '1', 'thin');
+    }
+
+    protected function dump($sheet, $row, $product, $prices, $homeRegionId)
+    {
+        if(false === $prices) return $row;
+
+        $end_column = self::getEndColumn();
+
+        $sheet->appendRow([
+            $product->name,
+            "",
+            "цена розн/опт",
+            $product->getCostWithMargin(),
+            $product->getCostWithMargin(true),
+        ]);
+
+        $sheet->mergeCells("A{$row}:B{$row}");
+
+        $sheet->cells("A{$row}:B{$row}", function($cells) {
+            $cells->setFont(array(
+                'size'       => '20',
+                'bold'       =>  true
+            ));
+
+            $cells->setAlignment('center');
+        });
+
+        $row++;
 
         foreach($prices->models as $model) {
+            if(!count($model->offers)) continue;
+
+            $sheet->appendRow([
+                $model->name,
+                "цена в Я.Маркет макс./средн./мин.",
+                $model->prices->max,
+                $model->prices->avg,
+                $model->prices->min,
+            ]);
+
+            $sheet->cells("A{$row}:A{$row}", function($cells) {
+                $cells->setFont(array(
+                    'size'       => '16',
+                    'bold'       =>  false
+                ));
+
+                $cells->setAlignment('center');
+            });
+
+            $row++;
+
+
             foreach ($model->offers as $offer) {
-                $this->writeRow($fh, [
-                    $product->name,
-                    $model->name,
+                if($offer->shopName === self::SHOP_NAME) continue;
+
+                $sheet->appendRow([
                     $offer->shopName,
                     $offer->name,
                     $offer->price,
-                    $offer->inStock ? 'В наличиии' : 'Нет в наличии',
-                    $homeRegionId == $offer->regionId ? 'да' : 'нет'
+                    $offer->inStock ? 'В наличиии' : '',
+                    $homeRegionId == $offer->regionId ? 'да' : ''
                 ]);
+
+                $sheet->cells("C{$row}:C{$row}", function($cells) use ($product, $offer) {
+                    if($product->getCostWithMargin() > $offer->price) {
+                        $cells->setBackground('#ffdbdb');
+                    } else if($product->getCostWithMargin() < $offer->price) {
+                        $cells->setBackground('#dbffdb');
+                    }
+                });
+
+
+                $row++;
             }
         }
 
-        $this->writeRow($fh, ["", "", "", "", "", "", ""]);
-    }
+        $sheet->appendRow([""]);
+        $row++;
 
-    protected function writeRow($fh, $row)
-    {
-        foreach ($row as &$v) {
-            if ($row[0] === '-' || $row[0] === '+' || $row[0] === '=') {
-                $v = " $v";
-            }
-        }
-
-        fputcsv($fh, $row, ';');
+        return $row;
     }
 }

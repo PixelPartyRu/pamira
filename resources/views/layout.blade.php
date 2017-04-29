@@ -161,6 +161,12 @@
           </a>
         </li>
 
+        @if(\App\Dealer::is_login() && \App\Dealer::getLoginDealer()->can_compare_prices)
+          <li>
+            <a href="/dealer/prices" >Цены</a>
+          </li>
+        @endif
+
         <li>
           <a id="gb-exit" href="/dealer/logout">
             Выход

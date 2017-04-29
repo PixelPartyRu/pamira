@@ -518,7 +518,12 @@ class DealerController extends MyCrudController {
     }
 
 
-
+    public function yandexMarketPrices()
+    {
+        if(\App\Dealer::is_login() && \App\Dealer::getLoginDealer()->can_compare_prices) {
+            return response()->download(storage_path('prices') . '/last_prices.xls', 'цены.xls');
+        }
+    }
 
     public function order_history() {
 
