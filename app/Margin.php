@@ -40,6 +40,11 @@ class Margin extends Model
 
             // $margin_ob->name = "";
 
+            $clean_name = preg_replace('/ rev$/', '', $margin['name']);
+            $type_margin = $current_type_margin;
+            $margin_name_new = $rev ? $clean_name . ' rev' : $clean_name;
+
+            /*
             if( $rev ) {
                 $current_name = $margin_ob->name;
                 if(substr($current_name, -3) == "rev"){
@@ -61,6 +66,7 @@ class Margin extends Model
                     $margin_name_new = $margin['name'].$add_text_for_name;
                 }
             }
+            */
 
             $margin_ob->type = $type_margin;
             $margin_ob->name = $margin_name_new;

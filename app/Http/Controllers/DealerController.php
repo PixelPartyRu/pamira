@@ -346,7 +346,7 @@ class DealerController extends MyCrudController {
         $this->set_scripts([
             //'/js/modules/jquery.sortable.min.js',
             '/js/modules/min/jquery.ui-drag-drop.min.js',
-            '/js/min/formalize_order_completion.min.js'
+            '/js/formalize_order_completion.min.js'
         ]);
 
         return redirect("/dealer/completed_order/" . $order->id);

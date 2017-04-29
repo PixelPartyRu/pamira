@@ -81,7 +81,7 @@
                 <div style="width:80px;">Сумма ОПТ</div>
                 <div style="width:80px;">Сумма РРЦ</div>
             </div>
-            <? $i=1; ?>
+            <?php $i=1; ?>
             @foreach($order->products as $product_info)
             <div class="row">
                 <div>{{$i++}}</div>        
