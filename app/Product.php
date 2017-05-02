@@ -202,13 +202,16 @@ public static function query() {
 
         $margin = $this->getMargin(($opt ? 'retail' : 'wholesale'));
 
+        if(!$margin) {
+            return $opt ? $cost_newness : $cost_trade_newness;
+        }
 
         if($margin_name=="rev"){
-            //return ceil_dec($cost_rev + ($cost_rev / 100 * $margin));
-            return !$margin ? $cost : ceil_dec($cost_rev + ($cost_rev / 100 * $margin));
+            return ceil_dec($cost_rev + ($cost_rev / 100 * $margin));
+            //return !$margin ? $cost_rev : ceil_dec($cost_rev + ($cost_rev / 100 * $margin));
         } else{
-            //return ceil_dec($cost + ($cost / 100 * $margin));
-            return !$margin ? $cost : ceil_dec($cost + ($cost / 100 * $margin));
+            return ceil_dec($cost + ($cost / 100 * $margin));
+            //return !$margin ? $cost : ceil_dec($cost + ($cost / 100 * $margin));
         }
 
 
