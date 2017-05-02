@@ -81,7 +81,7 @@
                 <div style="width:75px;">Сумма без скидки</div>
                 <div style="width:75px;">Сумма со скидкой</div>
             </div>
-            <? $i=1; ?>
+            <?php $i=1; ?>
             @foreach($order->products as $product_info)
             <div class="row">
                 <div>{{$i++}}</div>        

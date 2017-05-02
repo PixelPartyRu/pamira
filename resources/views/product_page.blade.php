@@ -110,7 +110,7 @@
 
     </div>
 
-    @if( \App\Dealer::is_login() )
+    @if( false && \App\Dealer::is_login() )
         @if(false !== $ya_market_product)
             <table class="similar-prices">
                 <thead>
