@@ -200,12 +200,15 @@ public static function query() {
             $margin_name = "";
         }
 
-        if($margin_name=="rev"){
-            return ceil_dec($cost_rev + ($cost_rev / 100 * $this->getMargin(( $opt ? 'retail' : 'wholesale' ))));
+        $margin = $this->getMargin(($opt ? 'retail' : 'wholesale'));
 
-        }
-        else{
-            return ceil_dec($cost + ($cost / 100 * $this->getMargin(( $opt ? 'retail' : 'wholesale' ))));
+
+        if($margin_name=="rev"){
+            //return ceil_dec($cost_rev + ($cost_rev / 100 * $margin));
+            return !$margin ? $cost : ceil_dec($cost_rev + ($cost_rev / 100 * $margin));
+        } else{
+            //return ceil_dec($cost + ($cost / 100 * $margin));
+            return !$margin ? $cost : ceil_dec($cost + ($cost / 100 * $margin));
         }
 
 
