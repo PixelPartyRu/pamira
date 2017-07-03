@@ -24,7 +24,7 @@
 <?php if(is_null($product_info->product)) continue; ?>
 <?php if($product_info->product_id == 0) continue; ?>
 <div class="product_info_row product_info_row_data table-row brick small" data-id="{{$product_info->id}}">
-    <div class="table-cell id">{{$i++}}<input class="hidden_id" type="hidden" name="id_order[]" value="{{$product_info->id}}"></div>
+    <div class="table-cell id"><span class="index">{{$i++}}</span><input class="hidden_id" type="hidden" name="id_order[]" value="{{$product_info->id}}"></div>
     <div class="table-cell photo"><div><img src="/imgresize?file={{public_path()}}/uploads/product/img1/{{$product_info->product->img}}" /></div></div>
     <div class="table-cell name">{{$product_info->product->name}}</div>
 

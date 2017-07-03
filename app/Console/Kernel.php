@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\PricesCommand;
 use App\Console\Commands\YmlCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -16,6 +17,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         // Commands\Inspire::class,
         YmlCommand::class,
+        PricesCommand::class,
     ];
 
     /**

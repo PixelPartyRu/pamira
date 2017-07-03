@@ -84,7 +84,10 @@ class Product extends Model
   }
 
 public static function query() {
-    return parent::query()->where("deleted","=",0);
+    return parent::query()
+        ->where("deleted","=",0)
+        ->where('moderated', 1)
+        ;
 }
   public function scopeFilter($query, $params) {
       unset($params['catalog']);
@@ -197,12 +200,18 @@ public static function query() {
             $margin_name = "";
         }
 
-        if($margin_name=="rev"){
-            return ceil_dec($cost_rev + ($cost_rev / 100 * $this->getMargin(( $opt ? 'retail' : 'wholesale' ))));
+        $margin = $this->getMargin(($opt ? 'retail' : 'wholesale'));
 
+        if(!$margin) {
+            return $opt ? $cost_newness : $cost_trade_newness;
         }
-        else{
-            return ceil_dec($cost + ($cost / 100 * $this->getMargin(( $opt ? 'retail' : 'wholesale' ))));
+
+        if($margin_name=="rev"){
+            return ceil_dec($cost_rev + ($cost_rev / 100 * $margin));
+            //return !$margin ? $cost_rev : ceil_dec($cost_rev + ($cost_rev / 100 * $margin));
+        } else{
+            return ceil_dec($cost + ($cost / 100 * $margin));
+            //return !$margin ? $cost : ceil_dec($cost + ($cost / 100 * $margin));
         }
 
 
@@ -556,7 +565,7 @@ public static function is_any_sales_now() {
 }
 
 public static function get_product_width_sales($catalog_id) {
-    return self::query()->where("sales",1)->where("catalog_id",$catalog_id)->get();
+    return self::query()->where("sales",1)->where("catalog_id",$catalog_id)->where('moderated', 1)->get();
 }
 
 public function getPHWithNumberCat($num) {

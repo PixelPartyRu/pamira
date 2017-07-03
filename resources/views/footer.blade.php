@@ -19,5 +19,42 @@
     <div class="clear"></div>
 
 </div>
-<div class="copyright">© 2011-2016 Все права защищены. Памира - официальный дилер
-    Franke в Ростове-на-Дону.</div>
+<div class="copyright">
+<table>
+    <tr>
+        <td width="25%" valign="top">© 2011-2016 Все права защищены.<br>
+Памира - официальный дилер Franke в Ростове-на-Дону.</td>
+        <td width="55%" valign="top">Обращаем Ваше внимание на то, что данный сайт носит исключительно информационный характер. Информация, указанная на сайте, не является публичной офертой, определяемой положениями Статей 435 и 437 Гражданского Кодекса РФ. Информация о технических характеристиках товаров, указанная на сайте, может быть изменена производителем в одностроннем порядке. Изображения товаров на фотографиях, представленных в каталоге на сайте, могут отличаться от оригиналов. <!-- Информация о цене товара, указанная в каталоге на сайте, может отличаться от фактической к моменту оформления заказа на соответствующий товар. Подтверждением цены заказанного товара является сообщение PAMIRA.RU о цене такого товара. --></td>
+        <td></td>
+    </tr>
+</table>
+</div>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter44539933 = new Ya.Metrika({
+                    id:44539933,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/44539933" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->

@@ -7,6 +7,7 @@ use App\YaMarket;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use Mockery\CountValidator\Exception;
 use Zofe\Rapyd\Facades\Rapyd;
 use App\Catalog;
 use Illuminate\Support\Facades\Response;
@@ -27,6 +28,31 @@ class ProductController extends MyCrudController {
         parent::__construct($lang);
 
     }
+
+    public function update_yml_export()
+    {
+        $rd = Request::all();
+        $values = collect(isset($rd['values']) ? $rd['values'] : []);
+
+        $value = $values->first();
+
+        Product::whereIn('id', $values->keys())->update([
+            'export_to_yml' => $value
+        ]);
+
+        /*
+        foreach($values as $id => $v) {
+            $product = Product::findOrFail($id);
+
+            $product->export_to_yml = (bool)$v;
+
+            $product->save();
+        }
+        */
+
+        return response()->json($value);
+    }
+
     public function all($entity) {
         parent::all($entity);
 
@@ -74,6 +100,13 @@ class ProductController extends MyCrudController {
           $this->grid->add('id', 'ID', true);
           $this->grid->add('name','Имя',"name");
           $this->grid->add('catalog_for_admin_list()','Каталог размещения',"catalog_id");
+
+            $this->grid->add('export_to_yml', 'Яндекс.Маркет <input type="checkbox" name="export_to_yml_all" />')->cell( function ($value, $product = null) {
+                $checked = !empty($product->export_to_yml) ? 'checked' : '';
+
+                return "<input data-product-id='{$product->id}' type='checkbox' name='export_to_yml' value='1' $checked />";
+            });
+
           $this->grid->add('show_cost()','Отображать цену',"viewcost");
           $this->grid->add('cost','Цена товара',"cost");
           // $this->grid->add('is_sales_leader()','Лидер продаж',"sales_leader");
@@ -172,6 +205,7 @@ class ProductController extends MyCrudController {
 
 
         $this->edit->add('name', 'Имя', 'text')->rule('required');
+        $this->edit->checkbox('export_to_yml', 'Экспортровать в Яндекс.Маркет');
         $this->edit->add('alias', 'Имя для формирования пути', 'text')->rule('required');
         $this->edit->add('haracteristic', 'Характеристика', 'redactor');
 
@@ -346,10 +380,12 @@ class ProductController extends MyCrudController {
 
         $data['ya_market_product'] = false;
 
+        /*
         if(Dealer::is_login() && Dealer::getLoginDealer()->can_compare_prices) {
             $market = App::make(YaMarket::class);
             $data['ya_market_product'] = $market->getSimilarPrices($product->name);
         }
+        */
 
         return view("catalog.product_page",$data, $gb_cost);
 

@@ -96,9 +96,17 @@ class Dealer extends User {
     }
 
     public function setDefaultMargin($type, $margin_id) {
+        DB::table('margins')
+            ->where("type", $type)
+            ->where('user_id', $this->id)
+            ->where("default", 1)
+            ->update(array('default' => 0));
 
-        DB::table('margins')->where("type", $type)->where("default", 1)->update(array('default' => 0));
-        DB::table('margins')->where("type", $type)->where("id", $margin_id)->update(array('default' => 1));
+        DB::table('margins')
+            ->where("type", $type)
+            ->where("id", $margin_id)
+            ->where('user_id', $this->id)
+            ->update(array('default' => 1));
     }
 
     public function bcrypt_pass(){

@@ -149,6 +149,8 @@ return [
         App\Providers\HelperServiceProvider::class,
         
         Bestmomo\Filemanager\FilemanagerServiceProvider::class,
+
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------
@@ -199,6 +201,7 @@ return [
         'PDF' => Vsmoraes\Pdf\PdfFacade::class,
         'BrowserDetect' => hisorange\BrowserDetect\Facade\Parser::class,
         'XmlParser' => Orchestra\Parser\Xml\Facade::class,
-        'Htmldom' => Yangqi\Htmldom\Htmldom::class
+        'Htmldom' => Yangqi\Htmldom\Htmldom::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 ];

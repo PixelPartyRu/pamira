@@ -8,16 +8,19 @@ $(document).ready(function () {
 
         });
 
-    }); 
+    });
+
     $('.dragging .table').sortable({
         placeholder: 'sortable-placeholder',
         items: ".product_info_row_data",
         update: function (event, ui) {
             var data = {'ids': [], '_token': $('input[name="_token"]').val()};
+
             $('.dragging .product_info_row_data').each(function(i, el) {
-                $(el).find('.id').html(i+1);
+                $(el).find('.id .index').html(i+1);
                 data['ids'][i] = $(el).attr('data-id');
             });
+
             $.ajax({
                 data: data,
                 type: 'POST',

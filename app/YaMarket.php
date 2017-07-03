@@ -22,6 +22,7 @@ class YaMarket {
     }
 
     public function getSimilarPrices($modelName, $regionId = null) {
+        // TODO: move this to ctor
         if(null === $regionId) {
             $regionId = \Config::get('yandex-market.region_id');
         }
@@ -34,7 +35,12 @@ class YaMarket {
             $similar = $this->callMarketApi("models/{$model->id}/offers", [
                 'regionId' => $regionId,
                 'currency' => 'RUR',
+                //'orderByPrice' => 'DESC'
             ]);
+
+            if(false === $similar) {
+                return false;
+            }
 
             $model->offers = isset($similar->models[0]->offers) ? $similar->models[0]->offers : null;
         }
@@ -75,17 +81,31 @@ class YaMarket {
             return false;
         }
 
-        //var_dump("Try $modelName");
-
         $result = $this->callMarketApi('models', [
             'query' => $modelName,
             'regionId' => $regionId,
             'pageSize' => 10
         ]);
 
+        if(false === $result) {
+            return false;
+        }
+        //var_dump('Try ' . $modelName);
+
         if(!count($result->models)) {
-            $new_model = trim(implode(' ', array_slice(explode(' ', $modelName), 0, -1)));
-            return $this->suggestModel($new_model, $regionId);
+            $words = explode(' ', $modelName);
+
+            if(count($words) > 1) {
+                $last = $words[count($words) - 1];
+
+                if(!preg_match('~[A-Z]{2,}~ui', $last) || mb_strlen($last, 'utf8') < 3) {
+                    $new_model = trim(implode(' ', array_slice($words, 0, -1)));
+
+                    return $this->suggestModel($new_model, $regionId);
+                }
+            }
+
+            return false;
         }
 
         return $result;
@@ -105,7 +125,10 @@ class YaMarket {
 
         try {
             $response = $client->send($request);
-        } catch (ClientException $e) {
+        } catch (\Exception $e) {
+        //} catch (ClientException $e) {
+            return false;
+            /*
             $response = $e->getRequest();
 
             $extra_message = '';
@@ -119,6 +142,7 @@ class YaMarket {
                 $e->getResponse(),
                 $e
             );
+            */
         }
 
         //var_dump($response->getHeaders());
@@ -127,14 +151,17 @@ class YaMarket {
     }
 
     public function exportToYml($outputFile) {
-        $categories = $this->sanitizeCategoriesForExport(Catalog::all());
+        //$categories = $this->sanitizeCategoriesForExport(Catalog::all());
+        $categories = Catalog::all();
         $categories_id = $categories->pluck('id');
         $products_name = [ ];
 
         /**
          * @var $products Product[]
          */
-        $products = Product::where("deleted", 0)->get();
+        $products = Product::where("deleted", 0)
+            ->where('export_to_yml', 1)
+            ->get();
 
         $hars_text = $this->prepareHaracteristicsForExport(\App\Product::getProductHaracteristic());
 

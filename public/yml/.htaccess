@@ -1,4 +1,10 @@
 AuthType Basic
+<<<<<<< HEAD
 AuthName "Private Area"
 AuthUserFile /var/www/pamira.ru/.htpasswd
 Require user yandex
+=======
+AuthName "Private Login"
+AuthUserFile "/var/www/pamira.ru/.htpasswd"
+Require valid-user
+>>>>>>> legal_information

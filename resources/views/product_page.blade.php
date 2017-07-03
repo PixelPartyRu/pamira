@@ -43,7 +43,11 @@
         @if($product->viewcost)
 
             @if($product->is_sales_for_current_product() )
-            <span class="cost_old"><span><span></span>{{ $product->getFormatCostOld() }} р.</span></span>
+
+                @unless( $product->getFormatCostOld() == $product->getFormatCost() )
+                    <span class="cost_old"><span><span></span>{{ $product->getFormatCostOld() }} р.</span></span>
+                @endunless
+
             @endif
 
         <div class="cost_trade"><span> Цена: {{ $product->getFormatCost() }} руб.</span></div>
@@ -52,7 +56,9 @@
 
             @if( \App\Dealer::is_login() )
                 @if($product->is_sales_for_current_product() )
-                    <span class=" cost_old" id="gb-cost-wholesale-old"><span><span></span>{{ number_format($product->getCostWithMargin(true, false),0,',',' ') }} р.</span></span>
+                    @unless( number_format($product->getCostWithMargin(true, false),0,',',' ') == number_format($product->getCostWithMargin(true),0,',',' ') )
+                        <span class=" cost_old" id="gb-cost-wholesale-old"><span><span></span>{{ number_format($product->getCostWithMargin(true, false),0,',',' ') }} р.</span></span>
+                    @endunless
                 @endif
 
                 <div class="cost_trade gb-cost-wholesale" id="gb-cost-wholesale"><span> Опт: {{ number_format($product->getCostWithMargin(true),0,',',' ') }} руб.</span></div>
@@ -104,10 +110,15 @@
 
     </div>
 
-    @if( \App\Dealer::is_login() )
+    @if( false && \App\Dealer::is_login() )
         @if(false !== $ya_market_product)
             <table class="similar-prices">
                 <thead>
+                    @if(count($ya_market_product->models) > 1)
+                    <tr>
+                        <th colspan="3">ВНИМАНИЕ: Яндекс маркет возвратил несколько товаров на наш запрос</th>
+                    </tr>
+                    @endif
                     <tr>
                         <th>Магазин</th>
                         <th>Цена</th>
@@ -121,16 +132,24 @@
                         <tr>
                             <th colspan="3">{{ $prod->name }}</th>
                         </tr>
-                        @foreach($offers as $offer)
+                        @if(count($offers))
+                            @foreach($offers as $offer)
+                                <tr>
+                                    <td>{{ $offer->shopName }}</td>
+                                    <td>{{ $offer->price }} руб.</td>
+                                    <td>{{ $offer->inStock ? 'В наличии' : 'Нет в наличии' }}</td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
-                                <td>{{ $offer->shopName }}</td>
-                                <td>{{ $offer->price }} руб.</td>
-                                <td>{{ $offer->inStock ? 'В наличии' : 'Нет в наличии' }}</td>
+                                <th colspan="3">Предложений нет</th>
                             </tr>
-                        @endforeach
+                        @endif
                     @endforeach
                 </tbody>
             </table>
+        @else
+            <h1 class="product_header" style="text-align: center">Предложения не найдены на яндекс маркете</h1>
         @endif
     @endif
 
