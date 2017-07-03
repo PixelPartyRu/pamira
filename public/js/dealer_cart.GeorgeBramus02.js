@@ -127,20 +127,20 @@ function Dealer_form() {
     this.sliceArrayAndSend = function(source_array,name) {
 
         /**
-         * George Bramus | 2016-11-19
          * Изменения в корзине не обновляют уже имеющиеся, если записей
-         * больше 10. Решение было реализовано на стороне JS и перед
-         * отправкой массив разбиваем на части по 10 элементо
-         * и поочередно отправляем.
+         * больше 7. Решение было реализовано на стороне JS и перед
+         * отправкой массив разбиваем на части по 7 элементо
+         * и поочередно отправляем
          */
 
         var t = this;
         var truncated_array = new Array;
-        var from, to, last_from_index;
+        var from, to;
+        var last_from_index = 0;
 
         $.each(source_array, function(index, element){
-            if (index % 10 == 0 && index != 0) {
-                from = index - 10;
+            if (index % 7 == 0 && index != 0) {
+                from = index - 7;
                 to = index;
                 last_from_index = to;
 
